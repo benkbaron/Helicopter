@@ -13,25 +13,62 @@ document.addEventListener("DOMContentLoaded", (event) => {
   ctx.fillStyle = "blue";
   ctx.fillRect(0, 0, 1000, 600);
 
-  let helicopterPosX = 100;
-  let helicopterPosY = 100;
-
   drawHelicopter = (x, y) => {
     let helicopterIcon = new Image();
+    helicopterIcon.src = "./assets/helicopterIcon.png";
     helicopterIcon.onload = function() {
       ctx.drawImage(this, x, y, 100, 100);
     };
-    helicopterIcon.src = "./assets/helicopterIcon.png";
   };
 
-  drawHelicopter(helicopterPosX, helicopterPosY);
+  drawBird = (x, y) => {
+    let birdIcon = new Image();
+    birdIcon.src = "./assets/birdIcon.png";
+    birdIcon.onload = function() {
+      ctx.drawImage(this, x, y, 100, 100);
+    };
+  };
+
+  drawFeathers = () => {
+    let feathersIcon = new Image();
+    feathersIcon.src = "./assets/feathersIcon.png";
+    feathersIcon.onload = function() {
+      ctx.drawImage(this, birdPosX, birdPosY, 100, 100);
+    };
+  };
+
+  checkCrash = (helicopter, otherObject) => {
+    if (distance([helicopterPosX, helicopterPosY], [birdPosX, birdPosY]) < 50){
+      return true;
+    }
+  };
+
+  distance = (pos1, pos2) => {
+    let a = pos1[0] - pos2[0];
+    let b = pos1[1] - pos2[1];
+
+    return Math.sqrt(a*a + b*b);
+  };
+
+  let helicopterPosX = 100;
+  let helicopterPosY = 100;
+
+  let birdPosX = 400;
+  let birdPosY = 400;
 
   resetPage = () => {
     ctx.clearRect(0, 0, 1000, 600);
     ctx.fillStyle = "blue";
     ctx.fillRect(0, 0, 1000, 600);
+    drawHelicopter(helicopterPosX, helicopterPosY);
+    if (checkCrash()) {
+      drawFeathers();
+    } else {
+      drawBird(birdPosX, birdPosY);
+    }
   };
 
+  resetPage();
 
   document.addEventListener("keydown", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
@@ -50,7 +87,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
         break;
       }
       resetPage();
-      drawHelicopter(helicopterPosX, helicopterPosY);
     }
   });
 });
