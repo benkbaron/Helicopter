@@ -15,10 +15,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
   //
   // ctx.font = '48px serif';
   // ctx.fillText('Rescue Count:', 10, 50);
+  let flipped = false;
 
   drawHelicopter = () => {
     let helicopterIcon = new Image();
-    helicopterIcon.src = "./assets/helicopterIcon.png";
+    helicopterIcon.src = flipped ? "./assets/flippedhelicopterIcon.png" : "./assets/helicopterIcon.png";
     helicopterIcon.onload = function() {
       ctx.drawImage(this, helicopterPosX, helicopterPosY, 100, 100);
     };
@@ -175,7 +176,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   updateCloudPos = () => {
-    if (cloudPosX < -300) {
+    if (cloudPosX < -500) {
       resetCloudPos();
     } else if (cloudPosX > 400 && cloudPosX < 500) {
       cloudPosX -= 2;
@@ -234,18 +235,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
       switch (event.keyCode){
         case 38:
-        helicopterPosY -= 13;
-        break;
+          helicopterPosY -= 13;
+          break;
         case 40:
-        helicopterPosY += 13;
-        break;
+          helicopterPosY += 13;
+          break;
         case 37:
-        helicopterPosX -= 13;
-        break;
+          helicopterPosX -= 13;
+          flipped = true;
+          break;
         case 39:
-        helicopterPosX += 13;
-        break;
-      }
+          helicopterPosX += 13;
+          flipped = false;
+          break;
+        }
       resetPage();
     }
   });
