@@ -40,6 +40,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     };
   };
 
+  drawLightning = () => {
+    let lightningIcon = new Image();
+    lightningIcon.src = "./assets/lightningIcon.png";
+    lightningIcon.onload = function() {
+      ctx.drawImage(this, lightningPosX, lightningPosY, 100, 700);
+    };
+  };
+
   drawBlimp = () => {
     let blimpIcon = new Image();
     blimpIcon.src = "./assets/blimpIcon.png";
@@ -110,6 +118,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let parachuterPosX = 1000 * Math.random();
   let parachuterPosY = -1000 * Math.random();
 
+  let lightningPosX = 1000 * Math.random();
+  let lightningPosY = -10000 * Math.random();
+
   resetPage = () => {
     ctx.clearRect(0, 0, 1000, 600);
     ctx.fillStyle = "blue";
@@ -121,6 +132,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       drawParachuter();
       drawBlimp();
       drawCloud();
+      drawLightning();
     } else if (checkCatch()){
       drawHelicopter();
       updateBirdPos();
@@ -131,6 +143,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
       drawBlimp();
       updateCloudPos();
       drawCloud();
+      updateLightningPos();
+      drawLightning();
     } else {
       drawHelicopter();
       updateBirdPos();
@@ -141,6 +155,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
       drawBlimp();
       updateCloudPos();
       drawCloud();
+      updateLightningPos();
+      drawLightning();
     }
   };
 
@@ -179,14 +195,25 @@ document.addEventListener("DOMContentLoaded", (event) => {
   updateParachuterPos = () => {
     parachuterPosY += 8;
     if (parachuterPosY > 1100) {
-      parachuterPosX = 1000 * Math.random();
-      parachuterPosY = -1000 * Math.random();
+      resetParachuterPos();
+    }
+  };
+
+  updateLightningPos = () => {
+    lightningPosY += 60;
+    if (lightningPosY > 1100) {
+      resetLightningPos();
     }
   };
 
   resetParachuterPos = () => {
     parachuterPosX = 1000 * Math.random();
     parachuterPosY = -1000 * Math.random();
+  };
+
+  resetLightningPos = () => {
+    lightningPosX = 1000 * Math.random();
+    lightningPosY = -10000 * Math.random();
   };
 
   resetBlimpPos = () => {
@@ -207,16 +234,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
       switch (event.keyCode){
         case 38:
-        helicopterPosY -= 10;
+        helicopterPosY -= 13;
         break;
         case 40:
-        helicopterPosY += 10;
+        helicopterPosY += 13;
         break;
         case 37:
-        helicopterPosX -= 10;
+        helicopterPosX -= 13;
         break;
         case 39:
-        helicopterPosX += 10;
+        helicopterPosX += 13;
         break;
       }
       resetPage();
