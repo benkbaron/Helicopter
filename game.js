@@ -15,12 +15,6 @@ const Arrow = require("./arrow");
 document.addEventListener("DOMContentLoaded", (event) => {
   let canvas = document.querySelector("canvas");
   let ctx = canvas.getContext("2d");
-  ctx.fillStyle = "blue";
-  ctx.fillRect(0, 0, 1000, 600);
-
-  // ctx.font = '48px serif';
-  // ctx.fillText('Rescue Count:', 10, 50);
-
 
   let parachuter1 = new Parachuter();
   let blimp1 = new Blimp();
@@ -81,6 +75,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.clearRect(0, 0, 1000, 600);
     ctx.fillStyle = "blue";
     ctx.fillRect(0, 0, 1000, 600);
+    ctx.fillStyle = "white";
+    ctx.font = '24px serif';
+    ctx.fillText('Rescues:', 10, 50);
 
     if (checkCrash()) {
       displayCrash();
