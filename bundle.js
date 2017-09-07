@@ -67,20 +67,13 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// import Helicopter from "./helicopter.js";
-//
-// class Game {
-//   constructor() {
-//     this.helicopter = new Helicopter;
-//   }
-//
-
 const Parachuter = __webpack_require__(1);
 const Blimp = __webpack_require__(2);
 const Cloud = __webpack_require__(3);
 const Lightning = __webpack_require__(4);
 const Bird = __webpack_require__(5);
 const Mosquito = __webpack_require__(6);
+const Helicopter = __webpack_require__(7);
 
 document.addEventListener("DOMContentLoaded", (event) => {
   let canvas = document.querySelector("canvas");
@@ -90,7 +83,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   //
   // ctx.font = '48px serif';
   // ctx.fillText('Rescue Count:', 10, 50);
-  let flipped = false;
 
 
   let parachuter1 = new Parachuter();
@@ -99,14 +91,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let lightning1 = new Lightning();
   let bird1 = new Bird();
   let mosquito1 = new Mosquito();
-
-  drawHelicopter = () => {
-    let helicopterIcon = new Image();
-    helicopterIcon.src = flipped ? "./assets/flippedhelicopterIcon.png" : "./assets/helicopterIcon.png";
-    helicopterIcon.onload = function() {
-      ctx.drawImage(this, helicopterPosX, helicopterPosY, 100, 100);
-    };
-  };
+  let helicopter1 = new Helicopter();
 
   drawFeathers = (bird) => {
     let feathersIcon = new Image();
@@ -120,19 +105,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let skullIcon = new Image();
     skullIcon.src = "./assets/skullIcon.png";
     skullIcon.onload = function() {
-      ctx.drawImage(this, helicopterPosX, helicopterPosY, 100, 100);
+      ctx.drawImage(this, helicopter1.posX, helicopter1.posY, 100, 100);
     };
   };
 
   checkCrash = () => {
-    let space = distance([helicopterPosX + 50, helicopterPosY + 50], [bird1.posX + 25, bird1.posY + 25]);
+    let space = distance([helicopter1.posX + 50, helicopter1.posY + 50], [bird1.posX + 25, bird1.posY + 25]);
     if (space < 70){
       return true;
     }
   };
 
   checkCatch = () => {
-    let space = distance([helicopterPosX + 50, helicopterPosY], [parachuter1.posX + 25, parachuter1.posY + 50]);
+    let space = distance([helicopter1.posX + 50, helicopter1.posY], [parachuter1.posX + 25, parachuter1.posY + 50]);
     if (space < 60){
       return true;
     }
@@ -144,10 +129,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     return Math.sqrt(a*a + b*b);
   };
-
-  let helicopterPosX = 100;
-  let helicopterPosY = 100;
-
 
   resetPage = () => {
     ctx.clearRect(0, 0, 1000, 600);
@@ -163,28 +144,28 @@ document.addEventListener("DOMContentLoaded", (event) => {
       cloud1.draw(ctx);
       lightning1.draw(ctx);
     } else if (checkCatch()){
-      drawHelicopter();
-      bird1.updatePos(helicopterPosY);
+      helicopter1.draw(ctx);
+      bird1.updatePos(helicopter1.posY);
       bird1.draw(ctx);
       parachuter1.resetPos();
       parachuter1.draw(ctx);
       blimp1.updatePos();
       blimp1.draw(ctx);
-      mosquito1.updatePos(helicopterPosX, helicopterPosY);
+      mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
       mosquito1.draw(ctx);
       cloud1.updatePos();
       cloud1.draw(ctx);
       lightning1.updatePos();
       lightning1.draw(ctx);
     } else {
-      drawHelicopter();
-      bird1.updatePos(helicopterPosY);
+      helicopter1.draw(ctx);
+      bird1.updatePos(helicopter1.posY);
       bird1.draw(ctx);
       parachuter1.updatePos();
       parachuter1.draw(ctx);
       blimp1.updatePos();
       blimp1.draw(ctx);
-      mosquito1.updatePos(helicopterPosX, helicopterPosY);
+      mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
       mosquito1.draw(ctx);
       cloud1.updatePos();
       cloud1.draw(ctx);
@@ -199,28 +180,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   document.addEventListener("keydown", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
-      switch (event.keyCode){
-        case 38:
-          helicopterPosY -= 13;
-          break;
-        case 40:
-          helicopterPosY += 13;
-          break;
-        case 37:
-          helicopterPosX -= 13;
-          flipped = true;
-          break;
-        case 39:
-          helicopterPosX += 13;
-          flipped = false;
-          break;
-        }
+      helicopter1.updatePos(event.keyCode);
       resetPage();
     }
   });
 });
-//
-// module.exports = Game;
 
 
 /***/ }),
@@ -464,6 +428,55 @@ class Mosquito {
 }
 
 module.exports = Mosquito;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+
+class Helicopter {
+  constructor(options) {
+    this.posX = 100;
+    this.posY = 100;
+    this.flipped = false;
+  }
+
+  draw(ctx) {
+    let helicopterPosX = this.posX;
+    let helicopterPosY = this.posY;
+    let helicopterIcon = new Image();
+    helicopterIcon.src = this.flipped ? "./assets/flippedhelicopterIcon.png" : "./assets/helicopterIcon.png";
+    helicopterIcon.onload = function() {
+      ctx.drawImage(this, helicopterPosX, helicopterPosY, 100, 100);
+    };
+  }
+
+
+  updatePos(code) {
+    switch (code){
+      case 38:
+        this.posY -= 13;
+        break;
+      case 40:
+        this.posY += 13;
+        break;
+      case 37:
+        this.posX -= 13;
+        this.flipped = true;
+        break;
+      case 39:
+        this.posX += 13;
+        this.flipped = false;
+        break;
+      }
+
+
+  }
+
+}
+
+module.exports = Helicopter;
 
 
 /***/ })
