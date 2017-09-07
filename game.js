@@ -13,19 +13,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
   ctx.fillStyle = "blue";
   ctx.fillRect(0, 0, 1000, 600);
 
-  drawHelicopter = (x, y) => {
+  drawHelicopter = () => {
     let helicopterIcon = new Image();
     helicopterIcon.src = "./assets/helicopterIcon.png";
     helicopterIcon.onload = function() {
-      ctx.drawImage(this, x, y, 100, 100);
+      ctx.drawImage(this, helicopterPosX, helicopterPosY, 100, 100);
     };
   };
 
-  drawBird = (x, y) => {
+  drawBird = () => {
     let birdIcon = new Image();
     birdIcon.src = "./assets/birdIcon.png";
     birdIcon.onload = function() {
-      ctx.drawImage(this, x, y, 100, 100);
+      ctx.drawImage(this, birdPosX, birdPosY, 100, 100);
     };
   };
 
@@ -37,8 +37,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
     };
   };
 
+  drawSkull = () => {
+    let skullIcon = new Image();
+    skullIcon.src = "./assets/skullIcon.png";
+    skullIcon.onload = function() {
+      ctx.drawImage(this, helicopterPosX, helicopterPosY, 100, 100);
+    };
+  };
+
   checkCrash = (helicopter, otherObject) => {
-    if (distance([helicopterPosX, helicopterPosY], [birdPosX, birdPosY]) < 50){
+    if (distance([helicopterPosX, helicopterPosY], [birdPosX, birdPosY]) < 90){
       return true;
     }
   };
@@ -53,22 +61,40 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let helicopterPosX = 100;
   let helicopterPosY = 100;
 
-  let birdPosX = 400;
-  let birdPosY = 400;
+  let birdPosX = 1010;
+  let birdPosY = 600 * Math.random();
 
   resetPage = () => {
     ctx.clearRect(0, 0, 1000, 600);
     ctx.fillStyle = "blue";
     ctx.fillRect(0, 0, 1000, 600);
-    drawHelicopter(helicopterPosX, helicopterPosY);
     if (checkCrash()) {
       drawFeathers();
+      drawSkull();
     } else {
-      drawBird(birdPosX, birdPosY);
+      drawHelicopter();
+      updateBirdPos();
+      drawBird();
+    }
+  };
+
+  updateBirdPos = () => {
+    birdPosX -= 10;
+    if (helicopterPosY > birdPosY) {
+      birdPosY += 3;
+    } else {
+      birdPosY -= 3;
+    }
+
+    if (birdPosX < -100) {
+      birdPosX = 1010;
+      birdPosY = 600 * Math.random();
     }
   };
 
   resetPage();
+  //
+  // setInterval(resetPage(), 500);
 
   document.addEventListener("keydown", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {

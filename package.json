@@ -1,0 +1,23 @@
+{
+  "name": "Helicopter",
+  "version": "1.0.0",
+  "description": "### Functionality & MVP",
+  "main": "bird.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benkbaron/Helicopter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benkbaron/Helicopter/issues"
+  },
+  "homepage": "https://github.com/benkbaron/Helicopter#readme",
+  "devDependencies": {
+    "webpack": "^3.5.6"
+  }
+}
