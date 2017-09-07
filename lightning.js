@@ -2,7 +2,7 @@
 class Lightning {
   constructor(options) {
     this.posX = 1000 * Math.random();
-    this.posY = (-10000 * Math.random()) - 1000;
+    this.posY = (-8000 * Math.random()) - 1000;
 
   }
 

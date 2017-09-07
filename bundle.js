@@ -109,6 +109,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
       bird1.feathers = 25;
       return true;
     }
+
+    space = distance([helicopter1.posX + 50, helicopter1.posY + 50], [mosquito1.posX + 10, mosquito1.posY + 10]);
+    if (space < 40){
+      return true;
+    }
+
+    let xDistance = Math.abs(helicopter1.posX - lightning1.posX);
+    let yDistance = lightning1.posY + 650 - helicopter1.posY;
+
+    if ((yDistance > 0 && yDistance < 700) && xDistance < 50){
+      return true;
+    }
+
   };
 
   checkCatch = () => {
@@ -379,7 +392,7 @@ module.exports = Cloud;
 class Lightning {
   constructor(options) {
     this.posX = 1000 * Math.random();
-    this.posY = (-10000 * Math.random()) - 1000;
+    this.posY = (-8000 * Math.random()) - 1000;
 
   }
 
