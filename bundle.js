@@ -65,7 +65,7 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 // import Helicopter from "./helicopter.js";
 //
@@ -75,6 +75,9 @@
 //   }
 //
 
+const Parachuter = __webpack_require__(1);
+const Blimp = __webpack_require__(2);
+const Cloud = __webpack_require__(3);
 
 document.addEventListener("DOMContentLoaded", (event) => {
   let canvas = document.querySelector("canvas");
@@ -85,6 +88,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
   // ctx.font = '48px serif';
   // ctx.fillText('Rescue Count:', 10, 50);
   let flipped = false;
+
+
+  let parachuter1 = new Parachuter();
+  let blimp1 = new Blimp();
+  let cloud1 = new Cloud();
+
+
+
+
 
   drawHelicopter = () => {
     let helicopterIcon = new Image();
@@ -102,14 +114,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     };
   };
 
-  drawCloud = () => {
-    let cloudIcon = new Image();
-    cloudIcon.src = "./assets/cloudIcon.png";
-    cloudIcon.onload = function() {
-      ctx.drawImage(this, cloudPosX, cloudPosY, 350, 350);
-    };
-  };
-
   drawLightning = () => {
     let lightningIcon = new Image();
     lightningIcon.src = "./assets/lightningIcon.png";
@@ -118,21 +122,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     };
   };
 
-  drawBlimp = () => {
-    let blimpIcon = new Image();
-    blimpIcon.src = "./assets/blimpIcon.png";
-    blimpIcon.onload = function() {
-      ctx.drawImage(this, blimpPosX, blimpPosY, 200, 200);
-    };
-  };
-
-  drawParachuter = () => {
-    let parachuterIcon = new Image();
-    parachuterIcon.src = "./assets/parachuterIcon.png";
-    parachuterIcon.onload = function() {
-      ctx.drawImage(this, parachuterPosX, parachuterPosY, 50, 50);
-    };
-  };
 
   drawFeathers = () => {
     let feathersIcon = new Image();
@@ -158,7 +147,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   checkCatch = () => {
-    let space = distance([helicopterPosX + 50, helicopterPosY], [parachuterPosX + 25, parachuterPosY + 50]);
+    let space = distance([helicopterPosX + 50, helicopterPosY], [parachuter1.posX + 25, parachuter1.posY + 50]);
     if (space < 60){
       return true;
     }
@@ -179,17 +168,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let birdPosX = 1010;
   let birdPosY = 600 * Math.random();
 
-  let cloudPosX = 1200 + (1000 * Math.random());
-  let cloudPosY = (600 * Math.random()) - 100;
-
-  let blimpPosX = - 1200 - (1000 * Math.random());
-  let blimpPosY = (600 * Math.random()) - 100;
-
-  let parachuterPosX = 1000 * Math.random();
-  let parachuterPosY = -1000 * Math.random();
-
   let lightningPosX = 1000 * Math.random();
-  let lightningPosY = -10000 * Math.random();
+  let lightningPosY = (-10000 * Math.random()) - 1000;
 
   resetPage = () => {
     ctx.clearRect(0, 0, 1000, 600);
@@ -199,32 +179,32 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (checkCrash()) {
       drawFeathers();
       drawSkull();
-      drawParachuter();
-      drawBlimp();
-      drawCloud();
+      parachuter1.draw(ctx);
+      blimp1.draw(ctx);
+      cloud1.draw(ctx);
       drawLightning();
     } else if (checkCatch()){
       drawHelicopter();
       updateBirdPos();
       drawBird();
-      resetParachuterPos();
-      drawParachuter();
-      updateBlimpPos();
-      drawBlimp();
-      updateCloudPos();
-      drawCloud();
+      parachuter1.resetPos();
+      parachuter1.draw(ctx);
+      blimp1.updatePos();
+      blimp1.draw(ctx);
+      cloud1.updatePos();
+      cloud1.draw(ctx);
       updateLightningPos();
       drawLightning();
     } else {
       drawHelicopter();
       updateBirdPos();
       drawBird();
-      updateParachuterPos();
-      drawParachuter();
-      updateBlimpPos();
-      drawBlimp();
-      updateCloudPos();
-      drawCloud();
+      parachuter1.updatePos();
+      parachuter1.draw(ctx);
+      blimp1.updatePos();
+      blimp1.draw(ctx);
+      cloud1.updatePos();
+      cloud1.draw(ctx);
       updateLightningPos();
       drawLightning();
     }
@@ -244,30 +224,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   };
 
-  updateCloudPos = () => {
-    if (cloudPosX < -500) {
-      resetCloudPos();
-    } else if (cloudPosX > 400 && cloudPosX < 500) {
-      cloudPosX -= 2;
-    } else {
-      cloudPosX -= 10;
-    }
-  };
-
-  updateBlimpPos = () => {
-    if (blimpPosX > 1200) {
-      resetBlimpPos();
-    } else {
-      blimpPosX += 5;
-    }
-  };
-
-  updateParachuterPos = () => {
-    parachuterPosY += 8;
-    if (parachuterPosY > 1100) {
-      resetParachuterPos();
-    }
-  };
 
   updateLightningPos = () => {
     lightningPosY += 60;
@@ -276,24 +232,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   };
 
-  resetParachuterPos = () => {
-    parachuterPosX = 1000 * Math.random();
-    parachuterPosY = -1000 * Math.random();
-  };
 
   resetLightningPos = () => {
     lightningPosX = 1000 * Math.random();
     lightningPosY = -10000 * Math.random();
-  };
-
-  resetBlimpPos = () => {
-    blimpPosX = - 1200 - (1000 * Math.random());
-    blimpPosY = (600 * Math.random()) - 100;
-  };
-
-  resetCloudPos = () => {
-    cloudPosX = 1200 + 1000 * Math.random();
-    cloudPosY = 600 * Math.random();
   };
 
   resetPage();
@@ -324,6 +266,128 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 //
 // module.exports = Game;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+
+class Parachuter {
+  constructor(options) {
+    this.posX = 1000 * Math.random();
+    this.posY = -1000 * Math.random();
+
+  }
+
+  draw(ctx) {
+    let parachuterPosX = this.posX;
+    let parachuterPosY = this.posY;
+    let parachuterIcon = new Image();
+    parachuterIcon.src = "./assets/parachuterIcon.png";
+    parachuterIcon.onload = function() {
+      ctx.drawImage(this, parachuterPosX, parachuterPosY, 50, 50);
+    };
+  }
+
+  updatePos() {
+    this.posY += 8;
+    if (this.posY > 1100) {
+      this.resetPos();
+    }
+  }
+
+  resetPos() {
+    this.posX = 1000 * Math.random();
+    this.posY = -1000 * Math.random();
+    }
+}
+
+module.exports = Parachuter;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+
+class Blimp {
+  constructor(options) {
+    this.posX = - 1200 - (1000 * Math.random());
+    this.posY = (600 * Math.random()) - 100;
+
+  }
+
+  draw(ctx) {
+    let blimpPosX = this.posX;
+    let blimpPosY = this.posY;
+    let blimpIcon = new Image();
+    blimpIcon.src = "./assets/blimpIcon.png";
+    blimpIcon.onload = function() {
+      ctx.drawImage(this, blimpPosX, blimpPosY, 200, 200);
+    };
+  }
+
+
+  updatePos() {
+    if (this.posX > 1200) {
+      this.resetPos();
+    } else {
+      this.posX += 5;
+    }
+  }
+
+  resetPos() {
+    this.posX = - 1200 - (1000 * Math.random());
+    this.posY = (600 * Math.random()) - 100;
+  }
+
+}
+
+module.exports = Blimp;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+
+class Cloud {
+  constructor(options) {
+    this.posX = 1200 + (1000 * Math.random());
+    this.posY = (600 * Math.random()) - 100;
+
+  }
+
+  draw(ctx) {
+    let cloudPosX = this.posX;
+    let cloudPosY = this.posY;
+    let cloudIcon = new Image();
+    cloudIcon.src = "./assets/cloudIcon.png";
+    cloudIcon.onload = function() {
+      ctx.drawImage(this, cloudPosX, cloudPosY, 350, 350);
+    };
+  }
+
+
+  updatePos() {
+    if (this.posX < -500) {
+      this.resetPos();
+    } else if (this.posX > 400 && this.posX < 500) {
+      this.posX -= 2;
+    } else {
+      this.posX -= 10;
+    }
+  }
+
+  resetPos() {
+    this.posX = 1200 + 1000 * Math.random();
+    this.posY = 600 * Math.random();
+  }
+
+}
+
+module.exports = Cloud;
 
 
 /***/ })
