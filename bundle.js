@@ -74,6 +74,7 @@ const Lightning = __webpack_require__(4);
 const Bird = __webpack_require__(5);
 const Mosquito = __webpack_require__(6);
 const Helicopter = __webpack_require__(7);
+const Arrow = __webpack_require__(8);
 
 // class Game {
 //
@@ -85,7 +86,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let ctx = canvas.getContext("2d");
   ctx.fillStyle = "blue";
   ctx.fillRect(0, 0, 1000, 600);
-  //
+
   // ctx.font = '48px serif';
   // ctx.fillText('Rescue Count:', 10, 50);
 
@@ -97,22 +98,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let bird1 = new Bird();
   let mosquito1 = new Mosquito();
   let helicopter1 = new Helicopter();
-
-  drawFeathers = (bird) => {
-    let feathersIcon = new Image();
-    feathersIcon.src = "./assets/feathersIcon.png";
-    feathersIcon.onload = function() {
-      ctx.drawImage(this, bird.posX, bird.posY, 100, 100);
-    };
-  };
-
-  drawSkull = () => {
-    let skullIcon = new Image();
-    skullIcon.src = "./assets/skullIcon.png";
-    skullIcon.onload = function() {
-      ctx.drawImage(this, helicopter1.posX, helicopter1.posY, 100, 100);
-    };
-  };
+  let arrow1 = new Arrow();
 
   checkCrash = () => {
     if (helicopter1.posY > 550) {
@@ -144,8 +130,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.fillRect(0, 0, 1000, 600);
 
     if (checkCrash()) {
-      drawFeathers(bird1);
-      drawSkull();
+      bird1.drawFeathers(ctx);
+      helicopter1.drawSkull(ctx);
       parachuter1.draw(ctx);
       blimp1.draw(ctx);
       mosquito1.draw(ctx);
@@ -166,6 +152,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
       cloud1.draw(ctx);
       lightning1.updatePos();
       lightning1.draw(ctx);
+      arrow1.updatePos();
+      arrow1.draw(ctx);
     } else {
       helicopter1.updatePos();
       helicopter1.draw(ctx);
@@ -181,6 +169,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
       cloud1.draw(ctx);
       lightning1.updatePos();
       lightning1.draw(ctx);
+      arrow1.updatePos();
+      arrow1.draw(ctx);
     }
   };
 
@@ -195,16 +185,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   document.addEventListener("keydown", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
-      helicopter1.shouldMove = true;
-      helicopter1.lastKeyDown = event.keyCode;
+      helicopter1.keysDown.push(event.keyCode);
       helicopter1.updatePos();
+    }
+
+    if (event.keyCode === 32){
+      arrow1.shoot(helicopter1);
     }
   });
 
   document.addEventListener("keyup", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
-      helicopter1.shouldMove = false;
-      helicopter1.lastKeyDown = false;
+      helicopter1.keysDown = helicopter1.keysDown.filter(num => num !== event.keyCode );
       helicopter1.updatePos();
     }
   });
@@ -400,6 +392,16 @@ class Bird {
     };
   }
 
+  drawFeathers(ctx) {
+    let birdPosX = this.posX;
+    let birdPosY = this.posY;
+    let feathersIcon = new Image();
+    feathersIcon.src = "./assets/feathersIcon.png";
+    feathersIcon.onload = function() {
+      ctx.drawImage(this, birdPosX, birdPosY, 100, 100);
+    };
+  }
+
   updatePos(helicopterPosY) {
     this.posX -= 2;
     if (helicopterPosY > this.posY) {
@@ -472,8 +474,7 @@ class Helicopter {
     this.posX = 100;
     this.posY = 100;
     this.flipped = false;
-    this.shouldMove = false;
-    this.lastKeyDown = false;
+    this.keysDown = [];
   }
 
   draw(ctx) {
@@ -486,32 +487,95 @@ class Helicopter {
     };
   }
 
+  drawSkull(ctx) {
+    let helicopterPosX = this.posX;
+    let helicopterPosY = this.posY;
+    let skullIcon = new Image();
+    skullIcon.src = "./assets/skullIcon.png";
+    skullIcon.onload = function() {
+      ctx.drawImage(this, helicopterPosX, helicopterPosY, 100, 100);
+    };
+  }
+
 
   updatePos() {
     this.posY += 2;
-    if (this.lastKeyDown) {
-    switch (this.lastKeyDown){
-      case 38:
-        this.posY -= 6;
-        break;
-      case 40:
-        this.posY += 6;
-        break;
-      case 37:
-        this.posX -= 6;
-        this.flipped = true;
-        break;
-      case 39:
-        this.posX += 6;
-        this.flipped = false;
-        break;
+
+    if (this.keysDown.includes(38)) {
+      this.posY -= 6;
       }
+    if (this.keysDown.includes(40)) {
+      this.posY += 6;
       }
-    }
+    if (this.keysDown.includes(37)) {
+      this.posX -= 6;
+      this.flipped = true;
+      }
+    if (this.keysDown.includes(39)) {
+      this.posX += 6;
+      this.flipped = false;
+      }
+  }
 
 }
 
 module.exports = Helicopter;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+
+class Arrow {
+  constructor(posX, posY) {
+    this.posX = -1000;
+    this.posY = -1000;
+    this.appear = false;
+    this.direction = "right";
+  }
+
+  draw(ctx) {
+    if (this.appear) {
+      let arrowPosX = this.posX;
+      let arrowPosY = this.posY;
+      let arrowIcon = new Image();
+      arrowIcon.src = this.direction === "right" ? "./assets/arrowIcon.png" : "./assets/flippedArrowIcon.png";
+      arrowIcon.onload = function() {
+        ctx.drawImage(this, arrowPosX, arrowPosY, 50, 50);
+      };
+    }
+  }
+
+  shoot(helicopter) {
+    if (this.posX > 1050 || this.posX < -50) {
+      this.posX = helicopter.flipped ? helicopter.posX : helicopter.posX + 100;
+      this.posY = helicopter.posY + 20;
+      this.direction = helicopter.flipped ? "left" : "right";
+      this.appear = true;
+    }
+  }
+
+  updatePos() {
+    if (this.direction === "right") {
+      this.posX += 4;
+    } else {
+      this.posX -= 4;
+    }
+
+    if (this.posX > 1100 || this.posX < -100) {
+      this.appear = false;
+    }
+  }
+
+  resetPos() {
+    this.posX = 1200 + 1000 * Math.random();
+    this.posY = 600 * Math.random();
+  }
+
+}
+
+module.exports = Arrow;
 
 
 /***/ })

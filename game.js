@@ -5,6 +5,7 @@ const Lightning = require("./lightning");
 const Bird = require("./bird");
 const Mosquito = require("./mosquito");
 const Helicopter = require("./helicopter");
+const Arrow = require("./arrow");
 
 // class Game {
 //
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let ctx = canvas.getContext("2d");
   ctx.fillStyle = "blue";
   ctx.fillRect(0, 0, 1000, 600);
-  //
+
   // ctx.font = '48px serif';
   // ctx.fillText('Rescue Count:', 10, 50);
 
@@ -28,22 +29,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let bird1 = new Bird();
   let mosquito1 = new Mosquito();
   let helicopter1 = new Helicopter();
-
-  drawFeathers = (bird) => {
-    let feathersIcon = new Image();
-    feathersIcon.src = "./assets/feathersIcon.png";
-    feathersIcon.onload = function() {
-      ctx.drawImage(this, bird.posX, bird.posY, 100, 100);
-    };
-  };
-
-  drawSkull = () => {
-    let skullIcon = new Image();
-    skullIcon.src = "./assets/skullIcon.png";
-    skullIcon.onload = function() {
-      ctx.drawImage(this, helicopter1.posX, helicopter1.posY, 100, 100);
-    };
-  };
+  let arrow1 = new Arrow();
 
   checkCrash = () => {
     if (helicopter1.posY > 550) {
@@ -75,8 +61,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.fillRect(0, 0, 1000, 600);
 
     if (checkCrash()) {
-      drawFeathers(bird1);
-      drawSkull();
+      bird1.drawFeathers(ctx);
+      helicopter1.drawSkull(ctx);
       parachuter1.draw(ctx);
       blimp1.draw(ctx);
       mosquito1.draw(ctx);
@@ -97,6 +83,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
       cloud1.draw(ctx);
       lightning1.updatePos();
       lightning1.draw(ctx);
+      arrow1.updatePos();
+      arrow1.draw(ctx);
     } else {
       helicopter1.updatePos();
       helicopter1.draw(ctx);
@@ -112,6 +100,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
       cloud1.draw(ctx);
       lightning1.updatePos();
       lightning1.draw(ctx);
+      arrow1.updatePos();
+      arrow1.draw(ctx);
     }
   };
 
@@ -126,16 +116,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   document.addEventListener("keydown", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
-      helicopter1.shouldMove = true;
-      helicopter1.lastKeyDown = event.keyCode;
+      helicopter1.keysDown.push(event.keyCode);
       helicopter1.updatePos();
+    }
+
+    if (event.keyCode === 32){
+      arrow1.shoot(helicopter1);
     }
   });
 
   document.addEventListener("keyup", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
-      helicopter1.shouldMove = false;
-      helicopter1.lastKeyDown = false;
+      helicopter1.keysDown = helicopter1.keysDown.filter(num => num !== event.keyCode );
       helicopter1.updatePos();
     }
   });

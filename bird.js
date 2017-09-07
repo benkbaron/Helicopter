@@ -15,6 +15,16 @@ class Bird {
     };
   }
 
+  drawFeathers(ctx) {
+    let birdPosX = this.posX;
+    let birdPosY = this.posY;
+    let feathersIcon = new Image();
+    feathersIcon.src = "./assets/feathersIcon.png";
+    feathersIcon.onload = function() {
+      ctx.drawImage(this, birdPosX, birdPosY, 100, 100);
+    };
+  }
+
   updatePos(helicopterPosY) {
     this.posX -= 2;
     if (helicopterPosY > this.posY) {
