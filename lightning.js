@@ -17,7 +17,7 @@ class Lightning {
   }
 
   updatePos() {
-    this.posY += 60;
+    this.posY += 4;
     if (this.posY > 1100) {
       this.resetPos();
     }

@@ -21,9 +21,9 @@ class Cloud {
     if (this.posX < -500) {
       this.resetPos();
     } else if (this.posX > 400 && this.posX < 500) {
-      this.posX -= 2;
+      this.posX -= 1/4;
     } else {
-      this.posX -= 10;
+      this.posX -= 1;
     }
   }
 

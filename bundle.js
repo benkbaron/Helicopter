@@ -75,6 +75,11 @@ const Bird = __webpack_require__(5);
 const Mosquito = __webpack_require__(6);
 const Helicopter = __webpack_require__(7);
 
+// class Game {
+//
+//   constructor() {
+//   }
+
 document.addEventListener("DOMContentLoaded", (event) => {
   let canvas = document.querySelector("canvas");
   let ctx = canvas.getContext("2d");
@@ -110,6 +115,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   checkCrash = () => {
+    if (helicopter1.posY > 550) {
+      return true;
+    }
     let space = distance([helicopter1.posX + 50, helicopter1.posY + 50], [bird1.posX + 25, bird1.posY + 25]);
     if (space < 70){
       return true;
@@ -144,6 +152,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       cloud1.draw(ctx);
       lightning1.draw(ctx);
     } else if (checkCatch()){
+      helicopter1.updatePos();
       helicopter1.draw(ctx);
       bird1.updatePos(helicopter1.posY);
       bird1.draw(ctx);
@@ -158,6 +167,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       lightning1.updatePos();
       lightning1.draw(ctx);
     } else {
+      helicopter1.updatePos();
       helicopter1.draw(ctx);
       bird1.updatePos(helicopter1.posY);
       bird1.draw(ctx);
@@ -174,17 +184,39 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   };
 
-  resetPage();
+  // let timer = setInterval(resetPage, 1000/60);
+
+  setInterval(resetPage, 1000/60);
+
+  // run = () => {
+  //   timer()
   //
-  // setInterval(resetPage(), 500);
+  // }
 
   document.addEventListener("keydown", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
-      helicopter1.updatePos(event.keyCode);
-      resetPage();
+      helicopter1.shouldMove = true;
+      helicopter1.lastKeyDown = event.keyCode;
+      helicopter1.updatePos();
     }
   });
+
+  document.addEventListener("keyup", (event) => {
+    if (event.keyCode >= 37 && event.keyCode <= 40 ) {
+      helicopter1.shouldMove = false;
+      helicopter1.lastKeyDown = false;
+      helicopter1.updatePos();
+    }
+  });
+
+
 });
+
+
+// }
+//
+// let game1 = new Game();
+// setInterval(game1.resetPage(), 1000)
 
 
 /***/ }),
@@ -210,7 +242,7 @@ class Parachuter {
   }
 
   updatePos() {
-    this.posY += 8;
+    this.posY += 1;
     if (this.posY > 1100) {
       this.resetPos();
     }
@@ -252,12 +284,12 @@ class Blimp {
     if (this.posX > 1200) {
       this.resetPos();
     } else {
-      this.posX += 5;
+      this.posX += 1/2;
     }
   }
 
   resetPos() {
-    this.posX = - 1200 - (1000 * Math.random());
+    this.posX = - 600 - (1000 * Math.random());
     this.posY = (600 * Math.random()) - 100;
   }
 
@@ -293,9 +325,9 @@ class Cloud {
     if (this.posX < -500) {
       this.resetPos();
     } else if (this.posX > 400 && this.posX < 500) {
-      this.posX -= 2;
+      this.posX -= 1/4;
     } else {
-      this.posX -= 10;
+      this.posX -= 1;
     }
   }
 
@@ -332,7 +364,7 @@ class Lightning {
   }
 
   updatePos() {
-    this.posY += 60;
+    this.posY += 4;
     if (this.posY > 1100) {
       this.resetPos();
     }
@@ -369,11 +401,11 @@ class Bird {
   }
 
   updatePos(helicopterPosY) {
-    this.posX -= 10;
+    this.posX -= 2;
     if (helicopterPosY > this.posY) {
-      this.posY += 3;
+      this.posY += 1;
     } else {
-      this.posY -= 3;
+      this.posY -= 1;
     }
 
     if (this.posX < -100) {
@@ -398,7 +430,7 @@ module.exports = Bird;
 class Mosquito {
   constructor(options) {
     this.posX = 600 * Math.random();
-    this.posY = 1100;
+    this.posY = 1005;
   }
 
   draw(ctx) {
@@ -413,15 +445,15 @@ class Mosquito {
 
   updatePos(helicopterPosX, helicopterPosY) {
     if (helicopterPosX > this.posX) {
-      this.posX += 3;
+      this.posX += 1/2;
     } else {
-      this.posX -= 3;
+      this.posX -= 1/2;
     }
 
     if (helicopterPosY > this.posY) {
-      this.posY += 3;
+      this.posY += 1/2;
     } else {
-      this.posY -= 3;
+      this.posY -= 1/2;
     }
   }
 
@@ -440,6 +472,8 @@ class Helicopter {
     this.posX = 100;
     this.posY = 100;
     this.flipped = false;
+    this.shouldMove = false;
+    this.lastKeyDown = false;
   }
 
   draw(ctx) {
@@ -453,26 +487,27 @@ class Helicopter {
   }
 
 
-  updatePos(code) {
-    switch (code){
+  updatePos() {
+    this.posY += 2;
+    if (this.lastKeyDown) {
+    switch (this.lastKeyDown){
       case 38:
-        this.posY -= 13;
+        this.posY -= 6;
         break;
       case 40:
-        this.posY += 13;
+        this.posY += 6;
         break;
       case 37:
-        this.posX -= 13;
+        this.posX -= 6;
         this.flipped = true;
         break;
       case 39:
-        this.posX += 13;
+        this.posX += 6;
         this.flipped = false;
         break;
       }
-
-
-  }
+      }
+    }
 
 }
 

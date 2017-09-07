@@ -6,6 +6,11 @@ const Bird = require("./bird");
 const Mosquito = require("./mosquito");
 const Helicopter = require("./helicopter");
 
+// class Game {
+//
+//   constructor() {
+//   }
+
 document.addEventListener("DOMContentLoaded", (event) => {
   let canvas = document.querySelector("canvas");
   let ctx = canvas.getContext("2d");
@@ -41,6 +46,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   checkCrash = () => {
+    if (helicopter1.posY > 550) {
+      return true;
+    }
     let space = distance([helicopter1.posX + 50, helicopter1.posY + 50], [bird1.posX + 25, bird1.posY + 25]);
     if (space < 70){
       return true;
@@ -75,6 +83,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       cloud1.draw(ctx);
       lightning1.draw(ctx);
     } else if (checkCatch()){
+      helicopter1.updatePos();
       helicopter1.draw(ctx);
       bird1.updatePos(helicopter1.posY);
       bird1.draw(ctx);
@@ -89,6 +98,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       lightning1.updatePos();
       lightning1.draw(ctx);
     } else {
+      helicopter1.updatePos();
       helicopter1.draw(ctx);
       bird1.updatePos(helicopter1.posY);
       bird1.draw(ctx);
@@ -105,14 +115,36 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   };
 
-  resetPage();
+  // let timer = setInterval(resetPage, 1000/60);
+
+  setInterval(resetPage, 1000/60);
+
+  // run = () => {
+  //   timer()
   //
-  // setInterval(resetPage(), 500);
+  // }
 
   document.addEventListener("keydown", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
-      helicopter1.updatePos(event.keyCode);
-      resetPage();
+      helicopter1.shouldMove = true;
+      helicopter1.lastKeyDown = event.keyCode;
+      helicopter1.updatePos();
     }
   });
+
+  document.addEventListener("keyup", (event) => {
+    if (event.keyCode >= 37 && event.keyCode <= 40 ) {
+      helicopter1.shouldMove = false;
+      helicopter1.lastKeyDown = false;
+      helicopter1.updatePos();
+    }
+  });
+
+
 });
+
+
+// }
+//
+// let game1 = new Game();
+// setInterval(game1.resetPage(), 1000)

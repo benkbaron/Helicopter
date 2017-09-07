@@ -21,12 +21,12 @@ class Blimp {
     if (this.posX > 1200) {
       this.resetPos();
     } else {
-      this.posX += 5;
+      this.posX += 1/2;
     }
   }
 
   resetPos() {
-    this.posX = - 1200 - (1000 * Math.random());
+    this.posX = - 600 - (1000 * Math.random());
     this.posY = (600 * Math.random()) - 100;
   }
 

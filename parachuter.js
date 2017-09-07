@@ -17,7 +17,7 @@ class Parachuter {
   }
 
   updatePos() {
-    this.posY += 8;
+    this.posY += 1;
     if (this.posY > 1100) {
       this.resetPos();
     }
