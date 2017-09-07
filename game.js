@@ -9,6 +9,9 @@
 const Parachuter = require("./parachuter");
 const Blimp = require("./blimp");
 const Cloud = require("./cloud");
+const Lightning = require("./lightning");
+const Bird = require("./bird");
+const Mosquito = require("./mosquito");
 
 document.addEventListener("DOMContentLoaded", (event) => {
   let canvas = document.querySelector("canvas");
@@ -24,10 +27,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let parachuter1 = new Parachuter();
   let blimp1 = new Blimp();
   let cloud1 = new Cloud();
-
-
-
-
+  let lightning1 = new Lightning();
+  let bird1 = new Bird();
+  let mosquito1 = new Mosquito();
 
   drawHelicopter = () => {
     let helicopterIcon = new Image();
@@ -37,28 +39,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
     };
   };
 
-  drawBird = () => {
-    let birdIcon = new Image();
-    birdIcon.src = "./assets/birdIcon.png";
-    birdIcon.onload = function() {
-      ctx.drawImage(this, birdPosX, birdPosY, 50, 50);
-    };
-  };
-
-  drawLightning = () => {
-    let lightningIcon = new Image();
-    lightningIcon.src = "./assets/lightningIcon.png";
-    lightningIcon.onload = function() {
-      ctx.drawImage(this, lightningPosX, lightningPosY, 100, 700);
-    };
-  };
-
-
-  drawFeathers = () => {
+  drawFeathers = (bird) => {
     let feathersIcon = new Image();
     feathersIcon.src = "./assets/feathersIcon.png";
     feathersIcon.onload = function() {
-      ctx.drawImage(this, birdPosX, birdPosY, 100, 100);
+      ctx.drawImage(this, bird.posX, bird.posY, 100, 100);
     };
   };
 
@@ -71,7 +56,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   checkCrash = () => {
-    let space = distance([helicopterPosX + 50, helicopterPosY + 50], [birdPosX + 25, birdPosY + 25]);
+    let space = distance([helicopterPosX + 50, helicopterPosY + 50], [bird1.posX + 25, bird1.posY + 25]);
     if (space < 70){
       return true;
     }
@@ -84,8 +69,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   };
 
-
-
   distance = (pos1, pos2) => {
     let a = pos1[0] - pos2[0];
     let b = pos1[1] - pos2[1];
@@ -96,11 +79,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let helicopterPosX = 100;
   let helicopterPosY = 100;
 
-  let birdPosX = 1010;
-  let birdPosY = 600 * Math.random();
-
-  let lightningPosX = 1000 * Math.random();
-  let lightningPosY = (-10000 * Math.random()) - 1000;
 
   resetPage = () => {
     ctx.clearRect(0, 0, 1000, 600);
@@ -108,65 +86,42 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.fillRect(0, 0, 1000, 600);
 
     if (checkCrash()) {
-      drawFeathers();
+      drawFeathers(bird1);
       drawSkull();
       parachuter1.draw(ctx);
       blimp1.draw(ctx);
+      mosquito1.draw(ctx);
       cloud1.draw(ctx);
-      drawLightning();
+      lightning1.draw(ctx);
     } else if (checkCatch()){
       drawHelicopter();
-      updateBirdPos();
-      drawBird();
+      bird1.updatePos(helicopterPosY);
+      bird1.draw(ctx);
       parachuter1.resetPos();
       parachuter1.draw(ctx);
       blimp1.updatePos();
       blimp1.draw(ctx);
+      mosquito1.updatePos(helicopterPosX, helicopterPosY);
+      mosquito1.draw(ctx);
       cloud1.updatePos();
       cloud1.draw(ctx);
-      updateLightningPos();
-      drawLightning();
+      lightning1.updatePos();
+      lightning1.draw(ctx);
     } else {
       drawHelicopter();
-      updateBirdPos();
-      drawBird();
+      bird1.updatePos(helicopterPosY);
+      bird1.draw(ctx);
       parachuter1.updatePos();
       parachuter1.draw(ctx);
       blimp1.updatePos();
       blimp1.draw(ctx);
+      mosquito1.updatePos(helicopterPosX, helicopterPosY);
+      mosquito1.draw(ctx);
       cloud1.updatePos();
       cloud1.draw(ctx);
-      updateLightningPos();
-      drawLightning();
+      lightning1.updatePos();
+      lightning1.draw(ctx);
     }
-  };
-
-  updateBirdPos = () => {
-    birdPosX -= 10;
-    if (helicopterPosY > birdPosY) {
-      birdPosY += 3;
-    } else {
-      birdPosY -= 3;
-    }
-
-    if (birdPosX < -100) {
-      birdPosX = 1010;
-      birdPosY = 600 * Math.random();
-    }
-  };
-
-
-  updateLightningPos = () => {
-    lightningPosY += 60;
-    if (lightningPosY > 1100) {
-      resetLightningPos();
-    }
-  };
-
-
-  resetLightningPos = () => {
-    lightningPosX = 1000 * Math.random();
-    lightningPosY = -10000 * Math.random();
   };
 
   resetPage();
