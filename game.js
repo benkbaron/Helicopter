@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.fillText(`Rescues: ${rescueCount}`, 10, 25);
     ctx.fillText(`Birds Shot: ${birdShotCount}`, 10, 50);
     ctx.fillText(`Lives Left: ${lifeCount}`, 10, 75);
-    addSun(ctx);
+
     if (lifeCount === 0) {
       displayGameOver();
       return;
@@ -140,6 +140,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
 
   displayCrash = () => {
+    addSadSun(ctx);
     bird1.draw(ctx);
     helicopter1.drawSkull(ctx);
     parachuter1.draw(ctx);
@@ -151,6 +152,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayCaught = () => {
+    addSun(ctx);
     helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY);
@@ -172,6 +174,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayHit = () => {
+    addSun(ctx);
     helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
     bird1.draw(ctx);
@@ -192,6 +195,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayStandard = () => {
+    addSun(ctx);
     helicopter1.updatePos(wind1);
     bird1.updatePos(helicopter1.posY);
     parachuter1.updatePos();
@@ -215,6 +219,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let sunIcon = new Image();
   sunIcon.src = "./assets/sunIcon.png";
   addSun = (ctx) => { ctx.drawImage(sunIcon, 920, 20, 70, 70); };
+
+  let sadSunIcon = new Image();
+  sadSunIcon.src = "./assets/sadSunIcon.png";
+  addSadSun = (ctx) => { ctx.drawImage(sadSunIcon, 920, 20, 70, 70); };
 
   resetPage();
 
