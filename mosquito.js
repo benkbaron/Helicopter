@@ -11,7 +11,7 @@ class Mosquito {
     ctx.drawImage(this.mosquitoIcon, this.posX, this.posY, 25, 25);
   }
 
-  updatePos(helicopterPosX, helicopterPosY) {
+  updatePos(helicopterPosX, helicopterPosY, wind) {
     if (helicopterPosX > this.posX) {
       this.posX += 2/3;
     } else {
@@ -23,6 +23,19 @@ class Mosquito {
     } else {
       this.posY -= 2/3;
     }
+
+    if (this.inWindRange(wind)){
+      this.posX += 1;
+    }
+  }
+
+
+  inWindRange(wind) {
+    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
+          return true;
+        }
+    return false;
   }
 
 }

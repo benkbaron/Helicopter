@@ -113,6 +113,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
       return true;
     }
 
+    space = distance([helicopter1.posX + 50, helicopter1.posY + 50], [blimp1.posX + 100, blimp1.posY + 100]);
+    if (space < 100){
+      return true;
+    }
+
     space = distance([helicopter1.posX + 50, helicopter1.posY + 50], [mosquito1.posX + 10, mosquito1.posY + 10]);
     if (space < 40){
       return true;
@@ -224,13 +229,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     addSun(ctx);
     helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
-    bird1.updatePos(helicopter1.posY);
+    bird1.updatePos(helicopter1.posY, wind1);
     bird1.draw(ctx);
     parachuter1.resetPos();
     parachuter1.draw(ctx);
     blimp1.updatePos();
     blimp1.draw(ctx);
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
+    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     mosquito1.draw(ctx);
     lightning1.updatePos();
     lightning1.draw(ctx);
@@ -246,14 +251,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
     addSun(ctx);
     helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
+    bird1.updatePos(helicopter1.posY, wind1);
     bird1.draw(ctx);
     arrow1.appear = false;
     arrow1.posX = -1000;
-    parachuter1.updatePos();
+    parachuter1.updatePos(wind1);
     parachuter1.draw(ctx);
     blimp1.updatePos();
     blimp1.draw(ctx);
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
+    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     mosquito1.draw(ctx);
     lightning1.updatePos();
     lightning1.draw(ctx);
@@ -266,10 +272,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
   displayStandard = () => {
     addSun(ctx);
     helicopter1.updatePos(wind1);
-    bird1.updatePos(helicopter1.posY);
-    parachuter1.updatePos();
+    bird1.updatePos(helicopter1.posY, wind1);
+    parachuter1.updatePos(wind1);
     blimp1.updatePos();
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
+    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     lightning1.updatePos();
     arrow1.updatePos();
     wind1.updatePos();
@@ -327,11 +333,22 @@ class Parachuter {
     ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 50, 50);
   }
 
-  updatePos() {
+  updatePos(wind) {
     this.posY += 1;
     if (this.posY > 1100) {
       this.resetPos();
     }
+    if (this.inWindRange(wind)){
+      this.posX += 3;
+    }
+  }
+
+  inWindRange(wind) {
+  if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+      (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
+        return true;
+      }
+  return false;
   }
 
   resetPos() {
@@ -350,7 +367,7 @@ module.exports = Parachuter;
 
 class Blimp {
   constructor(options) {
-    this.posX = - 1200 - (1000 * Math.random());
+    this.posX = - 500 - (1000 * Math.random());
     this.posY = (600 * Math.random()) - 100;
     this.blimpIcon = new Image();
     this.blimpIcon.src = "./assets/blimpIcon.png";
@@ -480,7 +497,7 @@ class Bird {
     }
   }
 
-  updatePos(helicopterPosY) {
+  updatePos(helicopterPosY, wind) {
     this.posX -= 2.5;
     if (helicopterPosY > this.posY) {
       this.posY += 1;
@@ -491,7 +508,21 @@ class Bird {
     if (this.posX < -100) {
       this.resetPos();
     }
+
+    if (this.inWindRange(wind)){
+      this.posX += 3;
+    }
   }
+
+
+inWindRange(wind) {
+  if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+      (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
+        return true;
+      }
+  return false;
+}
+
 
   resetPos() {
     this.posX = 1010;
@@ -519,7 +550,7 @@ class Mosquito {
     ctx.drawImage(this.mosquitoIcon, this.posX, this.posY, 25, 25);
   }
 
-  updatePos(helicopterPosX, helicopterPosY) {
+  updatePos(helicopterPosX, helicopterPosY, wind) {
     if (helicopterPosX > this.posX) {
       this.posX += 2/3;
     } else {
@@ -531,6 +562,19 @@ class Mosquito {
     } else {
       this.posY -= 2/3;
     }
+
+    if (this.inWindRange(wind)){
+      this.posX += 1;
+    }
+  }
+
+
+  inWindRange(wind) {
+    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
+          return true;
+        }
+    return false;
   }
 
 }

@@ -1,7 +1,7 @@
 
 class Blimp {
   constructor(options) {
-    this.posX = - 1200 - (1000 * Math.random());
+    this.posX = - 500 - (1000 * Math.random());
     this.posY = (600 * Math.random()) - 100;
     this.blimpIcon = new Image();
     this.blimpIcon.src = "./assets/blimpIcon.png";

@@ -44,6 +44,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
       return true;
     }
 
+    space = distance([helicopter1.posX + 50, helicopter1.posY + 50], [blimp1.posX + 100, blimp1.posY + 100]);
+    if (space < 100){
+      return true;
+    }
+
     space = distance([helicopter1.posX + 50, helicopter1.posY + 50], [mosquito1.posX + 10, mosquito1.posY + 10]);
     if (space < 40){
       return true;
@@ -155,13 +160,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     addSun(ctx);
     helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
-    bird1.updatePos(helicopter1.posY);
+    bird1.updatePos(helicopter1.posY, wind1);
     bird1.draw(ctx);
     parachuter1.resetPos();
     parachuter1.draw(ctx);
     blimp1.updatePos();
     blimp1.draw(ctx);
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
+    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     mosquito1.draw(ctx);
     lightning1.updatePos();
     lightning1.draw(ctx);
@@ -177,14 +182,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
     addSun(ctx);
     helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
+    bird1.updatePos(helicopter1.posY, wind1);
     bird1.draw(ctx);
     arrow1.appear = false;
     arrow1.posX = -1000;
-    parachuter1.updatePos();
+    parachuter1.updatePos(wind1);
     parachuter1.draw(ctx);
     blimp1.updatePos();
     blimp1.draw(ctx);
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
+    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     mosquito1.draw(ctx);
     lightning1.updatePos();
     lightning1.draw(ctx);
@@ -197,10 +203,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
   displayStandard = () => {
     addSun(ctx);
     helicopter1.updatePos(wind1);
-    bird1.updatePos(helicopter1.posY);
-    parachuter1.updatePos();
+    bird1.updatePos(helicopter1.posY, wind1);
+    parachuter1.updatePos(wind1);
     blimp1.updatePos();
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
+    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     lightning1.updatePos();
     arrow1.updatePos();
     wind1.updatePos();
