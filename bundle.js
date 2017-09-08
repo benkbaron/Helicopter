@@ -100,11 +100,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let intervalSpeed = 1000/60;
 
   checkCrash = () => {
-    if (helicopter1.posY > 550) {
+    if (helicopter1.posY > 550 || helicopter1.posY < -100 ||
+        helicopter1.posX > 1100 || helicopter1.posX < -100) {
       return true;
     }
+
     let space = distance([helicopter1.posX + 50, helicopter1.posY + 50], [bird1.posX + 25, bird1.posY + 25]);
-    if (space < 70){
+    if (space < 70 && bird1.feathers === 0){
       bird1.feathers = 25;
       return true;
     }
@@ -156,6 +158,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.fillText(`Rescues: ${rescueCount}`, 10, 25);
     ctx.fillText(`Birds Shot: ${birdShotCount}`, 10, 50);
     ctx.fillText(`Lives Left: ${lifeCount}`, 10, 75);
+    addSun(ctx);
+    if (lifeCount === 0) {
+      displayGameOver();
+      return;
+    }
+
+    // ctx.beginPath();
+    // ctx.arc(950, 50, 25, 0, 2 * Math.PI, false);
+    // ctx.fillStyle = 'yellow';
+    // ctx.fill();
+
     if (checkCrash()) {
       displayCrash();
       intervalSpeed = 2000;
@@ -233,7 +246,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     bird1.draw(ctx);
     arrow1.appear = false;
     arrow1.posX = -1000;
-    parachuter1.resetPos();
+    parachuter1.updatePos();
     parachuter1.draw(ctx);
     blimp1.updatePos();
     blimp1.draw(ctx);
@@ -264,7 +277,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
     cloud1.draw(ctx);
   };
 
+  addSun = (ctx) => {
+    let sunIcon = new Image();
+    sunIcon.src = "./assets/sunIcon.png";
+    sunIcon.onload = function() {
+      ctx.drawImage(this, 920, 20, 70, 70);
+    };
+  };
+
   resetPage();
+
+  displayGameOver = () => {
+    ctx.fillStyle = "white";
+    ctx.font = '80px serif';
+    ctx.fillText('Sorry you lost!', 270, 280);
+  };
 
 });
 
@@ -471,7 +498,7 @@ class Bird {
   }
 
   updatePos(helicopterPosY) {
-    this.posX -= 2;
+    this.posX -= 2.5;
     if (helicopterPosY > this.posY) {
       this.posY += 1;
     } else {
@@ -500,7 +527,7 @@ module.exports = Bird;
 class Mosquito {
   constructor(options) {
     this.posX = 600 * Math.random();
-    this.posY = 1005;
+    this.posY = 800;
   }
 
   draw(ctx) {
@@ -515,15 +542,15 @@ class Mosquito {
 
   updatePos(helicopterPosX, helicopterPosY) {
     if (helicopterPosX > this.posX) {
-      this.posX += 1/2;
+      this.posX += 2/3;
     } else {
-      this.posX -= 1/2;
+      this.posX -= 2/3;
     }
 
     if (helicopterPosY > this.posY) {
-      this.posY += 1/2;
+      this.posY += 2/3;
     } else {
-      this.posY -= 1/2;
+      this.posY -= 2/3;
     }
   }
 

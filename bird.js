@@ -30,7 +30,7 @@ class Bird {
   }
 
   updatePos(helicopterPosY) {
-    this.posX -= 2;
+    this.posX -= 2.5;
     if (helicopterPosY > this.posY) {
       this.posY += 1;
     } else {

@@ -2,7 +2,7 @@
 class Mosquito {
   constructor(options) {
     this.posX = 600 * Math.random();
-    this.posY = 1005;
+    this.posY = 800;
   }
 
   draw(ctx) {
@@ -17,15 +17,15 @@ class Mosquito {
 
   updatePos(helicopterPosX, helicopterPosY) {
     if (helicopterPosX > this.posX) {
-      this.posX += 1/2;
+      this.posX += 2/3;
     } else {
-      this.posX -= 1/2;
+      this.posX -= 2/3;
     }
 
     if (helicopterPosY > this.posY) {
-      this.posY += 1/2;
+      this.posY += 2/3;
     } else {
-      this.posY -= 1/2;
+      this.posY -= 2/3;
     }
   }
 
