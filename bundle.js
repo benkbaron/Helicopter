@@ -91,12 +91,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
   ctx.fillRect(0, 0, 1000, 600);
   ctx.fillStyle = "white";
   ctx.font = '80px serif';
-  ctx.fillText('Click to Start!', 270, 280);
+  ctx.fillText('Click to Start!', 270, 250);
   ctx.fillStyle = "black";
-  ctx.font = '30px serif';
-  ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 100, 400);
-  ctx.fillText('Other objects are dangerous, but stay in the borders!', 175, 450);
-  ctx.fillText('Shoot birds with arrows using spacebar.', 260, 500);
+  ctx.font = '25px serif';
+  ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 150, 380);
+  ctx.fillText('All objects, but clouds and wind, are dangerous! Careful to stay in the borders!', 100, 440);
+  ctx.fillText('Shoot birds and mosquitos using spacebar, only 1 arrow at a time.', 170, 500);
 
   let parachuter1 = new Parachuter();
   let blimp1 = new Blimp();
@@ -157,6 +157,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (space < 60){
       bird1.feathers = 25;
       birdShotCount += 1;
+      return true;
+    }
+
+    space = distance([arrow1.posX, arrow1.posY], [mosquito1.posX, mosquito1.posY]);
+    if (space < 12){
+      mosquito1.resetPos();
       return true;
     }
   };
