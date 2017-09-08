@@ -19,5 +19,8 @@
   "homepage": "https://github.com/benkbaron/Helicopter#readme",
   "devDependencies": {
     "webpack": "^3.5.6"
+  },
+  "dependencies": {
+    "sleep": "^5.1.1"
   }
 }

@@ -93,6 +93,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let mosquito1 = new Mosquito();
   let helicopter1 = new Helicopter();
   let arrow1 = new Arrow();
+  let rescueCount = 0;
+  let birdShotCount = 0;
+  let lifeCount = 3;
+
+  let intervalSpeed = 1000/60;
 
   checkCrash = () => {
     if (helicopter1.posY > 550) {
@@ -121,6 +126,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   checkCatch = () => {
     let space = distance([helicopter1.posX + 50, helicopter1.posY + 50], [parachuter1.posX + 25, parachuter1.posY + 25]);
     if (space < 60){
+      rescueCount += 1;
       return true;
     }
   };
@@ -129,6 +135,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let space = distance([arrow1.posX, arrow1.posY], [bird1.posX + 25, bird1.posY + 25]);
     if (space < 60){
       bird1.feathers = 25;
+      birdShotCount += 1;
       return true;
     }
   };
@@ -145,44 +152,33 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.fillStyle = "blue";
     ctx.fillRect(0, 0, 1000, 600);
     ctx.fillStyle = "white";
-    ctx.font = '24px serif';
-    ctx.fillText('Rescues:', 10, 50);
-
+    ctx.font = '20px serif';
+    ctx.fillText(`Rescues: ${rescueCount}`, 10, 25);
+    ctx.fillText(`Birds Shot: ${birdShotCount}`, 10, 50);
+    ctx.fillText(`Lives Left: ${lifeCount}`, 10, 75);
     if (checkCrash()) {
       displayCrash();
+      intervalSpeed = 2000;
+      helicopter1.resetPos();
+      lifeCount -= 1;
     } else if (checkCatch()){
+      intervalSpeed = 1000/60;
+
       displayCaught();
     } else if (checkHit()){
+      intervalSpeed = 1000/60;
+
       displayHit();
+    } else {
+      intervalSpeed = 1000/60;
+
+      displayStandard();
     }
-      else {
-      helicopter1.updatePos();
-      helicopter1.draw(ctx);
-      bird1.updatePos(helicopter1.posY);
-      bird1.draw(ctx);
-      parachuter1.updatePos();
-      parachuter1.draw(ctx);
-      blimp1.updatePos();
-      blimp1.draw(ctx);
-      mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
-      mosquito1.draw(ctx);
-      lightning1.updatePos();
-      lightning1.draw(ctx);
-      arrow1.updatePos();
-      arrow1.draw(ctx);
-      cloud1.updatePos();
-      cloud1.draw(ctx);
-    }
+
+    setTimeout(resetPage, intervalSpeed);
   };
 
-  // let timer = setInterval(resetPage, 1000/60);
-
-  setInterval(resetPage, 1000/60);
-
-  // run = () => {
-  //   timer()
-  //
-  // }
+  // setInterval(resetPage, intervalSpeed);
 
   document.addEventListener("keydown", (event) => {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
@@ -249,6 +245,26 @@ document.addEventListener("DOMContentLoaded", (event) => {
     cloud1.draw(ctx);
   };
 
+  displayStandard = () => {
+    helicopter1.updatePos();
+    helicopter1.draw(ctx);
+    bird1.updatePos(helicopter1.posY);
+    bird1.draw(ctx);
+    parachuter1.updatePos();
+    parachuter1.draw(ctx);
+    blimp1.updatePos();
+    blimp1.draw(ctx);
+    mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
+    mosquito1.draw(ctx);
+    lightning1.updatePos();
+    lightning1.draw(ctx);
+    arrow1.updatePos();
+    arrow1.draw(ctx);
+    cloud1.updatePos();
+    cloud1.draw(ctx);
+  };
+
+  resetPage();
 
 });
 
@@ -567,6 +583,11 @@ class Helicopter {
       this.posX += 6;
       this.flipped = false;
       }
+  }
+
+  resetPos() {
+    this.posX = 100;
+    this.posY = 100;
   }
 
 }

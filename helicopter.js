@@ -47,6 +47,11 @@ class Helicopter {
       }
   }
 
+  resetPos() {
+    this.posX = 100;
+    this.posY = 100;
+  }
+
 }
 
 module.exports = Helicopter;
