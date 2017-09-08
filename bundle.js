@@ -75,6 +75,7 @@ const Bird = __webpack_require__(5);
 const Mosquito = __webpack_require__(6);
 const Helicopter = __webpack_require__(7);
 const Arrow = __webpack_require__(8);
+const Wind = __webpack_require__(11);
 
 // class Game {
 //
@@ -93,6 +94,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let mosquito1 = new Mosquito();
   let helicopter1 = new Helicopter();
   let arrow1 = new Arrow();
+  let wind1 = new Wind();
   let rescueCount = 0;
   let birdShotCount = 0;
   let lifeCount = 3;
@@ -218,11 +220,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     blimp1.draw(ctx);
     mosquito1.draw(ctx);
     lightning1.draw(ctx);
+    wind1.draw(ctx);
     cloud1.draw(ctx);
   };
 
   displayCaught = () => {
-    helicopter1.updatePos();
+    helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY);
     bird1.draw(ctx);
@@ -236,12 +239,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.draw(ctx);
     arrow1.updatePos();
     arrow1.draw(ctx);
+    wind1.updatePos();
+    wind1.draw(ctx);
     cloud1.updatePos();
     cloud1.draw(ctx);
   };
 
   displayHit = () => {
-    helicopter1.updatePos();
+    helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
     bird1.draw(ctx);
     arrow1.appear = false;
@@ -254,12 +259,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     mosquito1.draw(ctx);
     lightning1.updatePos();
     lightning1.draw(ctx);
+    wind1.updatePos();
+    wind1.draw(ctx);
     cloud1.updatePos();
     cloud1.draw(ctx);
   };
 
   displayStandard = () => {
-    helicopter1.updatePos();
+    helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY);
     bird1.draw(ctx);
@@ -273,6 +280,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.draw(ctx);
     arrow1.updatePos();
     arrow1.draw(ctx);
+    wind1.updatePos();
+    wind1.draw(ctx);
     cloud1.updatePos();
     cloud1.draw(ctx);
   };
@@ -593,7 +602,7 @@ class Helicopter {
   }
 
 
-  updatePos() {
+  updatePos(wind) {
     this.posY += 2;
 
     if (this.keysDown.includes(38)) {
@@ -610,7 +619,20 @@ class Helicopter {
       this.posX += 6;
       this.flipped = false;
       }
+
+    if (this.inWindRange(wind)){
+      this.posX += 6.1;
+    }
   }
+
+  inWindRange(wind) {
+    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
+          return true;
+        }
+    return false;
+  }
+
 
   resetPos() {
     this.posX = 100;
@@ -676,6 +698,47 @@ class Arrow {
 }
 
 module.exports = Arrow;
+
+
+/***/ }),
+/* 9 */,
+/* 10 */,
+/* 11 */
+/***/ (function(module, exports) {
+
+
+class Wind {
+  constructor(options) {
+    this.posX = -1200 - (1000 * Math.random());
+    this.posY = (600 * Math.random()) - 100;
+  }
+
+  draw(ctx) {
+    let windPosX = this.posX;
+    let windPosY = this.posY;
+    let windIcon = new Image();
+    windIcon.src = "./assets/windIcon.png";
+    windIcon.onload = function() {
+      ctx.drawImage(this, windPosX, windPosY, 250, 250);
+    };
+  }
+
+
+  updatePos() {
+    this.posX += 3;
+    if (this.posX > 1200) {
+      this.resetPos();
+    }
+  }
+
+  resetPos() {
+    this.posX = -1200 - (1000 * Math.random());
+    this.posY = 600 * Math.random() - 100;
+  }
+
+}
+
+module.exports = Wind;
 
 
 /***/ })

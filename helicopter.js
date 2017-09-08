@@ -28,7 +28,7 @@ class Helicopter {
   }
 
 
-  updatePos() {
+  updatePos(wind) {
     this.posY += 2;
 
     if (this.keysDown.includes(38)) {
@@ -45,7 +45,20 @@ class Helicopter {
       this.posX += 6;
       this.flipped = false;
       }
+
+    if (this.inWindRange(wind)){
+      this.posX += 6.1;
+    }
   }
+
+  inWindRange(wind) {
+    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
+          return true;
+        }
+    return false;
+  }
+
 
   resetPos() {
     this.posX = 100;

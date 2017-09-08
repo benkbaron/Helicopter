@@ -6,6 +6,7 @@ const Bird = require("./bird");
 const Mosquito = require("./mosquito");
 const Helicopter = require("./helicopter");
 const Arrow = require("./arrow");
+const Wind = require("./wind");
 
 // class Game {
 //
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let mosquito1 = new Mosquito();
   let helicopter1 = new Helicopter();
   let arrow1 = new Arrow();
+  let wind1 = new Wind();
   let rescueCount = 0;
   let birdShotCount = 0;
   let lifeCount = 3;
@@ -149,11 +151,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     blimp1.draw(ctx);
     mosquito1.draw(ctx);
     lightning1.draw(ctx);
+    wind1.draw(ctx);
     cloud1.draw(ctx);
   };
 
   displayCaught = () => {
-    helicopter1.updatePos();
+    helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY);
     bird1.draw(ctx);
@@ -167,12 +170,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.draw(ctx);
     arrow1.updatePos();
     arrow1.draw(ctx);
+    wind1.updatePos();
+    wind1.draw(ctx);
     cloud1.updatePos();
     cloud1.draw(ctx);
   };
 
   displayHit = () => {
-    helicopter1.updatePos();
+    helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
     bird1.draw(ctx);
     arrow1.appear = false;
@@ -185,12 +190,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     mosquito1.draw(ctx);
     lightning1.updatePos();
     lightning1.draw(ctx);
+    wind1.updatePos();
+    wind1.draw(ctx);
     cloud1.updatePos();
     cloud1.draw(ctx);
   };
 
   displayStandard = () => {
-    helicopter1.updatePos();
+    helicopter1.updatePos(wind1);
     helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY);
     bird1.draw(ctx);
@@ -204,6 +211,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.draw(ctx);
     arrow1.updatePos();
     arrow1.draw(ctx);
+    wind1.updatePos();
+    wind1.draw(ctx);
     cloud1.updatePos();
     cloud1.draw(ctx);
   };
