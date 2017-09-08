@@ -86,6 +86,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let canvas = document.querySelector("canvas");
   let ctx = canvas.getContext("2d");
 
+  ctx.clearRect(0, 0, 1000, 600);
+  ctx.fillStyle = "blue";
+  ctx.fillRect(0, 0, 1000, 600);
+  ctx.fillStyle = "white";
+  ctx.font = '80px serif';
+  ctx.fillText('Click to Start!', 270, 280);
+  ctx.fillStyle = "black";
+  ctx.font = '30px serif';
+  ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 100, 400);
+  ctx.fillText('Other objects are dangerous, but stay in the borders!', 175, 450);
+  ctx.fillText('Shoot birds with arrows using spacebar.', 260, 500);
+
   let parachuter1 = new Parachuter();
   let blimp1 = new Blimp();
   let cloud1 = new Cloud();
@@ -299,12 +311,37 @@ document.addEventListener("DOMContentLoaded", (event) => {
   sadSunIcon.src = "./assets/sadSunIcon.png";
   addSadSun = (ctx) => { ctx.drawImage(sadSunIcon, 920, 20, 70, 70); };
 
-  resetPage();
+  // resetPage();
+
+  let gameStarted = false;
+
+  document.addEventListener("click", (event) => {
+    if (lifeCount === 0 || gameStarted === false) {
+      lifeCount = 3;
+      rescueCount = 0;
+      birdShotCount = 0;
+      helicopter1.resetPos();
+      bird1.resetPos();
+      wind1.resetPos();
+      cloud1.resetPos();
+      arrow1.resetPos();
+      parachuter1.resetPos();
+      blimp1.resetPos();
+      mosquito1.resetPos();
+      blimp1.resetPos();
+      lightning1.resetPos();
+      gameStarted = true;
+      resetPage();
+    }
+  });
+
 
   displayGameOver = () => {
     ctx.fillStyle = "white";
     ctx.font = '80px serif';
     ctx.fillText('Sorry you lost!', 270, 280);
+    ctx.font = '50px serif';
+    ctx.fillText('Click to Try Again', 325, 400);
   };
 
 });
@@ -575,6 +612,11 @@ class Mosquito {
           return true;
         }
     return false;
+  }
+
+  resetPos() {
+    this.posX = 600 * Math.random();
+    this.posY = 800;
   }
 
 }

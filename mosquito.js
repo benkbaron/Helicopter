@@ -38,6 +38,11 @@ class Mosquito {
     return false;
   }
 
+  resetPos() {
+    this.posX = 600 * Math.random();
+    this.posY = 800;
+  }
+
 }
 
 module.exports = Mosquito;

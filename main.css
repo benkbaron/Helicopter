@@ -1,0 +1,13 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: lightblue;
+}
+
+canvas {
+  /*display: flex;*/
+  min-width: 80vw;
+  max-height: 48vw;
+  /*padding-bottom: 30px;*/
+}
