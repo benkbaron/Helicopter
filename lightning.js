@@ -3,17 +3,12 @@ class Lightning {
   constructor(options) {
     this.posX = 1000 * Math.random();
     this.posY = (-8000 * Math.random()) - 1000;
-
+    this.lightningIcon = new Image();
+    this.lightningIcon.src = "./assets/lightningIcon.png";
   }
 
   draw(ctx) {
-    let lightningPosX = this.posX;
-    let lightningPosY = this.posY;
-    let lightningIcon = new Image();
-    lightningIcon.src = "./assets/lightningIcon.png";
-    lightningIcon.onload = function() {
-      ctx.drawImage(this, lightningPosX, lightningPosY, 100, 700);
-    };
+    ctx.drawImage(this.lightningIcon, this.posX, this.posY, 100, 700);
   }
 
   updatePos() {

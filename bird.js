@@ -4,28 +4,23 @@ class Bird {
     this.posX = 1010;
     this.posY = 600 * Math.random();
     this.feathers = 0;
+
+    this.feathersIcon = new Image();
+    this.feathersIcon.src = "./assets/feathersIcon.png";
+
+    this.birdIcon = new Image();
+    this.birdIcon.src = "./assets/birdIcon.png";
   }
 
   draw(ctx) {
-    let birdPosX = this.posX;
-    let birdPosY = this.posY;
-
     if (this.feathers > 0) {
       this.feathers -= 1;
-      let feathersIcon = new Image();
-      feathersIcon.src = "./assets/feathersIcon.png";
-      feathersIcon.onload = function() {
-        ctx.drawImage(this, birdPosX, birdPosY, 100, 100);
-      };
+      ctx.drawImage(this.feathersIcon, this.posX, this.posY, 100, 100);
       if (this.feathers === 0) {
         this.resetPos();
       }
     } else {
-        let birdIcon = new Image();
-        birdIcon.src = "./assets/birdIcon.png";
-        birdIcon.onload = function() {
-          ctx.drawImage(this, birdPosX, birdPosY, 50, 50);
-        };
+      ctx.drawImage(this.birdIcon, this.posX, this.posY, 50, 50);
     }
   }
 

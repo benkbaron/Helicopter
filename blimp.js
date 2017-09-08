@@ -3,17 +3,12 @@ class Blimp {
   constructor(options) {
     this.posX = - 1200 - (1000 * Math.random());
     this.posY = (600 * Math.random()) - 100;
-
+    this.blimpIcon = new Image();
+    this.blimpIcon.src = "./assets/blimpIcon.png";
   }
 
   draw(ctx) {
-    let blimpPosX = this.posX;
-    let blimpPosY = this.posY;
-    let blimpIcon = new Image();
-    blimpIcon.src = "./assets/blimpIcon.png";
-    blimpIcon.onload = function() {
-      ctx.drawImage(this, blimpPosX, blimpPosY, 200, 200);
-    };
+    ctx.drawImage(this.blimpIcon, this.posX, this.posY, 200, 200);
   }
 
 

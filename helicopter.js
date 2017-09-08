@@ -5,16 +5,16 @@ class Helicopter {
     this.posY = 100;
     this.flipped = false;
     this.keysDown = [];
+
+    this.helicopterIconFlipped = new Image();
+    this.helicopterIconFlipped.src = "./assets/flippedhelicopterIcon.png";
+    this.helicopterIcon = new Image();
+    this.helicopterIcon.src = "./assets/helicopterIcon.png";
   }
 
   draw(ctx) {
-    let helicopterPosX = this.posX;
-    let helicopterPosY = this.posY;
-    let helicopterIcon = new Image();
-    helicopterIcon.src = this.flipped ? "./assets/flippedhelicopterIcon.png" : "./assets/helicopterIcon.png";
-    helicopterIcon.onload = function() {
-      ctx.drawImage(this, helicopterPosX, helicopterPosY, 100, 100);
-    };
+    let helicopterImage = this.flipped ? this.helicopterIconFlipped : this.helicopterIcon;
+    ctx.drawImage(helicopterImage, this.posX, this.posY, 100, 100);
   }
 
   drawSkull(ctx) {

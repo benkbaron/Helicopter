@@ -3,17 +3,12 @@ class Cloud {
   constructor(options) {
     this.posX = 1200 + (1000 * Math.random());
     this.posY = (600 * Math.random()) - 100;
-
+    this.cloudIcon = new Image();
+    this.cloudIcon.src = "./assets/cloudIcon.png";
   }
 
   draw(ctx) {
-    let cloudPosX = this.posX;
-    let cloudPosY = this.posY;
-    let cloudIcon = new Image();
-    cloudIcon.src = "./assets/cloudIcon.png";
-    cloudIcon.onload = function() {
-      ctx.drawImage(this, cloudPosX, cloudPosY, 350, 350);
-    };
+    ctx.drawImage(this.cloudIcon, this.posX, this.posY, 350, 350);
   }
 
 

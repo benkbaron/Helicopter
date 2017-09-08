@@ -97,11 +97,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
       return;
     }
 
-    // ctx.beginPath();
-    // ctx.arc(950, 50, 25, 0, 2 * Math.PI, false);
-    // ctx.fillStyle = 'yellow';
-    // ctx.fill();
-
     if (checkCrash()) {
       displayCrash();
       intervalSpeed = 2000;
@@ -198,32 +193,28 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   displayStandard = () => {
     helicopter1.updatePos(wind1);
-    helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY);
-    bird1.draw(ctx);
     parachuter1.updatePos();
-    parachuter1.draw(ctx);
     blimp1.updatePos();
-    blimp1.draw(ctx);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
-    mosquito1.draw(ctx);
     lightning1.updatePos();
-    lightning1.draw(ctx);
     arrow1.updatePos();
-    arrow1.draw(ctx);
     wind1.updatePos();
-    wind1.draw(ctx);
     cloud1.updatePos();
+    helicopter1.draw(ctx);
+    bird1.draw(ctx);
+    parachuter1.draw(ctx);
+    blimp1.draw(ctx);
+    mosquito1.draw(ctx);
+    lightning1.draw(ctx);
+    arrow1.draw(ctx);
+    wind1.draw(ctx);
     cloud1.draw(ctx);
   };
 
-  addSun = (ctx) => {
-    let sunIcon = new Image();
-    sunIcon.src = "./assets/sunIcon.png";
-    sunIcon.onload = function() {
-      ctx.drawImage(this, 920, 20, 70, 70);
-    };
-  };
+  let sunIcon = new Image();
+  sunIcon.src = "./assets/sunIcon.png";
+  addSun = (ctx) => { ctx.drawImage(sunIcon, 920, 20, 70, 70); };
 
   resetPage();
 

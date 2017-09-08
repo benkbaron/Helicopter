@@ -5,17 +5,16 @@ class Arrow {
     this.posY = -1000;
     this.appear = false;
     this.direction = "right";
+    this.arrowIconLeft = new Image();
+    this.arrowIconRight = new Image();
+    this.arrowIconLeft.src = "./assets/flippedArrowIcon.png";
+    this.arrowIconRight.src = "./assets/arrowIcon.png";
   }
 
   draw(ctx) {
     if (this.appear) {
-      let arrowPosX = this.posX;
-      let arrowPosY = this.posY;
-      let arrowIcon = new Image();
-      arrowIcon.src = this.direction === "right" ? "./assets/arrowIcon.png" : "./assets/flippedArrowIcon.png";
-      arrowIcon.onload = function() {
-        ctx.drawImage(this, arrowPosX, arrowPosY, 50, 50);
-      };
+      let arrowImage = this.direction === "right" ? this.arrowIconRight : this.arrowIconLeft;
+      ctx.drawImage(arrowImage, this.posX, this.posY, 50, 50);
     }
   }
 

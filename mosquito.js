@@ -3,16 +3,12 @@ class Mosquito {
   constructor(options) {
     this.posX = 600 * Math.random();
     this.posY = 800;
+    this.mosquitoIcon = new Image();
+    this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
   }
 
   draw(ctx) {
-    let mosquitoPosX = this.posX;
-    let mosquitoPosY = this.posY;
-    let mosquitoIcon = new Image();
-    mosquitoIcon.src = "./assets/mosquitoIcon.png";
-    mosquitoIcon.onload = function() {
-      ctx.drawImage(this, mosquitoPosX, mosquitoPosY, 25, 25);
-    };
+    ctx.drawImage(this.mosquitoIcon, this.posX, this.posY, 25, 25);
   }
 
   updatePos(helicopterPosX, helicopterPosY) {

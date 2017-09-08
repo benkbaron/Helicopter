@@ -3,17 +3,12 @@ class Parachuter {
   constructor(options) {
     this.posX = 1000 * Math.random();
     this.posY = -1000 * Math.random();
-
+    this.parachuterIcon = new Image();
+    this.parachuterIcon.src = "./assets/parachuterIcon.png";
   }
 
   draw(ctx) {
-    let parachuterPosX = this.posX;
-    let parachuterPosY = this.posY;
-    let parachuterIcon = new Image();
-    parachuterIcon.src = "./assets/parachuterIcon.png";
-    parachuterIcon.onload = function() {
-      ctx.drawImage(this, parachuterPosX, parachuterPosY, 50, 50);
-    };
+    ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 50, 50);
   }
 
   updatePos() {

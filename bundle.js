@@ -166,11 +166,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
       return;
     }
 
-    // ctx.beginPath();
-    // ctx.arc(950, 50, 25, 0, 2 * Math.PI, false);
-    // ctx.fillStyle = 'yellow';
-    // ctx.fill();
-
     if (checkCrash()) {
       displayCrash();
       intervalSpeed = 2000;
@@ -267,32 +262,28 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   displayStandard = () => {
     helicopter1.updatePos(wind1);
-    helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY);
-    bird1.draw(ctx);
     parachuter1.updatePos();
-    parachuter1.draw(ctx);
     blimp1.updatePos();
-    blimp1.draw(ctx);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY);
-    mosquito1.draw(ctx);
     lightning1.updatePos();
-    lightning1.draw(ctx);
     arrow1.updatePos();
-    arrow1.draw(ctx);
     wind1.updatePos();
-    wind1.draw(ctx);
     cloud1.updatePos();
+    helicopter1.draw(ctx);
+    bird1.draw(ctx);
+    parachuter1.draw(ctx);
+    blimp1.draw(ctx);
+    mosquito1.draw(ctx);
+    lightning1.draw(ctx);
+    arrow1.draw(ctx);
+    wind1.draw(ctx);
     cloud1.draw(ctx);
   };
 
-  addSun = (ctx) => {
-    let sunIcon = new Image();
-    sunIcon.src = "./assets/sunIcon.png";
-    sunIcon.onload = function() {
-      ctx.drawImage(this, 920, 20, 70, 70);
-    };
-  };
+  let sunIcon = new Image();
+  sunIcon.src = "./assets/sunIcon.png";
+  addSun = (ctx) => { ctx.drawImage(sunIcon, 920, 20, 70, 70); };
 
   resetPage();
 
@@ -320,17 +311,12 @@ class Parachuter {
   constructor(options) {
     this.posX = 1000 * Math.random();
     this.posY = -1000 * Math.random();
-
+    this.parachuterIcon = new Image();
+    this.parachuterIcon.src = "./assets/parachuterIcon.png";
   }
 
   draw(ctx) {
-    let parachuterPosX = this.posX;
-    let parachuterPosY = this.posY;
-    let parachuterIcon = new Image();
-    parachuterIcon.src = "./assets/parachuterIcon.png";
-    parachuterIcon.onload = function() {
-      ctx.drawImage(this, parachuterPosX, parachuterPosY, 50, 50);
-    };
+    ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 50, 50);
   }
 
   updatePos() {
@@ -358,17 +344,12 @@ class Blimp {
   constructor(options) {
     this.posX = - 1200 - (1000 * Math.random());
     this.posY = (600 * Math.random()) - 100;
-
+    this.blimpIcon = new Image();
+    this.blimpIcon.src = "./assets/blimpIcon.png";
   }
 
   draw(ctx) {
-    let blimpPosX = this.posX;
-    let blimpPosY = this.posY;
-    let blimpIcon = new Image();
-    blimpIcon.src = "./assets/blimpIcon.png";
-    blimpIcon.onload = function() {
-      ctx.drawImage(this, blimpPosX, blimpPosY, 200, 200);
-    };
+    ctx.drawImage(this.blimpIcon, this.posX, this.posY, 200, 200);
   }
 
 
@@ -399,17 +380,12 @@ class Cloud {
   constructor(options) {
     this.posX = 1200 + (1000 * Math.random());
     this.posY = (600 * Math.random()) - 100;
-
+    this.cloudIcon = new Image();
+    this.cloudIcon.src = "./assets/cloudIcon.png";
   }
 
   draw(ctx) {
-    let cloudPosX = this.posX;
-    let cloudPosY = this.posY;
-    let cloudIcon = new Image();
-    cloudIcon.src = "./assets/cloudIcon.png";
-    cloudIcon.onload = function() {
-      ctx.drawImage(this, cloudPosX, cloudPosY, 350, 350);
-    };
+    ctx.drawImage(this.cloudIcon, this.posX, this.posY, 350, 350);
   }
 
 
@@ -442,17 +418,12 @@ class Lightning {
   constructor(options) {
     this.posX = 1000 * Math.random();
     this.posY = (-8000 * Math.random()) - 1000;
-
+    this.lightningIcon = new Image();
+    this.lightningIcon.src = "./assets/lightningIcon.png";
   }
 
   draw(ctx) {
-    let lightningPosX = this.posX;
-    let lightningPosY = this.posY;
-    let lightningIcon = new Image();
-    lightningIcon.src = "./assets/lightningIcon.png";
-    lightningIcon.onload = function() {
-      ctx.drawImage(this, lightningPosX, lightningPosY, 100, 700);
-    };
+    ctx.drawImage(this.lightningIcon, this.posX, this.posY, 100, 700);
   }
 
   updatePos() {
@@ -481,28 +452,23 @@ class Bird {
     this.posX = 1010;
     this.posY = 600 * Math.random();
     this.feathers = 0;
+
+    this.feathersIcon = new Image();
+    this.feathersIcon.src = "./assets/feathersIcon.png";
+
+    this.birdIcon = new Image();
+    this.birdIcon.src = "./assets/birdIcon.png";
   }
 
   draw(ctx) {
-    let birdPosX = this.posX;
-    let birdPosY = this.posY;
-
     if (this.feathers > 0) {
       this.feathers -= 1;
-      let feathersIcon = new Image();
-      feathersIcon.src = "./assets/feathersIcon.png";
-      feathersIcon.onload = function() {
-        ctx.drawImage(this, birdPosX, birdPosY, 100, 100);
-      };
+      ctx.drawImage(this.feathersIcon, this.posX, this.posY, 100, 100);
       if (this.feathers === 0) {
         this.resetPos();
       }
     } else {
-        let birdIcon = new Image();
-        birdIcon.src = "./assets/birdIcon.png";
-        birdIcon.onload = function() {
-          ctx.drawImage(this, birdPosX, birdPosY, 50, 50);
-        };
+      ctx.drawImage(this.birdIcon, this.posX, this.posY, 50, 50);
     }
   }
 
@@ -537,16 +503,12 @@ class Mosquito {
   constructor(options) {
     this.posX = 600 * Math.random();
     this.posY = 800;
+    this.mosquitoIcon = new Image();
+    this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
   }
 
   draw(ctx) {
-    let mosquitoPosX = this.posX;
-    let mosquitoPosY = this.posY;
-    let mosquitoIcon = new Image();
-    mosquitoIcon.src = "./assets/mosquitoIcon.png";
-    mosquitoIcon.onload = function() {
-      ctx.drawImage(this, mosquitoPosX, mosquitoPosY, 25, 25);
-    };
+    ctx.drawImage(this.mosquitoIcon, this.posX, this.posY, 25, 25);
   }
 
   updatePos(helicopterPosX, helicopterPosY) {
@@ -579,16 +541,16 @@ class Helicopter {
     this.posY = 100;
     this.flipped = false;
     this.keysDown = [];
+
+    this.helicopterIconFlipped = new Image();
+    this.helicopterIconFlipped.src = "./assets/flippedhelicopterIcon.png";
+    this.helicopterIcon = new Image();
+    this.helicopterIcon.src = "./assets/helicopterIcon.png";
   }
 
   draw(ctx) {
-    let helicopterPosX = this.posX;
-    let helicopterPosY = this.posY;
-    let helicopterIcon = new Image();
-    helicopterIcon.src = this.flipped ? "./assets/flippedhelicopterIcon.png" : "./assets/helicopterIcon.png";
-    helicopterIcon.onload = function() {
-      ctx.drawImage(this, helicopterPosX, helicopterPosY, 100, 100);
-    };
+    let helicopterImage = this.flipped ? this.helicopterIconFlipped : this.helicopterIcon;
+    ctx.drawImage(helicopterImage, this.posX, this.posY, 100, 100);
   }
 
   drawSkull(ctx) {
@@ -655,17 +617,16 @@ class Arrow {
     this.posY = -1000;
     this.appear = false;
     this.direction = "right";
+    this.arrowIconLeft = new Image();
+    this.arrowIconRight = new Image();
+    this.arrowIconLeft.src = "./assets/flippedArrowIcon.png";
+    this.arrowIconRight.src = "./assets/arrowIcon.png";
   }
 
   draw(ctx) {
     if (this.appear) {
-      let arrowPosX = this.posX;
-      let arrowPosY = this.posY;
-      let arrowIcon = new Image();
-      arrowIcon.src = this.direction === "right" ? "./assets/arrowIcon.png" : "./assets/flippedArrowIcon.png";
-      arrowIcon.onload = function() {
-        ctx.drawImage(this, arrowPosX, arrowPosY, 50, 50);
-      };
+      let arrowImage = this.direction === "right" ? this.arrowIconRight : this.arrowIconLeft;
+      ctx.drawImage(arrowImage, this.posX, this.posY, 50, 50);
     }
   }
 
@@ -711,16 +672,16 @@ class Wind {
   constructor(options) {
     this.posX = -1200 - (1000 * Math.random());
     this.posY = (600 * Math.random()) - 100;
+    this.windIcon = new Image();
+    this.windIcon.src = "./assets/windIcon.png";
   }
 
   draw(ctx) {
     let windPosX = this.posX;
     let windPosY = this.posY;
-    let windIcon = new Image();
-    windIcon.src = "./assets/windIcon.png";
-    windIcon.onload = function() {
-      ctx.drawImage(this, windPosX, windPosY, 250, 250);
-    };
+    // windIcon.onload = function() {
+      ctx.drawImage(this.windIcon, windPosX, windPosY, 250, 250);
+    // };
   }
 
 
