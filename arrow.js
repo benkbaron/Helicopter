@@ -27,7 +27,7 @@ class Arrow {
     }
   }
 
-  updatePos() {
+  updatePos(wind) {
     if (this.direction === "right") {
       this.posX += 4;
     } else {
@@ -37,7 +37,21 @@ class Arrow {
     if (this.posX > 1100 || this.posX < -100) {
       this.appear = false;
     }
+
+    if (this.inWindRange(wind)){
+      this.posX += 3;
+    }
   }
+
+
+    inWindRange(wind) {
+    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
+          return true;
+        }
+    return false;
+    }
+
 
   resetPos() {
     this.posX = 1200 + 1000 * Math.random();

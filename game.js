@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else if (Util.checkCatch({helicopter: helicopter1, parachuter: parachuter1})) {
         intervalSpeed = 1000/60;
         displayCaught();
-    } else if (Util.checkHit({arrow: arrow1, bird: bird1, mosquito: mosquito1})) {
+    } else if (Util.checkHit({arrow: arrow1, bird: bird1, mosquito: mosquito1, parachuter: parachuter1})) {
         intervalSpeed = 1000/60;
         displayHit();
     } else {
@@ -164,6 +164,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.resetPos();
     wind1.resetPos();
     cloud1.resetPos();
+    arrow1.resetPos();
     bird1.draw(ctx);
     helicopter1.drawSkull(ctx);
     parachuter1.draw(ctx);
@@ -171,6 +172,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     mosquito1.draw(ctx);
     lightning1.draw(ctx);
     wind1.draw(ctx);
+    arrow1.draw(ctx);
     cloud1.draw(ctx);
   };
 
@@ -182,17 +184,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
     bird1.draw(ctx);
     parachuter1.resetPos(true);
     parachuter1.draw(ctx);
-    blimp1.updatePos();
+    blimp1.updatePos(wind1);
     blimp1.draw(ctx);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     mosquito1.draw(ctx);
     lightning1.updatePos();
     lightning1.draw(ctx);
-    arrow1.updatePos();
+    arrow1.updatePos(wind1);
     arrow1.draw(ctx);
     wind1.updatePos();
     wind1.draw(ctx);
-    cloud1.updatePos();
+    cloud1.updatePos(wind1);
     cloud1.draw(ctx);
   };
 
@@ -206,7 +208,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     arrow1.posX = -1000;
     parachuter1.updatePos(wind1);
     parachuter1.draw(ctx);
-    blimp1.updatePos();
+    blimp1.updatePos(wind1);
     blimp1.draw(ctx);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     mosquito1.draw(ctx);
@@ -214,7 +216,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.draw(ctx);
     wind1.updatePos();
     wind1.draw(ctx);
-    cloud1.updatePos();
+    cloud1.updatePos(wind1);
     cloud1.draw(ctx);
   };
 
@@ -223,12 +225,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     helicopter1.updatePos(wind1);
     bird1.updatePos(helicopter1.posY, wind1);
     parachuter1.updatePos(wind1);
-    blimp1.updatePos();
+    blimp1.updatePos(wind1);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     lightning1.updatePos();
-    arrow1.updatePos();
+    arrow1.updatePos(wind1);
     wind1.updatePos();
-    cloud1.updatePos();
+    cloud1.updatePos(wind1);
     helicopter1.draw(ctx);
     bird1.draw(ctx);
     parachuter1.draw(ctx);

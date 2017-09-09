@@ -5,16 +5,27 @@ class Parachuter {
     this.posY = -600 * Math.random();
     this.parachuterIcon = new Image();
     this.parachuterIcon.src = "./assets/parachuterIcon.png";
+    this.parachuterSkullIcon = new Image();
+    this.parachuterSkullIcon.src = "./assets/skullIcon.png";
     this.rescueCount = 0;
     this.lostCount = -1;
+    this.dead = 0;
   }
 
   draw(ctx) {
-    ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 50, 50);
+    if (this.dead > 0) {
+      this.dead -= 1;
+      ctx.drawImage(this.parachuterSkullIcon, this.posX, this.posY, 50, 50);
+      if (this.dead === 0) {
+        this.resetPos();
+      }
+    } else {
+      ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 50, 50);
+    }
   }
 
   updatePos(wind) {
-    this.posY += 1.2;
+    this.posY += 1.7;
     if (this.posY > 650) {
       this.resetPos();
     }

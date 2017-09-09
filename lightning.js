@@ -2,7 +2,7 @@
 class Lightning {
   constructor(options) {
     this.posX = 1000 * Math.random();
-    this.posY = (-8000 * Math.random()) - 1000;
+    this.posY = (-7000 * Math.random()) - 1000;
     this.lightningIcon = new Image();
     this.lightningIcon.src = "./assets/lightningIcon.png";
   }
@@ -12,7 +12,7 @@ class Lightning {
   }
 
   updatePos() {
-    this.posY += 4;
+    this.posY += 4.5;
     if (this.posY > 1100) {
       this.resetPos();
     }

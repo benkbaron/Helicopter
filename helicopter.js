@@ -10,6 +10,8 @@ class Helicopter {
     this.helicopterIconFlipped.src = "./assets/flippedhelicopterIcon.png";
     this.helicopterIcon = new Image();
     this.helicopterIcon.src = "./assets/helicopterIcon.png";
+    this.skullIcon = new Image();
+    this.skullIcon.src = "./assets/skullIcon.png";
   }
 
   draw(ctx) {
@@ -18,13 +20,7 @@ class Helicopter {
   }
 
   drawSkull(ctx) {
-    let helicopterPosX = this.posX;
-    let helicopterPosY = this.posY;
-    let skullIcon = new Image();
-    skullIcon.src = "./assets/skullIcon.png";
-    skullIcon.onload = function() {
-      ctx.drawImage(this, helicopterPosX, helicopterPosY, 100, 100);
-    };
+      ctx.drawImage(this.skullIcon, this.posX, this.posY, 100, 100);
   }
 
 
@@ -63,6 +59,7 @@ class Helicopter {
   resetPos() {
     this.posX = 100;
     this.posY = 100;
+    this.flipped = false;
   }
 
 }

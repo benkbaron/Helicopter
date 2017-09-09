@@ -8,11 +8,7 @@ class Wind {
   }
 
   draw(ctx) {
-    let windPosX = this.posX;
-    let windPosY = this.posY;
-    // windIcon.onload = function() {
-      ctx.drawImage(this.windIcon, windPosX, windPosY, 250, 250);
-    // };
+    ctx.drawImage(this.windIcon, this.posX, this.posY, 250, 250);
   }
 
 

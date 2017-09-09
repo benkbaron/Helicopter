@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else if (Util.checkCatch({helicopter: helicopter1, parachuter: parachuter1})) {
         intervalSpeed = 1000/60;
         displayCaught();
-    } else if (Util.checkHit({arrow: arrow1, bird: bird1, mosquito: mosquito1})) {
+    } else if (Util.checkHit({arrow: arrow1, bird: bird1, mosquito: mosquito1, parachuter: parachuter1})) {
         intervalSpeed = 1000/60;
         displayHit();
     } else {
@@ -233,6 +233,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.resetPos();
     wind1.resetPos();
     cloud1.resetPos();
+    arrow1.resetPos();
     bird1.draw(ctx);
     helicopter1.drawSkull(ctx);
     parachuter1.draw(ctx);
@@ -240,6 +241,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     mosquito1.draw(ctx);
     lightning1.draw(ctx);
     wind1.draw(ctx);
+    arrow1.draw(ctx);
     cloud1.draw(ctx);
   };
 
@@ -251,17 +253,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
     bird1.draw(ctx);
     parachuter1.resetPos(true);
     parachuter1.draw(ctx);
-    blimp1.updatePos();
+    blimp1.updatePos(wind1);
     blimp1.draw(ctx);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     mosquito1.draw(ctx);
     lightning1.updatePos();
     lightning1.draw(ctx);
-    arrow1.updatePos();
+    arrow1.updatePos(wind1);
     arrow1.draw(ctx);
     wind1.updatePos();
     wind1.draw(ctx);
-    cloud1.updatePos();
+    cloud1.updatePos(wind1);
     cloud1.draw(ctx);
   };
 
@@ -275,7 +277,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     arrow1.posX = -1000;
     parachuter1.updatePos(wind1);
     parachuter1.draw(ctx);
-    blimp1.updatePos();
+    blimp1.updatePos(wind1);
     blimp1.draw(ctx);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     mosquito1.draw(ctx);
@@ -283,7 +285,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.draw(ctx);
     wind1.updatePos();
     wind1.draw(ctx);
-    cloud1.updatePos();
+    cloud1.updatePos(wind1);
     cloud1.draw(ctx);
   };
 
@@ -292,12 +294,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     helicopter1.updatePos(wind1);
     bird1.updatePos(helicopter1.posY, wind1);
     parachuter1.updatePos(wind1);
-    blimp1.updatePos();
+    blimp1.updatePos(wind1);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     lightning1.updatePos();
-    arrow1.updatePos();
+    arrow1.updatePos(wind1);
     wind1.updatePos();
-    cloud1.updatePos();
+    cloud1.updatePos(wind1);
     helicopter1.draw(ctx);
     bird1.draw(ctx);
     parachuter1.draw(ctx);
@@ -339,16 +341,27 @@ class Parachuter {
     this.posY = -600 * Math.random();
     this.parachuterIcon = new Image();
     this.parachuterIcon.src = "./assets/parachuterIcon.png";
+    this.parachuterSkullIcon = new Image();
+    this.parachuterSkullIcon.src = "./assets/skullIcon.png";
     this.rescueCount = 0;
     this.lostCount = -1;
+    this.dead = 0;
   }
 
   draw(ctx) {
-    ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 50, 50);
+    if (this.dead > 0) {
+      this.dead -= 1;
+      ctx.drawImage(this.parachuterSkullIcon, this.posX, this.posY, 50, 50);
+      if (this.dead === 0) {
+        this.resetPos();
+      }
+    } else {
+      ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 50, 50);
+    }
   }
 
   updatePos(wind) {
-    this.posY += 1.2;
+    this.posY += 1.7;
     if (this.posY > 650) {
       this.resetPos();
     }
@@ -397,13 +410,26 @@ class Blimp {
   }
 
 
-  updatePos() {
+  updatePos(wind) {
     if (this.posX > 1200) {
       this.resetPos();
     } else {
       this.posX += 1/2;
     }
+    if (this.inWindRange(wind)){
+      this.posX += 2;
+    }
   }
+
+
+    inWindRange(wind) {
+    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
+          return true;
+        }
+    return false;
+    }
+
 
   resetPos() {
     this.posX = - 600 - (1000 * Math.random());
@@ -433,7 +459,7 @@ class Cloud {
   }
 
 
-  updatePos() {
+  updatePos(wind) {
     if (this.posX < -500) {
       this.resetPos();
     } else if (this.posX > 400 && this.posX < 500) {
@@ -441,7 +467,19 @@ class Cloud {
     } else {
       this.posX -= 1;
     }
+    if (this.inWindRange(wind)){
+      this.posX += 3;
+    }
   }
+
+  inWindRange(wind) {
+  if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+      (this.posY < wind.posY + 300 && this.posY > wind.posY - 300))) {
+        return true;
+      }
+  return false;
+  }
+
 
   resetPos() {
     this.posX = 1200 + 1000 * Math.random();
@@ -461,7 +499,7 @@ module.exports = Cloud;
 class Lightning {
   constructor(options) {
     this.posX = 1000 * Math.random();
-    this.posY = (-8000 * Math.random()) - 1000;
+    this.posY = (-7000 * Math.random()) - 1000;
     this.lightningIcon = new Image();
     this.lightningIcon.src = "./assets/lightningIcon.png";
   }
@@ -471,7 +509,7 @@ class Lightning {
   }
 
   updatePos() {
-    this.posY += 4;
+    this.posY += 4.5;
     if (this.posY > 1100) {
       this.resetPos();
     }
@@ -623,6 +661,8 @@ class Helicopter {
     this.helicopterIconFlipped.src = "./assets/flippedhelicopterIcon.png";
     this.helicopterIcon = new Image();
     this.helicopterIcon.src = "./assets/helicopterIcon.png";
+    this.skullIcon = new Image();
+    this.skullIcon.src = "./assets/skullIcon.png";
   }
 
   draw(ctx) {
@@ -631,13 +671,7 @@ class Helicopter {
   }
 
   drawSkull(ctx) {
-    let helicopterPosX = this.posX;
-    let helicopterPosY = this.posY;
-    let skullIcon = new Image();
-    skullIcon.src = "./assets/skullIcon.png";
-    skullIcon.onload = function() {
-      ctx.drawImage(this, helicopterPosX, helicopterPosY, 100, 100);
-    };
+      ctx.drawImage(this.skullIcon, this.posX, this.posY, 100, 100);
   }
 
 
@@ -676,6 +710,7 @@ class Helicopter {
   resetPos() {
     this.posX = 100;
     this.posY = 100;
+    this.flipped = false;
   }
 
 }
@@ -716,7 +751,7 @@ class Arrow {
     }
   }
 
-  updatePos() {
+  updatePos(wind) {
     if (this.direction === "right") {
       this.posX += 4;
     } else {
@@ -726,7 +761,21 @@ class Arrow {
     if (this.posX > 1100 || this.posX < -100) {
       this.appear = false;
     }
+
+    if (this.inWindRange(wind)){
+      this.posX += 3;
+    }
   }
+
+
+    inWindRange(wind) {
+    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
+          return true;
+        }
+    return false;
+    }
+
 
   resetPos() {
     this.posX = 1200 + 1000 * Math.random();
@@ -754,11 +803,7 @@ class Wind {
   }
 
   draw(ctx) {
-    let windPosX = this.posX;
-    let windPosY = this.posY;
-    // windIcon.onload = function() {
-      ctx.drawImage(this.windIcon, windPosX, windPosY, 250, 250);
-    // };
+    ctx.drawImage(this.windIcon, this.posX, this.posY, 250, 250);
   }
 
 
@@ -822,11 +867,17 @@ const Util = {
     }
   },
 
-  checkHit({arrow, bird, mosquito}) {
+  checkHit({arrow, bird, mosquito, parachuter}) {
     let space = distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
     if (space < 35){
       bird.feathers = 25;
       bird.birdShotCount += 1;
+      return true;
+    }
+
+    space = distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
+    if (space < 30){
+      parachuter.dead = 25;
       return true;
     }
 

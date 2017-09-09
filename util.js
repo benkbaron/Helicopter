@@ -37,11 +37,17 @@ const Util = {
     }
   },
 
-  checkHit({arrow, bird, mosquito}) {
+  checkHit({arrow, bird, mosquito, parachuter}) {
     let space = distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
     if (space < 35){
       bird.feathers = 25;
       bird.birdShotCount += 1;
+      return true;
+    }
+
+    space = distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
+    if (space < 30){
+      parachuter.dead = 25;
       return true;
     }
 
