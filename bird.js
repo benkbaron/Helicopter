@@ -4,6 +4,7 @@ class Bird {
     this.posX = 1010;
     this.posY = 600 * Math.random();
     this.feathers = 0;
+    this.birdShotCount = 0;
 
     this.feathersIcon = new Image();
     this.feathersIcon.src = "./assets/feathersIcon.png";
