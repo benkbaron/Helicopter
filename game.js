@@ -87,8 +87,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   checkHit = () => {
-    let space = distance([arrow1.posX, arrow1.posY], [bird1.posX + 25, bird1.posY + 25]);
-    if (space < 60){
+    let space = distance([arrow1.posX + 10, arrow1.posY], [bird1.posX + 20, bird1.posY + 20]);
+    if (space < 50){
       bird1.feathers = 25;
       birdShotCount += 1;
       return true;
