@@ -91,7 +91,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
   ctx.fillRect(0, 0, 1000, 600);
   ctx.fillStyle = "white";
   ctx.font = '80px serif';
-  ctx.fillText('Click to Start!', 270, 250);
+  ctx.fillText('Helicopter', 320, 150);
+  ctx.fillStyle = "white";
+  ctx.font = '50px serif';
+  ctx.fillText('Hit Spacebar to Start!', 270, 270);
   ctx.fillStyle = "black";
   ctx.font = '25px serif';
   ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 150, 380);
@@ -160,8 +163,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
       return true;
     }
 
-    space = distance([arrow1.posX, arrow1.posY], [mosquito1.posX, mosquito1.posY]);
-    if (space < 12){
+    space = distance([arrow1.posX + 10, arrow1.posY], [mosquito1.posX, mosquito1.posY]);
+    if (space < 30) {
       mosquito1.resetPos();
       return true;
     }
@@ -214,6 +217,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   // setInterval(resetPage, intervalSpeed);
 
   document.addEventListener("keydown", (event) => {
+    if (gameStarted) {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
       helicopter1.keysDown.push(event.keyCode);
       helicopter1.updatePos();
@@ -222,6 +226,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (event.keyCode === 32){
       arrow1.shoot(helicopter1);
     }
+  }
   });
 
   document.addEventListener("keyup", (event) => {
@@ -230,6 +235,31 @@ document.addEventListener("DOMContentLoaded", (event) => {
       helicopter1.updatePos();
     }
   });
+
+  let gameStarted = false;
+
+  document.addEventListener("keydown", (event) => {
+    if (event.keyCode === 32){
+    if (lifeCount === 0 || gameStarted === false) {
+      lifeCount = 3;
+      rescueCount = 0;
+      birdShotCount = 0;
+      helicopter1.resetPos();
+      bird1.resetPos();
+      wind1.resetPos();
+      cloud1.resetPos();
+      arrow1.resetPos();
+      parachuter1.resetPos();
+      blimp1.resetPos();
+      mosquito1.resetPos();
+      blimp1.resetPos();
+      lightning1.resetPos();
+      gameStarted = true;
+      resetPage();
+    }
+  }
+  });
+
 
   displayCrash = () => {
     addSadSun(ctx);
@@ -319,27 +349,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   // resetPage();
 
-  let gameStarted = false;
 
-  document.addEventListener("click", (event) => {
-    if (lifeCount === 0 || gameStarted === false) {
-      lifeCount = 3;
-      rescueCount = 0;
-      birdShotCount = 0;
-      helicopter1.resetPos();
-      bird1.resetPos();
-      wind1.resetPos();
-      cloud1.resetPos();
-      arrow1.resetPos();
-      parachuter1.resetPos();
-      blimp1.resetPos();
-      mosquito1.resetPos();
-      blimp1.resetPos();
-      lightning1.resetPos();
-      gameStarted = true;
-      resetPage();
-    }
-  });
 
 
   displayGameOver = () => {
@@ -347,7 +357,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.font = '80px serif';
     ctx.fillText('Sorry you lost!', 270, 280);
     ctx.font = '50px serif';
-    ctx.fillText('Click to Try Again', 325, 400);
+    ctx.fillText('Spacebar to Try Again', 280, 400);
   };
 
 });
@@ -595,15 +605,15 @@ class Mosquito {
 
   updatePos(helicopterPosX, helicopterPosY, wind) {
     if (helicopterPosX > this.posX) {
-      this.posX += 2/3;
+      this.posX += 3/4;
     } else {
-      this.posX -= 2/3;
+      this.posX -= 3/4;
     }
 
     if (helicopterPosY > this.posY) {
-      this.posY += 2/3;
+      this.posY += 3/4;
     } else {
-      this.posY -= 2/3;
+      this.posY -= 3/4;
     }
 
     if (this.inWindRange(wind)){
@@ -671,7 +681,7 @@ class Helicopter {
       this.posY -= 6;
       }
     if (this.keysDown.includes(40)) {
-      this.posY += 6;
+      this.posY += 4;
       }
     if (this.keysDown.includes(37)) {
       this.posX -= 6;

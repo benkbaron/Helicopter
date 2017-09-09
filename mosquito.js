@@ -13,15 +13,15 @@ class Mosquito {
 
   updatePos(helicopterPosX, helicopterPosY, wind) {
     if (helicopterPosX > this.posX) {
-      this.posX += 2/3;
+      this.posX += 3/4;
     } else {
-      this.posX -= 2/3;
+      this.posX -= 3/4;
     }
 
     if (helicopterPosY > this.posY) {
-      this.posY += 2/3;
+      this.posY += 3/4;
     } else {
-      this.posY -= 2/3;
+      this.posY -= 3/4;
     }
 
     if (this.inWindRange(wind)){

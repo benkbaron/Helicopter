@@ -35,7 +35,7 @@ class Helicopter {
       this.posY -= 6;
       }
     if (this.keysDown.includes(40)) {
-      this.posY += 6;
+      this.posY += 4;
       }
     if (this.keysDown.includes(37)) {
       this.posX -= 6;
