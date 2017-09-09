@@ -81,14 +81,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
   checkCatch = () => {
     let space = distance([helicopter1.posX + 50, helicopter1.posY + 50], [parachuter1.posX + 25, parachuter1.posY + 25]);
     if (space < 60){
-      rescueCount += 1;
       return true;
     }
   };
 
   checkHit = () => {
-    let space = distance([arrow1.posX + 10, arrow1.posY], [bird1.posX + 20, bird1.posY + 20]);
-    if (space < 50){
+    let space = distance([arrow1.posX + 10, arrow1.posY], [bird1.posX + 30, bird1.posY + 20]);
+    if (space < 35){
       bird1.feathers = 25;
       birdShotCount += 1;
       return true;
@@ -113,10 +112,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.fillStyle = "blue";
     ctx.fillRect(0, 0, 1000, 600);
     ctx.fillStyle = "white";
-    ctx.font = '20px serif';
-    ctx.fillText(`Rescues: ${rescueCount}`, 10, 25);
-    ctx.fillText(`Birds Shot: ${birdShotCount}`, 10, 50);
-    ctx.fillText(`Lives Left: ${lifeCount}`, 10, 75);
+    ctx.font = '18px serif';
+    ctx.fillText(`Parachuters Saved: ${parachuter1.rescueCount}`, 10, 22);
+    ctx.fillText(`Parachuters Lost: ${parachuter1.lostCount}`, 10, 44);
+    ctx.fillText(`Birds Shot: ${birdShotCount}`, 10, 66);
+    ctx.fillText(`Lives Left: ${lifeCount}`, 10, 88);
 
     if (lifeCount === 0) {
       displayGameOver();
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       wind1.resetPos();
       cloud1.resetPos();
       arrow1.resetPos();
-      parachuter1.resetPos();
+      parachuter1.resetPos(false);
       blimp1.resetPos();
       mosquito1.resetPos();
       blimp1.resetPos();
@@ -210,7 +210,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY, wind1);
     bird1.draw(ctx);
-    parachuter1.resetPos();
+    parachuter1.resetPos(true);
     parachuter1.draw(ctx);
     blimp1.updatePos();
     blimp1.draw(ctx);

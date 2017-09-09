@@ -2,9 +2,11 @@
 class Parachuter {
   constructor(options) {
     this.posX = 1000 * Math.random();
-    this.posY = -1000 * Math.random();
+    this.posY = -600 * Math.random();
     this.parachuterIcon = new Image();
     this.parachuterIcon.src = "./assets/parachuterIcon.png";
+    this.rescueCount = 0;
+    this.lostCount = -1;
   }
 
   draw(ctx) {
@@ -12,8 +14,8 @@ class Parachuter {
   }
 
   updatePos(wind) {
-    this.posY += 1;
-    if (this.posY > 1100) {
+    this.posY += 1.2;
+    if (this.posY > 650) {
       this.resetPos();
     }
     if (this.inWindRange(wind)){
@@ -29,9 +31,14 @@ class Parachuter {
   return false;
   }
 
-  resetPos() {
+  resetPos(saved) {
+    if (saved) {
+      this.rescueCount += 1;
+    } else {
+      this.lostCount += 1;
+    }
     this.posX = 1000 * Math.random();
-    this.posY = -1000 * Math.random();
+    this.posY = -600 * Math.random();
     }
 }
 
