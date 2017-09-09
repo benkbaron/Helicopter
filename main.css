@@ -6,8 +6,12 @@ body {
 }
 
 canvas {
-  /*display: flex;*/
   min-width: 80vw;
   max-height: 48vw;
-  /*padding-bottom: 30px;*/
+}
+
+.bottomNav {
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
 }
