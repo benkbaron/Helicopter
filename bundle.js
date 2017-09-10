@@ -722,8 +722,8 @@ module.exports = Helicopter;
 
 class Arrow {
   constructor(posX, posY) {
-    this.posX = -1000;
-    this.posY = -1000;
+    this.posX = -100;
+    this.posY = -100;
     this.appear = false;
     this.direction = "right";
     this.arrowIconLeft = new Image();
@@ -740,11 +740,11 @@ class Arrow {
   }
 
   shoot(helicopter) {
-    if (this.posX > 1050 || this.posX < -50) {
+    if ((this.posY == -100) || (this.posX > 1050 || this.posX < -50)) {
+      this.appear = true;
       this.posX = helicopter.flipped ? helicopter.posX : helicopter.posX + 100;
       this.posY = helicopter.posY + 20;
       this.direction = helicopter.flipped ? "left" : "right";
-      this.appear = true;
     }
   }
 
@@ -755,7 +755,7 @@ class Arrow {
       this.posX -= 4;
     }
 
-    if (this.posX > 1100 || this.posX < -100) {
+    if (this.posX > 1050 || this.posX < -50) {
       this.appear = false;
     }
 
@@ -775,8 +775,8 @@ class Arrow {
 
 
   resetPos() {
-    this.posX = 1200 + 1000 * Math.random();
-    this.posY = 600 * Math.random();
+    this.posX = -100;
+    this.posY = -100;
   }
 
 }
