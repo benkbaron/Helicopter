@@ -244,6 +244,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
     wind1.draw(ctx);
     cloud1.draw(ctx);
   };
+  
+  displayGameOver = () => {
+    ctx.fillStyle = "white";
+    ctx.font = '80px serif';
+    ctx.fillText('So sorry you lost!', 220, 280);
+    ctx.font = '50px serif';
+    ctx.fillText('Spacebar to Try Again', 280, 400);
+    addSadSun(ctx);
+  };
 
   let sunIcon = new Image();
   sunIcon.src = "./assets/sunIcon.png";
@@ -253,12 +262,5 @@ document.addEventListener("DOMContentLoaded", (event) => {
   sadSunIcon.src = "./assets/sadSunIcon.png";
   addSadSun = (ctx) => { ctx.drawImage(sadSunIcon, 920, 20, 70, 70); };
 
-  displayGameOver = () => {
-    ctx.fillStyle = "white";
-    ctx.font = '80px serif';
-    ctx.fillText('So sorry you lost!', 220, 280);
-    ctx.font = '50px serif';
-    ctx.fillText('Spacebar to Try Again', 280, 400);
-  };
 
 });

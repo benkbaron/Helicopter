@@ -11,6 +11,7 @@ class Bird {
 
     this.birdIcon = new Image();
     this.birdIcon.src = "./assets/birdIcon.png";
+    this.speed = 3 * (Math.random() + 0.35);
   }
 
   draw(ctx) {
@@ -26,7 +27,7 @@ class Bird {
   }
 
   updatePos(helicopterPosY, wind) {
-    this.posX -= 2.5;
+    this.posX -= this.speed;
     if (helicopterPosY > this.posY) {
       this.posY += 1;
     } else {
@@ -55,6 +56,7 @@ inWindRange(wind) {
   resetPos() {
     this.posX = 1010;
     this.posY = 600 * Math.random();
+    this.speed = 3 * (Math.random() + 0.35);
   }
 }
 
