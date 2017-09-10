@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   document.addEventListener("keydown", (event) => {
+    event.preventDefault();
     if (gameStarted) {
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
       helicopter1.keysDown.push(event.keyCode);
@@ -178,6 +179,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
 
   document.addEventListener("keyup", (event) => {
+    event.preventDefault();
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
       helicopter1.keysDown = helicopter1.keysDown.filter(num => num !== event.keyCode );
       helicopter1.updatePos(wind1);
@@ -187,6 +189,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let gameStarted = false;
 
   document.addEventListener("keydown", (event) => {
+    event.preventDefault();
     if (event.keyCode === 32){
     if (lifeCount === 0 || gameStarted === false) {
       parachuter1.rescueCount = 0;
