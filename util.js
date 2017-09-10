@@ -6,18 +6,18 @@ const Util = {
       return true;
     }
 
-    let space = distance([helicopter.posX + 50, helicopter.posY + 50], [bird.posX + 25, bird.posY + 25]);
+    let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [bird.posX + 25, bird.posY + 25]);
     if (space < 70 && bird.feathers === 0){
       bird.feathers = 25;
       return true;
     }
 
-    space = distance([helicopter.posX + 50, helicopter.posY + 50], [blimp.posX + 100, blimp.posY + 100]);
+    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [blimp.posX + 100, blimp.posY + 100]);
     if (space < 100){
       return true;
     }
 
-    space = distance([helicopter.posX + 50, helicopter.posY + 50], [mosquito.posX + 10, mosquito.posY + 10]);
+    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [mosquito.posX + 10, mosquito.posY + 10]);
     if (space < 40){
       return true;
     }
@@ -31,33 +31,39 @@ const Util = {
   },
 
   checkCatch({helicopter, parachuter}) {
-    let space = distance([helicopter.posX + 50, helicopter.posY + 50], [parachuter.posX + 25, parachuter.posY + 25]);
+    let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [parachuter.posX + 25, parachuter.posY + 25]);
     if (space < 60){
       return true;
     }
   },
 
   checkHit({arrow, bird, mosquito, parachuter}) {
-    let space = distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
+    let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
     if (space < 35){
       bird.feathers = 25;
       bird.birdShotCount += 1;
       return true;
     }
 
-    space = distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
+    space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
     if (space < 30){
       parachuter.dead = 25;
       return true;
     }
 
-    space = distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
+    space = this.distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
     if (space < 30) {
       mosquito.resetPos();
       return true;
     }
   },
 
+  distance(pos1, pos2){
+    let a = pos1[0] - pos2[0];
+    let b = pos1[1] - pos2[1];
+
+    return Math.sqrt(a*a + b*b);
+  },
 };
 
 module.exports = Util;

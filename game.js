@@ -47,13 +47,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   let intervalSpeed = 1000/60;
 
-  distance = (pos1, pos2) => {
-    let a = pos1[0] - pos2[0];
-    let b = pos1[1] - pos2[1];
-
-    return Math.sqrt(a*a + b*b);
-  };
-
   resetPage = () => {
     ctx.clearRect(0, 0, 1000, 600);
     ctx.fillStyle = "blue";
@@ -98,15 +91,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
   document.addEventListener("keydown", (event) => {
     event.preventDefault();
     if (gameStarted) {
-    if (event.keyCode >= 37 && event.keyCode <= 40 ) {
-      helicopter1.keysDown.push(event.keyCode);
-      helicopter1.updatePos(wind1);
+      if (event.keyCode >= 37 && event.keyCode <= 40 ) {
+        helicopter1.keysDown.push(event.keyCode);
+        helicopter1.updatePos(wind1);
+      }
     }
-
     if (event.keyCode === 32){
-      arrow1.shoot(helicopter1);
+      if (lifeCount === 0 || gameStarted === false) {
+        restartGame();
+      } else {
+        arrow1.shoot(helicopter1);
+      }
     }
-  }
   });
 
   document.addEventListener("keyup", (event) => {
@@ -118,31 +114,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
 
   let gameStarted = false;
-
-  document.addEventListener("keydown", (event) => {
-    event.preventDefault();
-    if (event.keyCode === 32){
-    if (lifeCount === 0 || gameStarted === false) {
-      parachuter1.rescueCount = 0;
-      parachuter1.lostCount = -1;
-      bird1.birdShotCount = 0;
-      lifeCount = 3;
-      helicopter1.resetPos();
-      bird1.resetPos();
-      wind1.resetPos();
-      cloud1.resetPos();
-      arrow1.resetPos();
-      parachuter1.resetPos(false);
-      blimp1.resetPos();
-      mosquito1.resetPos();
-      blimp1.resetPos();
-      lightning1.resetPos();
-      gameStarted = true;
-      resetPage();
-    }
-  }
-  });
-
 
   displayCrash = () => {
     addSadSun(ctx);
@@ -244,7 +215,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     wind1.draw(ctx);
     cloud1.draw(ctx);
   };
-  
+
   displayGameOver = () => {
     ctx.fillStyle = "white";
     ctx.font = '80px serif';
@@ -252,6 +223,25 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.font = '50px serif';
     ctx.fillText('Spacebar to Try Again', 280, 400);
     addSadSun(ctx);
+  };
+
+  restartGame = () => {
+    parachuter1.rescueCount = 0;
+    parachuter1.lostCount = -1;
+    bird1.birdShotCount = 0;
+    lifeCount = 3;
+    helicopter1.resetPos();
+    bird1.resetPos();
+    wind1.resetPos();
+    cloud1.resetPos();
+    arrow1.resetPos();
+    parachuter1.resetPos(false);
+    blimp1.resetPos();
+    mosquito1.resetPos();
+    blimp1.resetPos();
+    lightning1.resetPos();
+    gameStarted = true;
+    resetPage();
   };
 
   let sunIcon = new Image();

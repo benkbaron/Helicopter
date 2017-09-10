@@ -116,13 +116,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   let intervalSpeed = 1000/60;
 
-  distance = (pos1, pos2) => {
-    let a = pos1[0] - pos2[0];
-    let b = pos1[1] - pos2[1];
-
-    return Math.sqrt(a*a + b*b);
-  };
-
   resetPage = () => {
     ctx.clearRect(0, 0, 1000, 600);
     ctx.fillStyle = "blue";
@@ -167,15 +160,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
   document.addEventListener("keydown", (event) => {
     event.preventDefault();
     if (gameStarted) {
-    if (event.keyCode >= 37 && event.keyCode <= 40 ) {
-      helicopter1.keysDown.push(event.keyCode);
-      helicopter1.updatePos(wind1);
+      if (event.keyCode >= 37 && event.keyCode <= 40 ) {
+        helicopter1.keysDown.push(event.keyCode);
+        helicopter1.updatePos(wind1);
+      }
     }
-
     if (event.keyCode === 32){
-      arrow1.shoot(helicopter1);
+      if (lifeCount === 0 || gameStarted === false) {
+        restartGame();
+      } else {
+        arrow1.shoot(helicopter1);
+      }
     }
-  }
   });
 
   document.addEventListener("keyup", (event) => {
@@ -187,31 +183,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
 
   let gameStarted = false;
-
-  document.addEventListener("keydown", (event) => {
-    event.preventDefault();
-    if (event.keyCode === 32){
-    if (lifeCount === 0 || gameStarted === false) {
-      parachuter1.rescueCount = 0;
-      parachuter1.lostCount = -1;
-      bird1.birdShotCount = 0;
-      lifeCount = 3;
-      helicopter1.resetPos();
-      bird1.resetPos();
-      wind1.resetPos();
-      cloud1.resetPos();
-      arrow1.resetPos();
-      parachuter1.resetPos(false);
-      blimp1.resetPos();
-      mosquito1.resetPos();
-      blimp1.resetPos();
-      lightning1.resetPos();
-      gameStarted = true;
-      resetPage();
-    }
-  }
-  });
-
 
   displayCrash = () => {
     addSadSun(ctx);
@@ -313,7 +284,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     wind1.draw(ctx);
     cloud1.draw(ctx);
   };
-  
+
   displayGameOver = () => {
     ctx.fillStyle = "white";
     ctx.font = '80px serif';
@@ -321,6 +292,25 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.font = '50px serif';
     ctx.fillText('Spacebar to Try Again', 280, 400);
     addSadSun(ctx);
+  };
+
+  restartGame = () => {
+    parachuter1.rescueCount = 0;
+    parachuter1.lostCount = -1;
+    bird1.birdShotCount = 0;
+    lifeCount = 3;
+    helicopter1.resetPos();
+    bird1.resetPos();
+    wind1.resetPos();
+    cloud1.resetPos();
+    arrow1.resetPos();
+    parachuter1.resetPos(false);
+    blimp1.resetPos();
+    mosquito1.resetPos();
+    blimp1.resetPos();
+    lightning1.resetPos();
+    gameStarted = true;
+    resetPage();
   };
 
   let sunIcon = new Image();
@@ -843,18 +833,18 @@ const Util = {
       return true;
     }
 
-    let space = distance([helicopter.posX + 50, helicopter.posY + 50], [bird.posX + 25, bird.posY + 25]);
+    let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [bird.posX + 25, bird.posY + 25]);
     if (space < 70 && bird.feathers === 0){
       bird.feathers = 25;
       return true;
     }
 
-    space = distance([helicopter.posX + 50, helicopter.posY + 50], [blimp.posX + 100, blimp.posY + 100]);
+    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [blimp.posX + 100, blimp.posY + 100]);
     if (space < 100){
       return true;
     }
 
-    space = distance([helicopter.posX + 50, helicopter.posY + 50], [mosquito.posX + 10, mosquito.posY + 10]);
+    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [mosquito.posX + 10, mosquito.posY + 10]);
     if (space < 40){
       return true;
     }
@@ -868,33 +858,39 @@ const Util = {
   },
 
   checkCatch({helicopter, parachuter}) {
-    let space = distance([helicopter.posX + 50, helicopter.posY + 50], [parachuter.posX + 25, parachuter.posY + 25]);
+    let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [parachuter.posX + 25, parachuter.posY + 25]);
     if (space < 60){
       return true;
     }
   },
 
   checkHit({arrow, bird, mosquito, parachuter}) {
-    let space = distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
+    let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
     if (space < 35){
       bird.feathers = 25;
       bird.birdShotCount += 1;
       return true;
     }
 
-    space = distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
+    space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
     if (space < 30){
       parachuter.dead = 25;
       return true;
     }
 
-    space = distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
+    space = this.distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
     if (space < 30) {
       mosquito.resetPos();
       return true;
     }
   },
 
+  distance(pos1, pos2){
+    let a = pos1[0] - pos2[0];
+    let b = pos1[1] - pos2[1];
+
+    return Math.sqrt(a*a + b*b);
+  },
 };
 
 module.exports = Util;
