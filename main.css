@@ -6,8 +6,8 @@ body {
 }
 
 canvas {
-  min-width: 80vw;
-  max-height: 48vw;
+  min-width: 75vw;
+  max-height: 45vw;
 }
 
 .bottomNav {

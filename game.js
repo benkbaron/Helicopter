@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   displayGameOver = () => {
     ctx.fillStyle = "white";
     ctx.font = '80px serif';
-    ctx.fillText('Sorry you lost!', 270, 280);
+    ctx.fillText('So sorry you lost!', 220, 280);
     ctx.font = '50px serif';
     ctx.fillText('Spacebar to Try Again', 280, 400);
   };
