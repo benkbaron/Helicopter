@@ -523,17 +523,14 @@ module.exports = Lightning;
 /* 5 */
 /***/ (function(module, exports) {
 
-
 class Bird {
   constructor(options) {
     this.posX = 1010;
     this.posY = 600 * Math.random();
     this.feathers = 0;
     this.birdShotCount = 0;
-
     this.feathersIcon = new Image();
     this.feathersIcon.src = "./assets/feathersIcon.png";
-
     this.birdIcon = new Image();
     this.birdIcon.src = "./assets/birdIcon.png";
     this.speed = 3 * (Math.random() + 0.35);
@@ -568,15 +565,13 @@ class Bird {
     }
   }
 
-
-inWindRange(wind) {
-  if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-      (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-        return true;
-      }
-  return false;
-}
-
+  inWindRange(wind) {
+    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
+          return true;
+        }
+    return false;
+  }
 
   resetPos() {
     this.posX = 1010;
@@ -719,7 +714,6 @@ module.exports = Helicopter;
 /* 8 */
 /***/ (function(module, exports) {
 
-
 class Arrow {
   constructor(posX, posY) {
     this.posX = -100;
@@ -764,21 +758,18 @@ class Arrow {
     }
   }
 
-
-    inWindRange(wind) {
-    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-          return true;
-        }
-    return false;
-    }
-
+  inWindRange(wind) {
+  if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
+      (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
+        return true;
+      }
+  return false;
+  }
 
   resetPos() {
     this.posX = -100;
     this.posY = -100;
   }
-
 }
 
 module.exports = Arrow;

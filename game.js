@@ -178,8 +178,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY, wind1);
     bird1.draw(ctx);
-    arrow1.appear = false;
-    arrow1.posX = -1000;
+    arrow1.resetPos();
     parachuter1.updatePos(wind1);
     parachuter1.draw(ctx);
     blimp1.updatePos(wind1);
