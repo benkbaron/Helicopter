@@ -66,9 +66,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (reset) {
       resetObjects();
       reset = false;
-    }
-
-    if (Util.checkCrash({helicopter: helicopter1, bird: bird1, blimp: blimp1,
+    } else if (Util.checkCrash({helicopter: helicopter1, bird: bird1, blimp: blimp1,
                          mosquito: mosquito1, lightning: lightning1})) {
       displayCrash();
       intervalSpeed = 2000;
