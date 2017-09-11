@@ -61,13 +61,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (lifeCount === 0) {
       displayGameOver();
       return;
-    }
-
-    if (reset) {
+    } else if (reset) {
       resetObjects();
       reset = false;
     } else if (Util.checkCrash({helicopter: helicopter1, bird: bird1, blimp: blimp1,
-                         mosquito: mosquito1, lightning: lightning1})) {
+                                mosquito: mosquito1, lightning: lightning1})) {
       displayCrash();
       intervalSpeed = 2000;
       lifeCount -= 1;
@@ -91,7 +89,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (gameStarted) {
       if (event.keyCode >= 37 && event.keyCode <= 40 ) {
         helicopter1.keysDown.push(event.keyCode);
-        helicopter1.updatePos(wind1);
       }
     }
     if (event.keyCode === 32){
