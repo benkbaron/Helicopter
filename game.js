@@ -230,6 +230,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     bird1.birdShotCount = 0;
     lifeCount = 3;
     helicopter1.resetPos();
+    helicopter1.keysDown = [];
     bird1.resetPos();
     wind1.resetPos();
     cloud1.resetPos();

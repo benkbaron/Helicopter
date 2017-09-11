@@ -12,7 +12,7 @@ Player guides the helicopter using the arrow keys to rescue falling parachuters 
 
 ### Architecture and Technologies
 
-This project is implemented using vanilla JavaScript, HTML5 with Canvas for effects, and CSS3.
+This project is implemented using vanilla JavaScript, HTML5 with Canvas, and CSS3.
 
 Each object has its own class, which will interact with other objects based upon its own unique specifications.
 
