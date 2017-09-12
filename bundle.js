@@ -169,6 +169,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
     if (event.keyCode === 32){
       if (gameStarted === false) {
+        playSong = true;
         restartGame();
       } else if (arrowCounter < 1 || passwordEntered()){
         firstArrow = arrowArr[0];
@@ -267,6 +268,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.fillText('Spacebar to Try Again', 280, 400);
     addSadSun(ctx);
     gameStarted = false;
+    music.pause();
   };
 
   restartGame = () => {
@@ -288,6 +290,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     gameStarted = true;
     inputs = [];
     resetPage();
+    music.load();
+    music.play();
   };
 
   let sunIcon = new Image();
@@ -333,13 +337,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return false;
   };
 
-
-
-
-
   let music = document.getElementById("music");
-  console.log("music")
-  music.play();
+  // let playSong;
+  // if (playSong) {
+  //   music.play();
+  // }
+
 });
 
 
