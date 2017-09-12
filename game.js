@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let helicopter1 = new Helicopter();
   let arrowArr = [];
   let wind1 = new Wind();
+  let allObjects = [parachuter1, blimp1, cloud1, lightning1, bird1, mosquito1, helicopter1, wind1];
+
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = -1;
   bird1.birdShotCount = 0;
@@ -93,7 +95,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
       }
       if (inputs.length < 4) {
-      inputs.push(event.keyCode);
+        inputs.push(event.keyCode);
       }
     }
     if (event.keyCode === 32){
@@ -111,7 +113,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   document.addEventListener("keyup", (event) => {
     event.preventDefault();
-    if (event.keyCode >= 37 && event.keyCode <= 40 ) {
+    if (event.keyCode >= 37 && event.keyCode <= 40) {
       helicopter1.keysDown = helicopter1.keysDown.filter(num => num !== event.keyCode );
     }
   });
@@ -142,56 +144,36 @@ document.addEventListener("DOMContentLoaded", (event) => {
     wind1.resetPos();
     cloud1.resetPos();
     resetArrows();
-    bird1.draw(ctx);
-    helicopter1.draw(ctx);
-    parachuter1.draw(ctx);
-    blimp1.draw(ctx);
-    mosquito1.draw(ctx);
-    lightning1.draw(ctx);
-    wind1.draw(ctx);
-    cloud1.draw(ctx);
+    drawArrows();
+    drawAll();
   };
 
   displayCaught = () => {
     addSun(ctx);
     helicopter1.updatePos(wind1);
-    helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY, wind1);
-    bird1.draw(ctx);
     parachuter1.resetPos(true);
-    parachuter1.draw(ctx);
     blimp1.updatePos(wind1);
-    blimp1.draw(ctx);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
-    mosquito1.draw(ctx);
     lightning1.updatePos();
-    lightning1.draw(ctx);
-    drawArrows();
     wind1.updatePos();
-    wind1.draw(ctx);
     cloud1.updatePos(wind1);
-    cloud1.draw(ctx);
+    drawArrows();
+    drawAll();
   };
 
   displayHit = () => {
     addSun(ctx);
     helicopter1.updatePos(wind1);
-    helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY, wind1);
-    bird1.draw(ctx);
-    drawArrows();
     parachuter1.updatePos(wind1);
-    parachuter1.draw(ctx);
     blimp1.updatePos(wind1);
-    blimp1.draw(ctx);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
-    mosquito1.draw(ctx);
     lightning1.updatePos();
-    lightning1.draw(ctx);
     wind1.updatePos();
-    wind1.draw(ctx);
     cloud1.updatePos(wind1);
-    cloud1.draw(ctx);
+    drawArrows();
+    drawAll();
   };
 
   displayStandard = () => {
@@ -204,15 +186,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.updatePos();
     wind1.updatePos();
     cloud1.updatePos(wind1);
-    helicopter1.draw(ctx);
-    bird1.draw(ctx);
-    parachuter1.draw(ctx);
-    blimp1.draw(ctx);
-    mosquito1.draw(ctx);
-    lightning1.draw(ctx);
     drawArrows();
-    wind1.draw(ctx);
-    cloud1.draw(ctx);
+    drawAll();
   };
 
   displayGameOver = () => {
@@ -272,6 +247,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
       arrowArr.push(new Arrow());
     }
   };
+
+  drawAll = () => {
+    allObjects.forEach((obj) => {
+      obj.draw(ctx);
+    });
+  };
+
   let arrowCounter = 0;
   addArrows();
 
