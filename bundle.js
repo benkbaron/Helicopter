@@ -75,9 +75,9 @@ const Bird = __webpack_require__(5);
 const Mosquito = __webpack_require__(6);
 const Helicopter = __webpack_require__(7);
 const Arrow = __webpack_require__(8);
-const Wind = __webpack_require__(11);
+const Wind = __webpack_require__(9);
 
-const Util = __webpack_require__(12);
+const Util = __webpack_require__(10);
 
 let reset;
 
@@ -107,14 +107,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let bird1 = new Bird();
   let mosquito1 = new Mosquito();
   let helicopter1 = new Helicopter();
-  let arrow1 = new Arrow();
+  let arrowArr = [];
   let wind1 = new Wind();
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = -1;
   bird1.birdShotCount = 0;
   let lifeCount = 3;
-
-  let intervalSpeed = 1000/60;
 
   resetPage = () => {
     ctx.clearRect(0, 0, 1000, 600);
@@ -130,15 +128,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (lifeCount === 0) {
       displayGameOver();
       return;
-    }
-
-    if (reset) {
+    } else if (reset) {
       resetObjects();
+      intervalSpeed = 1000/60;
       reset = false;
-    }
-
-    if (Util.checkCrash({helicopter: helicopter1, bird: bird1, blimp: blimp1,
-                         mosquito: mosquito1, lightning: lightning1})) {
+    } else if (Util.checkCrash({helicopter: helicopter1, bird: bird1, blimp: blimp1,
+                                mosquito: mosquito1, lightning: lightning1})) {
       displayCrash();
       intervalSpeed = 2000;
       lifeCount -= 1;
@@ -146,14 +141,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else if (Util.checkCatch({helicopter: helicopter1, parachuter: parachuter1})) {
         intervalSpeed = 1000/60;
         displayCaught();
-    } else if (Util.checkHit({arrow: arrow1, bird: bird1, mosquito: mosquito1, parachuter: parachuter1})) {
+    } else if (Util.checkHit({arrowArr: arrowArr, bird: bird1, mosquito: mosquito1, parachuter: parachuter1})) {
         intervalSpeed = 1000/60;
         displayHit();
     } else {
         intervalSpeed = 1000/60;
         displayStandard();
     }
-
     setTimeout(resetPage, intervalSpeed);
   };
 
@@ -161,15 +155,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
     event.preventDefault();
     if (gameStarted) {
       if (event.keyCode >= 37 && event.keyCode <= 40 ) {
-        helicopter1.keysDown.push(event.keyCode);
-        helicopter1.updatePos(wind1);
+        if (helicopter1.keysDown.includes(event.keyCode) === false){
+          helicopter1.keysDown.push(event.keyCode);
+        }
       }
     }
     if (event.keyCode === 32){
-      if (lifeCount === 0 || gameStarted === false) {
+      if (gameStarted === false) {
         restartGame();
       } else {
-        arrow1.shoot(helicopter1);
+        firstArrow = arrowArr[0];
+        firstArrow.shoot(helicopter1);
+        arrowArr = arrowArr.slice(1);
+        arrowArr.push(firstArrow);
       }
     }
   });
@@ -178,7 +176,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     event.preventDefault();
     if (event.keyCode >= 37 && event.keyCode <= 40 ) {
       helicopter1.keysDown = helicopter1.keysDown.filter(num => num !== event.keyCode );
-      helicopter1.updatePos(wind1);
     }
   });
 
@@ -207,15 +204,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.resetPos();
     wind1.resetPos();
     cloud1.resetPos();
-    arrow1.resetPos();
+    resetArrows();
     bird1.draw(ctx);
-    helicopter1.drawSkull(ctx);
+    helicopter1.draw(ctx);
     parachuter1.draw(ctx);
     blimp1.draw(ctx);
     mosquito1.draw(ctx);
     lightning1.draw(ctx);
     wind1.draw(ctx);
-    arrow1.draw(ctx);
     cloud1.draw(ctx);
   };
 
@@ -233,8 +229,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     mosquito1.draw(ctx);
     lightning1.updatePos();
     lightning1.draw(ctx);
-    arrow1.updatePos(wind1);
-    arrow1.draw(ctx);
+    drawArrows();
     wind1.updatePos();
     wind1.draw(ctx);
     cloud1.updatePos(wind1);
@@ -247,8 +242,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     helicopter1.draw(ctx);
     bird1.updatePos(helicopter1.posY, wind1);
     bird1.draw(ctx);
-    arrow1.appear = false;
-    arrow1.posX = -1000;
+    drawArrows();
     parachuter1.updatePos(wind1);
     parachuter1.draw(ctx);
     blimp1.updatePos(wind1);
@@ -271,7 +265,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     blimp1.updatePos(wind1);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     lightning1.updatePos();
-    arrow1.updatePos(wind1);
     wind1.updatePos();
     cloud1.updatePos(wind1);
     helicopter1.draw(ctx);
@@ -280,7 +273,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     blimp1.draw(ctx);
     mosquito1.draw(ctx);
     lightning1.draw(ctx);
-    arrow1.draw(ctx);
+    drawArrows();
     wind1.draw(ctx);
     cloud1.draw(ctx);
   };
@@ -292,6 +285,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.font = '50px serif';
     ctx.fillText('Spacebar to Try Again', 280, 400);
     addSadSun(ctx);
+    gameStarted = false;
   };
 
   restartGame = () => {
@@ -300,10 +294,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
     bird1.birdShotCount = 0;
     lifeCount = 3;
     helicopter1.resetPos();
+    helicopter1.keysDown = [];
     bird1.resetPos();
     wind1.resetPos();
     cloud1.resetPos();
-    arrow1.resetPos();
+    resetArrows();
     parachuter1.resetPos(false);
     blimp1.resetPos();
     mosquito1.resetPos();
@@ -321,6 +316,25 @@ document.addEventListener("DOMContentLoaded", (event) => {
   sadSunIcon.src = "./assets/sadSunIcon.png";
   addSadSun = (ctx) => { ctx.drawImage(sadSunIcon, 920, 20, 70, 70); };
 
+  drawArrows = () => {
+    arrowArr.forEach((arrow) => {
+      arrow.updatePos(wind1);
+      arrow.draw(ctx);
+    });
+  };
+
+  resetArrows = () => {
+    arrowArr.forEach((arrow) => {
+      arrow.resetPos();
+    });
+  };
+
+  addArrows = () => {
+    for (let i = 0; i < 50; i++){
+      arrowArr.push(new Arrow());
+    }
+  };
+    addArrows();
 
 });
 
@@ -663,7 +677,7 @@ class Helicopter {
   }
 
   drawSkull(ctx) {
-      ctx.drawImage(this.skullIcon, this.posX, this.posY, 100, 100);
+    ctx.drawImage(this.skullIcon, this.posX, this.posY, 100, 100);
   }
 
 
@@ -718,7 +732,6 @@ class Arrow {
   constructor(posX, posY) {
     this.posX = -100;
     this.posY = -100;
-    this.appear = false;
     this.direction = "right";
     this.arrowIconLeft = new Image();
     this.arrowIconRight = new Image();
@@ -727,15 +740,12 @@ class Arrow {
   }
 
   draw(ctx) {
-    if (this.appear) {
       let arrowImage = this.direction === "right" ? this.arrowIconRight : this.arrowIconLeft;
       ctx.drawImage(arrowImage, this.posX, this.posY, 50, 50);
-    }
   }
 
   shoot(helicopter) {
     if ((this.posY == -100) || (this.posX > 1050 || this.posX < -50)) {
-      this.appear = true;
       this.posX = helicopter.flipped ? helicopter.posX : helicopter.posX + 100;
       this.posY = helicopter.posY + 20;
       this.direction = helicopter.flipped ? "left" : "right";
@@ -750,7 +760,7 @@ class Arrow {
     }
 
     if (this.posX > 1050 || this.posX < -50) {
-      this.appear = false;
+      this.resetPos();
     }
 
     if (this.inWindRange(wind)){
@@ -776,9 +786,7 @@ module.exports = Arrow;
 
 
 /***/ }),
-/* 9 */,
-/* 10 */,
-/* 11 */
+/* 9 */
 /***/ (function(module, exports) {
 
 
@@ -813,7 +821,7 @@ module.exports = Wind;
 
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(module, exports) {
 
 const Util = {
@@ -855,25 +863,34 @@ const Util = {
     }
   },
 
-  checkHit({arrow, bird, mosquito, parachuter}) {
+  checkHit({arrowArr, bird, mosquito, parachuter}) {
+    arrowArr.forEach((arrow) => {
     let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
     if (space < 35){
       bird.feathers = 25;
       bird.birdShotCount += 1;
+
+      arrow.resetPos();
       return true;
     }
 
     space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
     if (space < 30){
       parachuter.dead = 25;
+
+      arrow.resetPos();
       return true;
     }
 
     space = this.distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
     if (space < 30) {
       mosquito.resetPos();
+
+      arrow.resetPos();
       return true;
     }
+
+    });
   },
 
   distance(pos1, pos2){

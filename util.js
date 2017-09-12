@@ -37,25 +37,34 @@ const Util = {
     }
   },
 
-  checkHit({arrow, bird, mosquito, parachuter}) {
+  checkHit({arrowArr, bird, mosquito, parachuter}) {
+    arrowArr.forEach((arrow) => {
     let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
     if (space < 35){
       bird.feathers = 25;
       bird.birdShotCount += 1;
+
+      arrow.resetPos();
       return true;
     }
 
     space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
     if (space < 30){
       parachuter.dead = 25;
+
+      arrow.resetPos();
       return true;
     }
 
     space = this.distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
     if (space < 30) {
       mosquito.resetPos();
+
+      arrow.resetPos();
       return true;
     }
+
+    });
   },
 
   distance(pos1, pos2){

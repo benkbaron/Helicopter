@@ -20,7 +20,7 @@ class Helicopter {
   }
 
   drawSkull(ctx) {
-      ctx.drawImage(this.skullIcon, this.posX, this.posY, 100, 100);
+    ctx.drawImage(this.skullIcon, this.posX, this.posY, 100, 100);
   }
 
 
