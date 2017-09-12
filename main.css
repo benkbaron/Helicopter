@@ -11,7 +11,17 @@ canvas {
 }
 
 .bottomNav {
-  width: 400px;
+  width: 500px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+#soundButton {
+  height: 40px;
+  width: 90px;
+  border-radius: 10px;
+  background-color: yellow;
+  font-weight: 700;
+  font-size: 12px;
 }

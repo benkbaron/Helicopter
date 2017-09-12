@@ -100,7 +100,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
     if (event.keyCode === 32){
       if (gameStarted === false) {
-        playSong = true;
         restartGame();
       } else if (arrowCounter < 1 || passwordEntered()){
         firstArrow = arrowArr[0];
@@ -269,9 +268,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   let music = document.getElementById("music");
-  // let playSong;
-  // if (playSong) {
-  //   music.play();
-  // }
+
+  let soundButton = document.getElementById("soundButton");
+  let playing = true;
+  soundButton.addEventListener("click", () => {
+    if (playing){
+      soundButton.innerHTML = "Turn Sound On";
+      music.pause();
+      playing = false;
+    } else {
+      soundButton.innerHTML = "Turn Sound Off";
+      music.play();
+      playing = true;
+    }
+  });
 
 });
