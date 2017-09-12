@@ -21,7 +21,12 @@ canvas {
   height: 40px;
   width: 90px;
   border-radius: 10px;
-  background-color: yellow;
+  background-color: #ffec19;
   font-weight: 700;
   font-size: 12px;
+  outline: none;
+  border: 1px solid black;
+}
+#soundButton:hover {
+  background-color: #dbcb18;
 }

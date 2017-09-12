@@ -267,7 +267,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.fillText('Spacebar to Try Again', 280, 400);
     addSadSun(ctx);
     gameStarted = false;
-    music.pause();
   };
 
   restartGame = () => {
@@ -289,8 +288,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     gameStarted = true;
     inputs = [];
     resetPage();
-    music.load();
-    music.play();
   };
 
   let sunIcon = new Image();
@@ -337,21 +334,25 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   let music = document.getElementById("music");
-
+  music.volume = 0.7;
   let soundButton = document.getElementById("soundButton");
   let playing = true;
+  music.play();
   soundButton.addEventListener("click", () => {
-    if (playing){
-      soundButton.innerHTML = "Turn Sound On";
-      music.pause();
-      playing = false;
-    } else {
-      soundButton.innerHTML = "Turn Sound Off";
-      music.play();
-      playing = true;
-    }
+    musicControl();
   });
 
+  musicControl = () => {
+  if (!playing){
+    soundButton.innerHTML = "Turn Sound Off";
+    music.play();
+    playing = true;
+  } else {
+    soundButton.innerHTML = "Turn Sound On";
+    music.pause();
+    playing = false;
+  }
+  };
 });
 
 
