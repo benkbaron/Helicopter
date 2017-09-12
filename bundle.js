@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let helicopter1 = new Helicopter();
   let arrowArr = [];
   let wind1 = new Wind();
-  let allObjects = [parachuter1, blimp1, cloud1, lightning1, bird1, mosquito1, helicopter1, wind1];
+  let allObjects = [parachuter1, blimp1, lightning1, bird1, mosquito1, helicopter1, wind1, cloud1];
 
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = -1;
@@ -333,6 +333,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return false;
   };
 
+
+
+
+
+  let music = document.getElementById("music");
+  console.log("music")
+  music.play();
 });
 
 
