@@ -8,7 +8,7 @@ class Bird {
     this.feathersIcon.src = "./assets/feathersIcon.png";
     this.birdIcon = new Image();
     this.birdIcon.src = "./assets/birdIcon.png";
-    this.speed = 3 * (Math.random() + 0.35);
+    this.speed = 3.5 * (Math.random() + 0.4);
   }
 
   draw(ctx) {

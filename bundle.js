@@ -113,6 +113,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   parachuter1.lostCount = -1;
   bird1.birdShotCount = 0;
   let lifeCount = 3;
+  let inputs = [];
 
   resetPage = () => {
     ctx.clearRect(0, 0, 1000, 600);
@@ -148,6 +149,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         intervalSpeed = 1000/60;
         displayStandard();
     }
+    arrowCounter -= 1;
     setTimeout(resetPage, intervalSpeed);
   };
 
@@ -159,15 +161,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
           helicopter1.keysDown.push(event.keyCode);
         }
       }
+      if (inputs.length < 4) {
+      inputs.push(event.keyCode);
+      }
     }
     if (event.keyCode === 32){
       if (gameStarted === false) {
         restartGame();
-      } else {
+      } else if (arrowCounter < 1 || passwordEntered()){
         firstArrow = arrowArr[0];
         firstArrow.shoot(helicopter1);
         arrowArr = arrowArr.slice(1);
         arrowArr.push(firstArrow);
+        arrowCounter = 45;
       }
     }
   });
@@ -305,6 +311,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     blimp1.resetPos();
     lightning1.resetPos();
     gameStarted = true;
+    inputs = [];
     resetPage();
   };
 
@@ -334,7 +341,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
       arrowArr.push(new Arrow());
     }
   };
-    addArrows();
+  let arrowCounter = 0;
+  addArrows();
+
+  passwordEntered = () => {
+    if (inputs[0] === 86 && inputs[1] === 69 && inputs[2] === 82 && inputs[3] === 78) {
+      return true;
+    }
+    return false;
+  };
 
 });
 
@@ -547,7 +562,7 @@ class Bird {
     this.feathersIcon.src = "./assets/feathersIcon.png";
     this.birdIcon = new Image();
     this.birdIcon.src = "./assets/birdIcon.png";
-    this.speed = 3 * (Math.random() + 0.35);
+    this.speed = 3.5 * (Math.random() + 0.4);
   }
 
   draw(ctx) {
