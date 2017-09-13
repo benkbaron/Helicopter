@@ -1,3 +1,5 @@
+let wah = new Audio('./assets/wah.wav');
+wah.volume = 0.05;
 
 class Parachuter {
   constructor(options) {
@@ -15,19 +17,21 @@ class Parachuter {
   draw(ctx) {
     if (this.dead > 0) {
       this.dead -= 1;
-      ctx.drawImage(this.parachuterSkullIcon, this.posX, this.posY, 50, 50);
+      ctx.drawImage(this.parachuterSkullIcon, this.posX, this.posY, 60, 60);
       if (this.dead === 0) {
         this.resetPos();
       }
     } else {
-      ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 50, 50);
+      ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 60, 60);
     }
   }
 
   updatePos(wind) {
-    this.posY += 1.7;
-    if (this.posY > 650) {
+    this.posY += 1.8;
+    if (this.posY > 620) {
       this.resetPos();
+      wah.load();
+      wah.play();
     }
     if (this.inWindRange(wind)){
       this.posX += 3;
