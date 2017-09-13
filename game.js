@@ -11,6 +11,7 @@ const Wind = require("./wind");
 const Util = require("./util");
 
 let reset;
+let paused = false;
 
 document.addEventListener("DOMContentLoaded", (event) => {
   let canvas = document.querySelector("canvas");
@@ -24,12 +25,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
   ctx.fillText('Helicopter', 320, 150);
   ctx.fillStyle = "white";
   ctx.font = '50px serif';
-  ctx.fillText('Hit Spacebar to Start!', 270, 270);
+  ctx.fillText("Press 'p' to Start and Pause", 220, 270);
   ctx.fillStyle = "black";
-  ctx.font = '25px serif';
-  ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 150, 380);
-  ctx.fillText('All objects, but clouds and wind, are dangerous! Careful to stay in the borders!', 100, 440);
-  ctx.fillText('Shoot birds and mosquitos using spacebar, only 1 arrow at a time.', 170, 500);
+  ctx.font = '28px serif';
+  ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 130, 380);
+  ctx.fillText('All objects, but clouds and wind, are dangerous! Careful to stay in the borders!', 60, 440);
+  ctx.fillText('Shoot birds and mosquitos using spacebar.', 250, 500);
 
   let parachuter1 = new Parachuter();
   let blimp1 = new Blimp();
@@ -62,6 +63,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (lifeCount === 0) {
       displayGameOver();
       return;
+    } else if (paused) {
+      ctx.font = '60px serif';
+      ctx.fillText("Paused", 410, 220);
+      ctx.font = '40px serif';
+      ctx.fillText("Press 'p' to resume.", 340, 350);
     } else if (reset) {
       resetObjects();
       intervalSpeed = 1000/60;
@@ -100,10 +106,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
         inputs.push(event.keyCode);
       }
     }
-    if (event.keyCode === 32){
-      if (gameStarted === false) {
-        restartGame();
-      } else if (arrowCounter < 1 || passwordEntered()){
+
+    if (event.keyCode === 32 && !paused){
+      if ( gameStarted && (arrowCounter < 1 || passwordEntered())){
         firstArrow = arrowArr[0];
         firstArrow.shoot(helicopter1);
         playSound("arrowShot");
@@ -111,6 +116,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
         arrowArr.push(firstArrow);
         arrowCounter = 45;
       }
+    }
+
+    if (event.keyCode === 80){
+      if (!gameStarted) {
+        restartGame();
+      } else {
+      paused = paused ? false : true;
+    }
     }
   });
 
@@ -185,7 +198,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.font = '80px serif';
     ctx.fillText('So sorry you lost!', 220, 280);
     ctx.font = '50px serif';
-    ctx.fillText('Spacebar to Try Again', 280, 400);
+    ctx.fillText("Press 'p' to Try Again", 270, 400);
     addSadSun(ctx);
     gameStarted = false;
   };
