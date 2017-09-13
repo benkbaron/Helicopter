@@ -152,6 +152,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         displayStandard();
     }
     arrowCounter -= 1;
+
     setTimeout(resetPage, intervalSpeed);
   };
 
@@ -173,6 +174,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
       } else if (arrowCounter < 1 || passwordEntered()){
         firstArrow = arrowArr[0];
         firstArrow.shoot(helicopter1);
+        arrowShotSound.load();
+        arrowShotSound.play();
         arrowArr = arrowArr.slice(1);
         arrowArr.push(firstArrow);
         arrowCounter = 45;
@@ -333,11 +336,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return false;
   };
 
-  let music = document.getElementById("music");
-  music.volume = 0.7;
+  let music = new Audio('./assets/music.m4a');
+  music.volume = 0.4;
+  music.loop = true;
+  music.play();
+
+  let arrowShotSound = new Audio('./assets/arrowShot.wav');
+  arrowShotSound.volume = 0.3;
+
+  let arrowHitSound = new Audio('./assets/arrowHit.wav');
+  arrowHitSound.volume = 0.3;
+  
   let soundButton = document.getElementById("soundButton");
   let playing = true;
-  music.play();
   soundButton.addEventListener("click", () => {
     musicControl();
   });

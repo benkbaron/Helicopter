@@ -26,6 +26,7 @@ canvas {
   font-size: 12px;
   outline: none;
   border: 1px solid black;
+
 }
 #soundButton:hover {
   background-color: #dbcb18;
