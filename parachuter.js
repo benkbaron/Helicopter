@@ -27,7 +27,7 @@ class Parachuter {
   }
 
   updatePos(wind) {
-    this.posY += 1.8;
+    this.posY += 1.4 + (this.rescueCount / 10);
     if (this.posY > 610) {
       this.resetPos();
       wah.load();
