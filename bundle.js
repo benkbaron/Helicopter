@@ -144,15 +144,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else if (Util.checkCatch({helicopter: helicopter1, parachuter: parachuter1})) {
         intervalSpeed = 1000/60;
         displayCaught();
-    } else if (Util.checkHit({arrowArr: arrowArr, bird: bird1, mosquito: mosquito1, parachuter: parachuter1})) {
-        intervalSpeed = 1000/60;
-        displayHit();
     } else {
+        if (Util.checkHit({arrowArr: arrowArr, bird: bird1, mosquito: mosquito1,
+                          parachuter: parachuter1})) {
+          playSound("arrowHit");
+        }
         intervalSpeed = 1000/60;
         displayStandard();
-    }
-    arrowCounter -= 1;
+      }
 
+    arrowCounter -= 1;
     setTimeout(resetPage, intervalSpeed);
   };
 
@@ -174,8 +175,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       } else if (arrowCounter < 1 || passwordEntered()){
         firstArrow = arrowArr[0];
         firstArrow.shoot(helicopter1);
-        arrowShotSound.load();
-        arrowShotSound.play();
+        playSound("arrowShot");
         arrowArr = arrowArr.slice(1);
         arrowArr.push(firstArrow);
         arrowCounter = 45;
@@ -225,20 +225,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     helicopter1.updatePos(wind1);
     bird1.updatePos(helicopter1.posY, wind1);
     parachuter1.resetPos(true);
-    blimp1.updatePos(wind1);
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
-    lightning1.updatePos();
-    wind1.updatePos();
-    cloud1.updatePos(wind1);
-    drawArrows();
-    drawAll();
-  };
-
-  displayHit = () => {
-    addSun(ctx);
-    helicopter1.updatePos(wind1);
-    bird1.updatePos(helicopter1.posY, wind1);
-    parachuter1.updatePos(wind1);
     blimp1.updatePos(wind1);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     lightning1.updatePos();
@@ -345,13 +331,23 @@ document.addEventListener("DOMContentLoaded", (event) => {
   arrowShotSound.volume = 0.3;
 
   let arrowHitSound = new Audio('./assets/arrowHit.wav');
-  arrowHitSound.volume = 0.3;
-  
+  arrowHitSound.volume = 0.7;
+
   let soundButton = document.getElementById("soundButton");
   let playing = true;
   soundButton.addEventListener("click", () => {
     musicControl();
   });
+
+  playSound = (sound) => {
+    if (sound === "arrowShot") {
+      arrowShotSound.load();
+      arrowShotSound.play();
+    } else if (sound === "arrowHit") {
+      arrowHitSound.load();
+      arrowHitSound.play();
+    }
+  };
 
   musicControl = () => {
   if (!playing){
@@ -892,33 +888,32 @@ const Util = {
   },
 
   checkHit({arrowArr, bird, mosquito, parachuter}) {
+    let answer = false;
     arrowArr.forEach((arrow) => {
-    let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
-    if (space < 35){
-      bird.feathers = 25;
-      bird.birdShotCount += 1;
+      let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
+      if (space < 35){
+        bird.feathers = 25;
+        bird.birdShotCount += 1;
+        arrow.resetPos();
+        answer = true;
+      }
 
-      arrow.resetPos();
-      return true;
-    }
+      space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
+      if (space < 30){
+        parachuter.dead = 25;
+        arrow.resetPos();
+        answer = true;
+      }
 
-    space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
-    if (space < 30){
-      parachuter.dead = 25;
-
-      arrow.resetPos();
-      return true;
-    }
-
-    space = this.distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
-    if (space < 30) {
-      mosquito.resetPos();
-
-      arrow.resetPos();
-      return true;
-    }
+      space = this.distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
+      if (space < 30) {
+        mosquito.resetPos();
+        arrow.resetPos();
+        answer = true;
+      }
 
     });
+    return answer;
   },
 
   distance(pos1, pos2){

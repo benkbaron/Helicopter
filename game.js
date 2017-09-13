@@ -75,15 +75,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else if (Util.checkCatch({helicopter: helicopter1, parachuter: parachuter1})) {
         intervalSpeed = 1000/60;
         displayCaught();
-    } else if (Util.checkHit({arrowArr: arrowArr, bird: bird1, mosquito: mosquito1, parachuter: parachuter1})) {
-        intervalSpeed = 1000/60;
-        displayHit();
     } else {
+        if (Util.checkHit({arrowArr: arrowArr, bird: bird1, mosquito: mosquito1,
+                          parachuter: parachuter1})) {
+          playSound("arrowHit");
+        }
         intervalSpeed = 1000/60;
         displayStandard();
-    }
-    arrowCounter -= 1;
+      }
 
+    arrowCounter -= 1;
     setTimeout(resetPage, intervalSpeed);
   };
 
@@ -105,8 +106,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       } else if (arrowCounter < 1 || passwordEntered()){
         firstArrow = arrowArr[0];
         firstArrow.shoot(helicopter1);
-        arrowShotSound.load();
-        arrowShotSound.play();
+        playSound("arrowShot");
         arrowArr = arrowArr.slice(1);
         arrowArr.push(firstArrow);
         arrowCounter = 45;
@@ -156,20 +156,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     helicopter1.updatePos(wind1);
     bird1.updatePos(helicopter1.posY, wind1);
     parachuter1.resetPos(true);
-    blimp1.updatePos(wind1);
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
-    lightning1.updatePos();
-    wind1.updatePos();
-    cloud1.updatePos(wind1);
-    drawArrows();
-    drawAll();
-  };
-
-  displayHit = () => {
-    addSun(ctx);
-    helicopter1.updatePos(wind1);
-    bird1.updatePos(helicopter1.posY, wind1);
-    parachuter1.updatePos(wind1);
     blimp1.updatePos(wind1);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
     lightning1.updatePos();
@@ -276,13 +262,23 @@ document.addEventListener("DOMContentLoaded", (event) => {
   arrowShotSound.volume = 0.3;
 
   let arrowHitSound = new Audio('./assets/arrowHit.wav');
-  arrowHitSound.volume = 0.3;
-  
+  arrowHitSound.volume = 0.7;
+
   let soundButton = document.getElementById("soundButton");
   let playing = true;
   soundButton.addEventListener("click", () => {
     musicControl();
   });
+
+  playSound = (sound) => {
+    if (sound === "arrowShot") {
+      arrowShotSound.load();
+      arrowShotSound.play();
+    } else if (sound === "arrowHit") {
+      arrowHitSound.load();
+      arrowHitSound.play();
+    }
+  };
 
   musicControl = () => {
   if (!playing){
