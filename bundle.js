@@ -215,7 +215,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.draw(ctx);
     wind1.draw(ctx);
     cloud1.draw(ctx);
-    playSound("lifeLost")
+    drawArrows();
+    playSound("lifeLost");
   };
 
   resetObjects = () => {
@@ -597,7 +598,7 @@ module.exports = Lightning;
 
 class Bird {
   constructor(options) {
-    this.posX = 1010;
+    this.posX = 1050;
     this.posY = 600 * Math.random();
     this.feathers = 0;
     this.birdShotCount = 0;
@@ -646,7 +647,7 @@ class Bird {
   }
 
   resetPos() {
-    this.posX = 1010;
+    this.posX = 1050;
     this.posY = 600 * Math.random();
     this.speed = 3 * (Math.random() + 0.35);
   }

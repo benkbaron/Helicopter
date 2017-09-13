@@ -1,6 +1,6 @@
 class Bird {
   constructor(options) {
-    this.posX = 1010;
+    this.posX = 1050;
     this.posY = 600 * Math.random();
     this.feathers = 0;
     this.birdShotCount = 0;
@@ -49,7 +49,7 @@ class Bird {
   }
 
   resetPos() {
-    this.posX = 1010;
+    this.posX = 1050;
     this.posY = 600 * Math.random();
     this.speed = 3 * (Math.random() + 0.35);
   }

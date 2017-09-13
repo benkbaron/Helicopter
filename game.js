@@ -146,7 +146,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.draw(ctx);
     wind1.draw(ctx);
     cloud1.draw(ctx);
-    playSound("lifeLost")
+    drawArrows();
+    playSound("lifeLost");
   };
 
   resetObjects = () => {
