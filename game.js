@@ -133,6 +133,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.draw(ctx);
     wind1.draw(ctx);
     cloud1.draw(ctx);
+    playSound("lifeLost")
   };
 
   resetObjects = () => {
@@ -264,6 +265,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let arrowHitSound = new Audio('./assets/arrowHit.wav');
   arrowHitSound.volume = 0.7;
 
+  let lifeLostSound = new Audio('./assets/lifeLost.wav');
+  lifeLostSound.volume = 0.5;
+
   let soundButton = document.getElementById("soundButton");
   let playing = true;
   soundButton.addEventListener("click", () => {
@@ -277,6 +281,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else if (sound === "arrowHit") {
       arrowHitSound.load();
       arrowHitSound.play();
+    } else if (sound === "lifeLost") {
+      lifeLostSound.load();
+      lifeLostSound.play();
     }
   };
 

@@ -1,3 +1,6 @@
+let wah = new Audio('./assets/wah.wav');
+wah.volume = 0.05;
+
 const Util = {
 
   checkCrash({helicopter, bird, blimp, mosquito, lightning}) {
@@ -40,7 +43,7 @@ const Util = {
   checkHit({arrowArr, bird, mosquito, parachuter}) {
     let answer = false;
     arrowArr.forEach((arrow) => {
-      let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
+    let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
       if (space < 35){
         bird.feathers = 25;
         bird.birdShotCount += 1;
@@ -51,6 +54,8 @@ const Util = {
       space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
       if (space < 30){
         parachuter.dead = 25;
+        wah.load();
+        wah.play();
         arrow.resetPos();
         answer = true;
       }
@@ -61,7 +66,6 @@ const Util = {
         arrow.resetPos();
         answer = true;
       }
-
     });
     return answer;
   },

@@ -25,7 +25,7 @@ class Mosquito {
     }
 
     if (this.inWindRange(wind)){
-      this.posX += 1;
+      this.posX += 2.5;
     }
   }
 

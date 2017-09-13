@@ -202,6 +202,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     lightning1.draw(ctx);
     wind1.draw(ctx);
     cloud1.draw(ctx);
+    playSound("lifeLost")
   };
 
   resetObjects = () => {
@@ -333,6 +334,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let arrowHitSound = new Audio('./assets/arrowHit.wav');
   arrowHitSound.volume = 0.7;
 
+  let lifeLostSound = new Audio('./assets/lifeLost.wav');
+  lifeLostSound.volume = 0.5;
+
   let soundButton = document.getElementById("soundButton");
   let playing = true;
   soundButton.addEventListener("click", () => {
@@ -346,6 +350,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else if (sound === "arrowHit") {
       arrowHitSound.load();
       arrowHitSound.play();
+    } else if (sound === "lifeLost") {
+      lifeLostSound.load();
+      lifeLostSound.play();
     }
   };
 
@@ -652,7 +659,7 @@ class Mosquito {
     }
 
     if (this.inWindRange(wind)){
-      this.posX += 1;
+      this.posX += 2.5;
     }
   }
 
@@ -848,6 +855,9 @@ module.exports = Wind;
 /* 10 */
 /***/ (function(module, exports) {
 
+let wah = new Audio('./assets/wah.wav');
+wah.volume = 0.05;
+
 const Util = {
 
   checkCrash({helicopter, bird, blimp, mosquito, lightning}) {
@@ -890,7 +900,7 @@ const Util = {
   checkHit({arrowArr, bird, mosquito, parachuter}) {
     let answer = false;
     arrowArr.forEach((arrow) => {
-      let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
+    let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
       if (space < 35){
         bird.feathers = 25;
         bird.birdShotCount += 1;
@@ -901,6 +911,8 @@ const Util = {
       space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
       if (space < 30){
         parachuter.dead = 25;
+        wah.load();
+        wah.play();
         arrow.resetPos();
         answer = true;
       }
@@ -911,7 +923,6 @@ const Util = {
         arrow.resetPos();
         answer = true;
       }
-
     });
     return answer;
   },
