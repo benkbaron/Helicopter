@@ -3,7 +3,7 @@ wah.volume = 0.05;
 
 class Parachuter {
   constructor(options) {
-    this.posX = 1000 * Math.random();
+    this.posX = (1000 * Math.random()) - 30;
     this.posY = -600 * Math.random();
     this.parachuterIcon = new Image();
     this.parachuterIcon.src = "./assets/parachuterIcon.png";
@@ -52,7 +52,7 @@ class Parachuter {
     } else {
       this.lostCount += 1;
     }
-    this.posX = 1000 * Math.random();
+    this.posX = (1000 * Math.random()) - 30;
     this.posY = -600 * Math.random();
     }
 }
