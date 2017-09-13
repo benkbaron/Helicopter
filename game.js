@@ -8,6 +8,8 @@ const Helicopter = require("./helicopter");
 const Arrow = require("./arrow");
 const Wind = require("./wind");
 
+const BlueBird = require("./blueBird");
+
 const Util = require("./util");
 
 let reset;
@@ -41,7 +43,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let helicopter1 = new Helicopter();
   let arrowArr = [];
   let wind1 = new Wind();
-  let allObjects = [parachuter1, blimp1, lightning1, bird1, mosquito1, helicopter1, wind1, cloud1];
+
+  let blueBird1 = new BlueBird();
+
+  let allObjects = [parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1, helicopter1, wind1, cloud1];
 
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = -1;
@@ -57,7 +62,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.font = '18px serif';
     ctx.fillText(`Parachuters Saved: ${parachuter1.rescueCount}`, 10, 22);
     ctx.fillText(`Parachuters Lost: ${parachuter1.lostCount}`, 10, 44);
-    ctx.fillText(`Birds Shot: ${bird1.birdShotCount}`, 10, 66);
+    ctx.fillText(`Birds Shot: ${bird1.birdShotCount + blueBird1.birdShotCount}`, 10, 66);
     ctx.fillText(`Lives Left: ${lifeCount}`, 10, 88);
 
     if (lifeCount === 0) {
@@ -72,8 +77,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
       resetObjects();
       intervalSpeed = 1000/60;
       reset = false;
-    } else if (Util.checkCrash({helicopter: helicopter1, bird: bird1, blimp: blimp1,
-                                mosquito: mosquito1, lightning: lightning1})) {
+    } else if (Util.checkCrash({helicopter: helicopter1, bird: bird1, blueBird: blueBird1,
+                                blimp: blimp1, mosquito: mosquito1, lightning: lightning1})) {
       displayCrash();
       intervalSpeed = 2000;
       lifeCount -= 1;
@@ -82,7 +87,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         intervalSpeed = 1000/60;
         displayCaught();
     } else {
-        if (Util.checkHit({arrowArr: arrowArr, bird: bird1, mosquito: mosquito1,
+        if (Util.checkHit({arrowArr: arrowArr, bird: bird1, blueBird: blueBird1, mosquito: mosquito1,
                           parachuter: parachuter1})) {
           playSound("arrowHit");
         }
@@ -139,6 +144,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   displayCrash = () => {
     addSadSun(ctx);
     bird1.draw(ctx);
+    blueBird1.draw(ctx);
     helicopter1.drawSkull(ctx);
     parachuter1.draw(ctx);
     blimp1.draw(ctx);
@@ -153,6 +159,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   resetObjects = () => {
     addSadSun(ctx);
     bird1.resetPos();
+    blueBird1.resetPos();
     helicopter1.resetPos();
     parachuter1.resetPos();
     parachuter1.lostCount -= 1;
@@ -170,6 +177,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     addSun(ctx);
     helicopter1.updatePos(wind1);
     bird1.updatePos(helicopter1.posY, wind1);
+    blueBird1.updatePos(helicopter1.posY, wind1);
     parachuter1.resetPos(true);
     blimp1.updatePos(wind1);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
@@ -184,6 +192,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     addSun(ctx);
     helicopter1.updatePos(wind1);
     bird1.updatePos(helicopter1.posY, wind1);
+    blueBird1.updatePos(helicopter1.posY, wind1);
     parachuter1.updatePos(wind1);
     blimp1.updatePos(wind1);
     mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
@@ -208,10 +217,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     parachuter1.rescueCount = 0;
     parachuter1.lostCount = -1;
     bird1.birdShotCount = 0;
+    blueBird1.birdShotCount = 0;
     lifeCount = 3;
     helicopter1.resetPos();
     helicopter1.keysDown = [];
     bird1.resetPos();
+    blueBird1.resetPos();
     wind1.resetPos();
     cloud1.resetPos();
     resetArrows();

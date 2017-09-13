@@ -3,7 +3,7 @@ wah.volume = 0.05;
 
 const Util = {
 
-  checkCrash({helicopter, bird, blimp, mosquito, lightning}) {
+  checkCrash({helicopter, bird, blueBird, blimp, mosquito, lightning}) {
     if (helicopter.posY > 550 || helicopter.posY < -100 ||
         helicopter.posX > 1100 || helicopter.posX < -100) {
       return true;
@@ -12,6 +12,12 @@ const Util = {
     let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [bird.posX + 25, bird.posY + 25]);
     if (space < 70 && bird.feathers === 0){
       bird.feathers = 25;
+      return true;
+    }
+
+    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [blueBird.posX + 25, blueBird.posY + 25]);
+    if (space < 70 && blueBird.feathers === 0){
+      blueBird.feathers = 25;
       return true;
     }
 
@@ -40,13 +46,21 @@ const Util = {
     }
   },
 
-  checkHit({arrowArr, bird, mosquito, parachuter}) {
+  checkHit({arrowArr, bird, blueBird, mosquito, parachuter}) {
     let answer = false;
     arrowArr.forEach((arrow) => {
     let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
       if (space < 35){
         bird.feathers = 25;
         bird.birdShotCount += 1;
+        arrow.resetPos();
+        answer = true;
+      }
+
+      space = this.distance([arrow.posX + 10, arrow.posY], [blueBird.posX + 30, blueBird.posY + 20]);
+      if (space < 35){
+        blueBird.feathers = 25;
+        blueBird.birdShotCount += 1;
         arrow.resetPos();
         answer = true;
       }
