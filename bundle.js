@@ -350,32 +350,46 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let lifeLostSound = new Audio('./assets/lifeLost.wav');
   lifeLostSound.volume = 0.5;
 
-  let soundButton = document.getElementById("soundButton");
+  let musicButton = document.getElementById("musicButton");
   let playing = true;
-  soundButton.addEventListener("click", () => {
+  musicButton.addEventListener("click", () => {
     musicControl();
   });
 
+  let soundEffects = true;
+  let soundButton = document.getElementById("soundButton");
+  soundButton.addEventListener("click", () => {
+    if (soundEffects) {
+      soundEffects = false;
+      soundButton.innerHTML = "Turn Sound Effects On";
+    } else {
+      soundEffects = true;
+      soundButton.innerHTML = "Turn Sound Effects Off";
+    }
+  });
+
   playSound = (sound) => {
-    if (sound === "arrowShot") {
-      arrowShotSound.load();
-      arrowShotSound.play();
-    } else if (sound === "arrowHit") {
-      arrowHitSound.load();
-      arrowHitSound.play();
-    } else if (sound === "lifeLost") {
-      lifeLostSound.load();
-      lifeLostSound.play();
+    if (soundEffects) {
+      if (sound === "arrowShot") {
+        arrowShotSound.load();
+        arrowShotSound.play();
+      } else if (sound === "arrowHit") {
+        arrowHitSound.load();
+        arrowHitSound.play();
+      } else if (sound === "lifeLost") {
+        lifeLostSound.load();
+        lifeLostSound.play();
+      }
     }
   };
 
   musicControl = () => {
   if (!playing){
-    soundButton.innerHTML = "Turn Sound Off";
+    musicButton.innerHTML = "Turn Music Off";
     music.play();
     playing = true;
   } else {
-    soundButton.innerHTML = "Turn Sound On";
+    musicButton.innerHTML = "Turn Music On";
     music.pause();
     playing = false;
   }

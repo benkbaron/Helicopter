@@ -11,13 +11,13 @@ canvas {
 }
 
 .bottomNav {
-  width: 500px;
+  width: 630px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-#soundButton {
+button {
   height: 40px;
   width: 90px;
   border-radius: 10px;
@@ -28,6 +28,6 @@ canvas {
   border: 1px solid black;
 
 }
-#soundButton:hover {
+button:hover {
   background-color: #dbcb18;
 }
