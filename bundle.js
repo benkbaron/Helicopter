@@ -190,6 +190,7 @@ const Helicopter = __webpack_require__(20);
 const Lightning = __webpack_require__(17);
 const Mosquito = __webpack_require__(16);
 const Parachuter = __webpack_require__(19);
+const Sound = __webpack_require__(22);
 const Util = __webpack_require__(0);
 const Wind = __webpack_require__(18);
 
@@ -270,7 +271,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else {
         if (Util.checkHit({arrowArr: arrowArr, bird: bird1, blueBird: blueBird1, mosquito: mosquito1,
                           parachuter: parachuter1})) {
-          playSound("arrowHit");
+          Sound.playSound("arrowHit", soundEffects);
         }
         intervalSpeed = 1000/60;
         displayStandard();
@@ -297,7 +298,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       if ( gameStarted && (arrowCounter < 1 || passwordEntered())){
         firstArrow = arrowArr[0];
         firstArrow.shoot(helicopter1);
-        playSound("arrowShot");
+        Sound.playSound("arrowShot", soundEffects);
         arrowArr = arrowArr.slice(1);
         arrowArr.push(firstArrow);
         arrowCounter = 45;
@@ -334,7 +335,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     wind1.draw(ctx);
     cloud1.draw(ctx);
     drawArrows();
-    playSound("lifeLost");
+    Sound.playSound("lifeLost", soundEffects);
   };
 
   resetObjects = () => {
@@ -460,24 +461,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     return false;
   };
 
-  let music = new Audio('./assets/music.m4a');
-  music.volume = 0.4;
-  music.loop = true;
-  music.play();
-
-  let arrowShotSound = new Audio('./assets/arrowShot.wav');
-  arrowShotSound.volume = 0.3;
-
-  let arrowHitSound = new Audio('./assets/arrowHit.wav');
-  arrowHitSound.volume = 0.7;
-
-  let lifeLostSound = new Audio('./assets/lifeLost.wav');
-  lifeLostSound.volume = 0.5;
+  Sound.playMusic();
 
   let musicButton = document.getElementById("musicButton");
   let playing = true;
   musicButton.addEventListener("click", () => {
-    musicControl();
+    Sound.musicControl();
   });
 
   let soundEffects = true;
@@ -492,32 +481,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   });
 
-  playSound = (sound) => {
-    if (soundEffects) {
-      if (sound === "arrowShot") {
-        arrowShotSound.load();
-        arrowShotSound.play();
-      } else if (sound === "arrowHit") {
-        arrowHitSound.load();
-        arrowHitSound.play();
-      } else if (sound === "lifeLost") {
-        lifeLostSound.load();
-        lifeLostSound.play();
-      }
-    }
-  };
-
-  musicControl = () => {
-  if (!playing){
-    musicButton.innerHTML = "Turn Music Off";
-    music.play();
-    playing = true;
-  } else {
-    musicButton.innerHTML = "Turn Music On";
-    music.pause();
-    playing = false;
-  }
-  };
 });
 
 
@@ -587,7 +550,7 @@ class BlueBird {
     this.feathersIcon.src = "./assets/feathersIcon.png";
     this.blueBirdGif = new Image();
     this.blueBirdGif.src = "./assets/blueBirdGif.gif";
-    this.speed = 3 * (Math.random() + 0.4);
+    this.speed = 2 * (Math.random() + 0.4);
 
     this.blueBirdImages = [];
     this.imageCounter = 0;
@@ -634,7 +597,7 @@ class BlueBird {
   resetPos() {
     this.posX = -1000 * Math.random();
     this.posY = 600 * Math.random();
-    this.speed = 3 * (Math.random() + 0.35);
+    this.speed = 2 * (Math.random() + 0.35);
     this.feathers = 0;
   }
 }
@@ -1031,6 +994,67 @@ class Bird {
 }
 
 module.exports = Bird;
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+let wah = new Audio('./assets/wah.wav');
+wah.volume = 0.05;
+
+let catchSound = new Audio('./assets/catchSound.wav');
+catchSound.volume = 0.3;
+
+let arrowShotSound = new Audio('./assets/arrowShot.wav');
+arrowShotSound.volume = 0.3;
+
+let arrowHitSound = new Audio('./assets/arrowHit.wav');
+arrowHitSound.volume = 0.7;
+
+let lifeLostSound = new Audio('./assets/lifeLost.wav');
+lifeLostSound.volume = 0.5;
+
+let music = new Audio('./assets/music.m4a');
+music.volume = 0.4;
+music.loop = true;
+
+const Sound = {
+
+  playMusic() {
+    music.play();
+  },
+
+  playSound(sound, soundEffects) {
+    if (soundEffects) {
+      if (sound === "arrowShot") {
+        arrowShotSound.load();
+        arrowShotSound.play();
+      } else if (sound === "arrowHit") {
+        arrowHitSound.load();
+        arrowHitSound.play();
+      } else if (sound === "lifeLost") {
+        lifeLostSound.load();
+        lifeLostSound.play();
+      }
+    }
+  },
+
+  musicControl() {
+    if (!playing){
+      musicButton.innerHTML = "Turn Music Off";
+      music.play();
+      playing = true;
+    } else {
+      musicButton.innerHTML = "Turn Music On";
+      music.pause();
+      playing = false;
+    }
+  },
+
+};
+
+module.exports = Sound;
 
 
 /***/ })
