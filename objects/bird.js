@@ -1,4 +1,4 @@
-const Util = require("./util");
+const Util = require("../util");
 
 class Bird {
   constructor(options) {

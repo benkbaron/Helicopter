@@ -1,4 +1,4 @@
-const Util = require("./util");
+const Util = require("../util");
 
 let wah = new Audio('./assets/wah.wav');
 wah.volume = 0.05;

@@ -181,19 +181,17 @@ module.exports = Util;
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Parachuter = __webpack_require__(2);
-const Blimp = __webpack_require__(3);
-const Cloud = __webpack_require__(4);
-const Lightning = __webpack_require__(5);
-const Bird = __webpack_require__(6);
-const Mosquito = __webpack_require__(7);
-const Helicopter = __webpack_require__(8);
-const Arrow = __webpack_require__(9);
-const Wind = __webpack_require__(10);
-
-const BlueBird = __webpack_require__(11);
-
+const Arrow = __webpack_require__(15);
+const Bird = __webpack_require__(21);
+const Blimp = __webpack_require__(14);
+const BlueBird = __webpack_require__(13);
+const Cloud = __webpack_require__(12);
+const Helicopter = __webpack_require__(20);
+const Lightning = __webpack_require__(17);
+const Mosquito = __webpack_require__(16);
+const Parachuter = __webpack_require__(19);
 const Util = __webpack_require__(0);
+const Wind = __webpack_require__(18);
 
 let reset;
 let paused = false;
@@ -524,107 +522,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Util = __webpack_require__(0);
-
-let wah = new Audio('./assets/wah.wav');
-wah.volume = 0.05;
-
-class Parachuter {
-  constructor(options) {
-    this.posX = 960 * Math.random();
-    this.posY = -600 * Math.random();
-    this.parachuterIcon = new Image();
-    this.parachuterIcon.src = "./assets/parachuterIcon.png";
-    this.parachuterSkullIcon = new Image();
-    this.parachuterSkullIcon.src = "./assets/skullIcon.png";
-    this.rescueCount = 0;
-    this.lostCount = -1;
-    this.dead = 0;
-  }
-
-  draw(ctx) {
-    if (this.dead > 0) {
-      this.dead -= 1;
-      ctx.drawImage(this.parachuterSkullIcon, this.posX, this.posY, 60, 60);
-      if (this.dead === 0) {
-        this.resetPos();
-      }
-    } else {
-      ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 60, 60);
-    }
-  }
-
-  updatePos(wind) {
-    this.posY += 1.4 + (this.rescueCount / 8);
-    if (this.posY > 610) {
-      this.resetPos();
-      wah.load();
-      wah.play();
-    }
-    if (Util.inWindRange(this, wind)){
-      this.posX += 3;
-    }
-  }
-
-  resetPos(saved) {
-    if (saved) {
-      this.rescueCount += 1;
-    } else {
-      this.lostCount += 1;
-    }
-    this.posX = 960 * Math.random();
-    this.posY = -600 * Math.random();
-  }
-}
-
-module.exports = Parachuter;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Util = __webpack_require__(0);
-
-class Blimp {
-  constructor(options) {
-    this.posX = - 500 - (1000 * Math.random());
-    this.posY = (600 * Math.random()) - 100;
-    this.blimpIcon = new Image();
-    this.blimpIcon.src = "./assets/blimpIcon.png";
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.blimpIcon, this.posX, this.posY, 200, 200);
-  }
-
-
-  updatePos(wind) {
-    if (this.posX > 1200) {
-      this.resetPos();
-    } else {
-      this.posX += 1/2;
-    }
-    if (Util.inWindRange(this, wind)){
-      this.posX += 2;
-    }
-  }
-
-  resetPos() {
-    this.posX = - 600 - (1000 * Math.random());
-    this.posY = (600 * Math.random()) - 100;
-  }
-
-}
-
-module.exports = Blimp;
-
-
-/***/ }),
-/* 4 */
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -664,298 +572,7 @@ module.exports = Cloud;
 
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-
-class Lightning {
-  constructor(options) {
-    this.posX = 1000 * Math.random();
-    this.posY = (-7000 * Math.random()) - 1000;
-    this.lightningIcon = new Image();
-    this.lightningIcon.src = "./assets/lightningIcon.png";
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.lightningIcon, this.posX, this.posY, 100, 700);
-  }
-
-  updatePos() {
-    this.posY += 4.5;
-    if (this.posY > 1100) {
-      this.resetPos();
-    }
-  }
-
-  resetPos() {
-    this.posX = 1000 * Math.random();
-    this.posY = -10000 * Math.random() - 1000;
-    }
-}
-
-module.exports = Lightning;
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Util = __webpack_require__(0);
-
-class Bird {
-  constructor(options) {
-    this.posX = 1050;
-    this.posY = 600 * Math.random();
-    this.feathers = 0;
-    this.birdShotCount = 0;
-    this.feathersIcon = new Image();
-    this.feathersIcon.src = "./assets/feathersIcon.png";
-    this.birdIcon = new Image();
-    this.birdIcon.src = "./assets/birdIcon.png";
-    this.speed = 3.5 * (Math.random() + 0.4);
-  }
-
-  draw(ctx) {
-    if (this.feathers > 0) {
-      this.feathers -= 1;
-      ctx.drawImage(this.feathersIcon, this.posX, this.posY, 100, 100);
-      if (this.feathers === 0) {
-        this.resetPos();
-      }
-    } else {
-      ctx.drawImage(this.birdIcon, this.posX, this.posY, 50, 50);
-    }
-  }
-
-  updatePos(helicopterPosY, wind) {
-    this.posX -= this.speed + (this.birdShotCount / 8);
-    if (helicopterPosY > this.posY) {
-      this.posY += 1;
-    } else {
-      this.posY -= 1;
-    }
-
-    if (this.posX < -100) {
-      this.resetPos();
-    }
-
-    if (Util.inWindRange(this, wind)){
-      this.posX += 3;
-    }
-  }
-
-  resetPos() {
-    this.posX = 1050;
-    this.posY = 600 * Math.random();
-    this.speed = 3 * (Math.random() + 0.35);
-    this.feathers = 0;
-  }
-}
-
-module.exports = Bird;
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Util = __webpack_require__(0);
-
-class Mosquito {
-  constructor(options) {
-    this.posX = 600 * Math.random();
-    this.posY = 800;
-    this.mosquitoIcon = new Image();
-    this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.mosquitoIcon, this.posX, this.posY, 25, 25);
-  }
-
-  updatePos(helicopterPosX, helicopterPosY, wind) {
-    if (helicopterPosX > this.posX) {
-      this.posX += 3/4;
-    } else {
-      this.posX -= 3/4;
-    }
-
-    if (helicopterPosY > this.posY) {
-      this.posY += 3/4;
-    } else {
-      this.posY -= 3/4;
-    }
-
-    if (Util.inWindRange(this, wind)){
-      this.posX += 2.5;
-    }
-  }
-
-  resetPos() {
-    this.posX = 600 * Math.random();
-    this.posY = 800;
-  }
-
-}
-
-module.exports = Mosquito;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Util = __webpack_require__(0);
-
-class Helicopter {
-  constructor(options) {
-    this.posX = 100;
-    this.posY = 100;
-    this.flipped = false;
-    this.keysDown = [];
-
-    this.helicopterIconFlipped = new Image();
-    this.helicopterIconFlipped.src = "./assets/flippedhelicopterIcon.png";
-    this.helicopterIcon = new Image();
-    this.helicopterIcon.src = "./assets/helicopterIcon.png";
-    this.skullIcon = new Image();
-    this.skullIcon.src = "./assets/skullIcon.png";
-  }
-
-  draw(ctx) {
-    let helicopterImage = this.flipped ? this.helicopterIconFlipped : this.helicopterIcon;
-    ctx.drawImage(helicopterImage, this.posX, this.posY, 100, 100);
-  }
-
-  drawSkull(ctx) {
-    ctx.drawImage(this.skullIcon, this.posX, this.posY, 100, 100);
-  }
-
-
-  updatePos(wind) {
-    this.posY += 2;
-
-    if (this.keysDown.includes(38)) {
-      this.posY -= 6;
-      }
-    if (this.keysDown.includes(40)) {
-      this.posY += 4;
-      }
-    if (this.keysDown.includes(37)) {
-      this.posX -= 6;
-      this.flipped = true;
-      }
-    if (this.keysDown.includes(39)) {
-      this.posX += 6;
-      this.flipped = false;
-      }
-
-    if (Util.inWindRange(this, wind)){
-      this.posX += 6.1;
-    }
-  }
-
-  resetPos() {
-    this.posX = 100;
-    this.posY = 100;
-    this.flipped = false;
-  }
-
-}
-
-module.exports = Helicopter;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Util = __webpack_require__(0);
-
-class Arrow {
-  constructor(posX, posY) {
-    this.posX = -100;
-    this.posY = -100;
-    this.direction = "right";
-    this.arrowIconLeft = new Image();
-    this.arrowIconRight = new Image();
-    this.arrowIconLeft.src = "./assets/flippedArrowIcon.png";
-    this.arrowIconRight.src = "./assets/arrowIcon.png";
-  }
-
-  draw(ctx) {
-      let arrowImage = this.direction === "right" ? this.arrowIconRight : this.arrowIconLeft;
-      ctx.drawImage(arrowImage, this.posX, this.posY, 50, 50);
-  }
-
-  shoot(helicopter) {
-    if ((this.posY == -100) || (this.posX > 1050 || this.posX < -50)) {
-      this.posX = helicopter.flipped ? helicopter.posX : helicopter.posX + 100;
-      this.posY = helicopter.posY + 20;
-      this.direction = helicopter.flipped ? "left" : "right";
-    }
-  }
-
-  updatePos(wind) {
-    if (this.direction === "right") {
-      this.posX += 4;
-    } else {
-      this.posX -= 4;
-    }
-
-    if (this.posX > 1050 || this.posX < -50) {
-      this.resetPos();
-    }
-
-    if (Util.inWindRange(this, wind)){
-      this.posX += 3;
-    }
-  }
-
-  resetPos() {
-    this.posX = -100;
-    this.posY = -100;
-  }
-}
-
-module.exports = Arrow;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-
-class Wind {
-  constructor(options) {
-    this.posX = -1200 - (1000 * Math.random());
-    this.posY = (500 * Math.random());
-    this.windIcon = new Image();
-    this.windIcon.src = "./assets/windIcon.png";
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.windIcon, this.posX, this.posY, 250, 250);
-  }
-
-  updatePos() {
-    this.posX += 3;
-    if (this.posX > 1200) {
-      this.resetPos();
-    }
-  }
-
-  resetPos() {
-    this.posX = -1200 - (1000 * Math.random());
-    this.posY = 500 * Math.random();
-  }
-}
-
-module.exports = Wind;
-
-
-/***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -1023,6 +640,397 @@ class BlueBird {
 }
 
 module.exports = BlueBird;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+class Blimp {
+  constructor(options) {
+    this.posX = - 500 - (1000 * Math.random());
+    this.posY = (600 * Math.random()) - 100;
+    this.blimpIcon = new Image();
+    this.blimpIcon.src = "./assets/blimpIcon.png";
+  }
+
+  draw(ctx) {
+    ctx.drawImage(this.blimpIcon, this.posX, this.posY, 200, 200);
+  }
+
+
+  updatePos(wind) {
+    if (this.posX > 1200) {
+      this.resetPos();
+    } else {
+      this.posX += 1/2;
+    }
+    if (Util.inWindRange(this, wind)){
+      this.posX += 2;
+    }
+  }
+
+  resetPos() {
+    this.posX = - 600 - (1000 * Math.random());
+    this.posY = (600 * Math.random()) - 100;
+  }
+
+}
+
+module.exports = Blimp;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+class Arrow {
+  constructor(posX, posY) {
+    this.posX = -100;
+    this.posY = -100;
+    this.direction = "right";
+    this.arrowIconLeft = new Image();
+    this.arrowIconRight = new Image();
+    this.arrowIconLeft.src = "./assets/flippedArrowIcon.png";
+    this.arrowIconRight.src = "./assets/arrowIcon.png";
+  }
+
+  draw(ctx) {
+      let arrowImage = this.direction === "right" ? this.arrowIconRight : this.arrowIconLeft;
+      ctx.drawImage(arrowImage, this.posX, this.posY, 50, 50);
+  }
+
+  shoot(helicopter) {
+    if ((this.posY == -100) || (this.posX > 1050 || this.posX < -50)) {
+      this.posX = helicopter.flipped ? helicopter.posX : helicopter.posX + 100;
+      this.posY = helicopter.posY + 20;
+      this.direction = helicopter.flipped ? "left" : "right";
+    }
+  }
+
+  updatePos(wind) {
+    if (this.direction === "right") {
+      this.posX += 4;
+    } else {
+      this.posX -= 4;
+    }
+
+    if (this.posX > 1050 || this.posX < -50) {
+      this.resetPos();
+    }
+
+    if (Util.inWindRange(this, wind)){
+      this.posX += 3;
+    }
+  }
+
+  resetPos() {
+    this.posX = -100;
+    this.posY = -100;
+  }
+}
+
+module.exports = Arrow;
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+class Mosquito {
+  constructor(options) {
+    this.posX = 600 * Math.random();
+    this.posY = 800;
+    this.mosquitoIcon = new Image();
+    this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
+  }
+
+  draw(ctx) {
+    ctx.drawImage(this.mosquitoIcon, this.posX, this.posY, 25, 25);
+  }
+
+  updatePos(helicopterPosX, helicopterPosY, wind) {
+    if (helicopterPosX > this.posX) {
+      this.posX += 3/4;
+    } else {
+      this.posX -= 3/4;
+    }
+
+    if (helicopterPosY > this.posY) {
+      this.posY += 3/4;
+    } else {
+      this.posY -= 3/4;
+    }
+
+    if (Util.inWindRange(this, wind)){
+      this.posX += 2.5;
+    }
+  }
+
+  resetPos() {
+    this.posX = 600 * Math.random();
+    this.posY = 800;
+  }
+
+}
+
+module.exports = Mosquito;
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+
+class Lightning {
+  constructor(options) {
+    this.posX = 1000 * Math.random();
+    this.posY = (-7000 * Math.random()) - 1000;
+    this.lightningIcon = new Image();
+    this.lightningIcon.src = "./assets/lightningIcon.png";
+  }
+
+  draw(ctx) {
+    ctx.drawImage(this.lightningIcon, this.posX, this.posY, 100, 700);
+  }
+
+  updatePos() {
+    this.posY += 4.5;
+    if (this.posY > 1100) {
+      this.resetPos();
+    }
+  }
+
+  resetPos() {
+    this.posX = 1000 * Math.random();
+    this.posY = -10000 * Math.random() - 1000;
+    }
+}
+
+module.exports = Lightning;
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+
+class Wind {
+  constructor(options) {
+    this.posX = -1200 - (1000 * Math.random());
+    this.posY = (500 * Math.random());
+    this.windIcon = new Image();
+    this.windIcon.src = "./assets/windIcon.png";
+  }
+
+  draw(ctx) {
+    ctx.drawImage(this.windIcon, this.posX, this.posY, 250, 250);
+  }
+
+  updatePos() {
+    this.posX += 3;
+    if (this.posX > 1200) {
+      this.resetPos();
+    }
+  }
+
+  resetPos() {
+    this.posX = -1200 - (1000 * Math.random());
+    this.posY = 500 * Math.random();
+  }
+}
+
+module.exports = Wind;
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+let wah = new Audio('./assets/wah.wav');
+wah.volume = 0.05;
+
+class Parachuter {
+  constructor(options) {
+    this.posX = 960 * Math.random();
+    this.posY = -600 * Math.random();
+    this.parachuterIcon = new Image();
+    this.parachuterIcon.src = "./assets/parachuterIcon.png";
+    this.parachuterSkullIcon = new Image();
+    this.parachuterSkullIcon.src = "./assets/skullIcon.png";
+    this.rescueCount = 0;
+    this.lostCount = -1;
+    this.dead = 0;
+  }
+
+  draw(ctx) {
+    if (this.dead > 0) {
+      this.dead -= 1;
+      ctx.drawImage(this.parachuterSkullIcon, this.posX, this.posY, 60, 60);
+      if (this.dead === 0) {
+        this.resetPos();
+      }
+    } else {
+      ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 60, 60);
+    }
+  }
+
+  updatePos(wind) {
+    this.posY += 1.4 + (this.rescueCount / 8);
+    if (this.posY > 610) {
+      this.resetPos();
+      wah.load();
+      wah.play();
+    }
+    if (Util.inWindRange(this, wind)){
+      this.posX += 3;
+    }
+  }
+
+  resetPos(saved) {
+    if (saved) {
+      this.rescueCount += 1;
+    } else {
+      this.lostCount += 1;
+    }
+    this.posX = 960 * Math.random();
+    this.posY = -600 * Math.random();
+  }
+}
+
+module.exports = Parachuter;
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+class Helicopter {
+  constructor(options) {
+    this.posX = 100;
+    this.posY = 100;
+    this.flipped = false;
+    this.keysDown = [];
+
+    this.helicopterIconFlipped = new Image();
+    this.helicopterIconFlipped.src = "./assets/flippedhelicopterIcon.png";
+    this.helicopterIcon = new Image();
+    this.helicopterIcon.src = "./assets/helicopterIcon.png";
+    this.skullIcon = new Image();
+    this.skullIcon.src = "./assets/skullIcon.png";
+  }
+
+  draw(ctx) {
+    let helicopterImage = this.flipped ? this.helicopterIconFlipped : this.helicopterIcon;
+    ctx.drawImage(helicopterImage, this.posX, this.posY, 100, 100);
+  }
+
+  drawSkull(ctx) {
+    ctx.drawImage(this.skullIcon, this.posX, this.posY, 100, 100);
+  }
+
+
+  updatePos(wind) {
+    this.posY += 2;
+
+    if (this.keysDown.includes(38)) {
+      this.posY -= 6;
+      }
+    if (this.keysDown.includes(40)) {
+      this.posY += 4;
+      }
+    if (this.keysDown.includes(37)) {
+      this.posX -= 6;
+      this.flipped = true;
+      }
+    if (this.keysDown.includes(39)) {
+      this.posX += 6;
+      this.flipped = false;
+      }
+
+    if (Util.inWindRange(this, wind)){
+      this.posX += 6.1;
+    }
+  }
+
+  resetPos() {
+    this.posX = 100;
+    this.posY = 100;
+    this.flipped = false;
+  }
+
+}
+
+module.exports = Helicopter;
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+class Bird {
+  constructor(options) {
+    this.posX = 1050;
+    this.posY = 600 * Math.random();
+    this.feathers = 0;
+    this.birdShotCount = 0;
+    this.feathersIcon = new Image();
+    this.feathersIcon.src = "./assets/feathersIcon.png";
+    this.birdIcon = new Image();
+    this.birdIcon.src = "./assets/birdIcon.png";
+    this.speed = 3.5 * (Math.random() + 0.4);
+  }
+
+  draw(ctx) {
+    if (this.feathers > 0) {
+      this.feathers -= 1;
+      ctx.drawImage(this.feathersIcon, this.posX, this.posY, 100, 100);
+      if (this.feathers === 0) {
+        this.resetPos();
+      }
+    } else {
+      ctx.drawImage(this.birdIcon, this.posX, this.posY, 50, 50);
+    }
+  }
+
+  updatePos(helicopterPosY, wind) {
+    this.posX -= this.speed + (this.birdShotCount / 8);
+    if (helicopterPosY > this.posY) {
+      this.posY += 1;
+    } else {
+      this.posY -= 1;
+    }
+
+    if (this.posX < -100) {
+      this.resetPos();
+    }
+
+    if (Util.inWindRange(this, wind)){
+      this.posX += 3;
+    }
+  }
+
+  resetPos() {
+    this.posX = 1050;
+    this.posY = 600 * Math.random();
+    this.speed = 3 * (Math.random() + 0.35);
+    this.feathers = 0;
+  }
+}
+
+module.exports = Bird;
 
 
 /***/ })

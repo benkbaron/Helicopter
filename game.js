@@ -1,16 +1,14 @@
-const Parachuter = require("./parachuter");
-const Blimp = require("./blimp");
-const Cloud = require("./cloud");
-const Lightning = require("./lightning");
-const Bird = require("./bird");
-const Mosquito = require("./mosquito");
-const Helicopter = require("./helicopter");
-const Arrow = require("./arrow");
-const Wind = require("./wind");
-
-const BlueBird = require("./blueBird");
-
+const Arrow = require("./objects/arrow");
+const Bird = require("./objects/bird");
+const Blimp = require("./objects/blimp");
+const BlueBird = require("./objects/blueBird");
+const Cloud = require("./objects/cloud");
+const Helicopter = require("./objects/helicopter");
+const Lightning = require("./objects/lightning");
+const Mosquito = require("./objects/mosquito");
+const Parachuter = require("./objects/parachuter");
 const Util = require("./util");
+const Wind = require("./objects/wind");
 
 let reset;
 let paused = false;
