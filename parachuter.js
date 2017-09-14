@@ -1,3 +1,5 @@
+const Util = require("./util");
+
 let wah = new Audio('./assets/wah.wav');
 wah.volume = 0.05;
 
@@ -33,17 +35,9 @@ class Parachuter {
       wah.load();
       wah.play();
     }
-    if (this.inWindRange(wind)){
+    if (Util.inWindRange(this, wind)){
       this.posX += 3;
     }
-  }
-
-  inWindRange(wind) {
-  if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-      (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-        return true;
-      }
-  return false;
   }
 
   resetPos(saved) {

@@ -60,26 +60,140 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+let wah = new Audio('./assets/wah.wav');
+wah.volume = 0.05;
+
+let catchSound = new Audio('./assets/catchSound.wav');
+catchSound.volume = 0.3;
+
+const Util = {
+
+  checkCrash({helicopter, bird, blueBird, blimp, mosquito, lightning}) {
+    if (helicopter.posY > 550 || helicopter.posY < -100 ||
+        helicopter.posX > 1100 || helicopter.posX < -100) {
+      return true;
+    }
+
+    let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [bird.posX + 25, bird.posY + 25]);
+    if (space < 70 && bird.feathers === 0){
+      bird.feathers = 25;
+      return true;
+    }
+
+    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [blueBird.posX + 25, blueBird.posY + 25]);
+    if (space < 70 && blueBird.feathers === 0){
+      blueBird.feathers = 25;
+      return true;
+    }
+
+    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [blimp.posX + 100, blimp.posY + 100]);
+    if (space < 100){
+      return true;
+    }
+
+    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [mosquito.posX + 10, mosquito.posY + 10]);
+    if (space < 40){
+      return true;
+    }
+
+    let xDistance = Math.abs(helicopter.posX - lightning.posX);
+    let yDistance = lightning.posY + 650 - helicopter.posY;
+
+    if ((yDistance > 0 && yDistance < 700) && xDistance < 50){
+      return true;
+    }
+  },
+
+  checkCatch({helicopter, parachuter}) {
+    let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [parachuter.posX + 25, parachuter.posY + 25]);
+    if (space < 60){
+      catchSound.load();
+      catchSound.play();
+      return true;
+    }
+  },
+
+  checkHit({arrowArr, bird, blueBird, mosquito, parachuter}) {
+    let answer = false;
+    arrowArr.forEach((arrow) => {
+    let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
+      if (space < 35){
+        bird.feathers = 25;
+        bird.birdShotCount += 1;
+        arrow.resetPos();
+        answer = true;
+      }
+
+      space = this.distance([arrow.posX + 10, arrow.posY], [blueBird.posX + 30, blueBird.posY + 20]);
+      if (space < 35){
+        blueBird.feathers = 25;
+        blueBird.birdShotCount += 1;
+        arrow.resetPos();
+        answer = true;
+      }
+
+      space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
+      if (space < 30){
+        parachuter.dead = 25;
+        wah.load();
+        wah.play();
+        arrow.resetPos();
+        answer = true;
+      }
+
+      space = this.distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
+      if (space < 30) {
+        mosquito.resetPos();
+        arrow.resetPos();
+        answer = true;
+      }
+    });
+    return answer;
+  },
+
+  distance(pos1, pos2){
+    let a = pos1[0] - pos2[0];
+    let b = pos1[1] - pos2[1];
+
+    return Math.sqrt(a*a + b*b);
+  },
+
+  inWindRange(object, wind) {
+    if ((object.posX > wind.posX && object.posX < wind.posX + 500) && ((wind.posX > -300) &&
+        (object.posY < wind.posY + 200 && object.posY > wind.posY))) {
+          return true;
+        }
+    return false;
+  },
+};
+
+module.exports = Util;
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Parachuter = __webpack_require__(1);
-const Blimp = __webpack_require__(2);
-const Cloud = __webpack_require__(3);
-const Lightning = __webpack_require__(4);
-const Bird = __webpack_require__(5);
-const Mosquito = __webpack_require__(6);
-const Helicopter = __webpack_require__(7);
-const Arrow = __webpack_require__(8);
-const Wind = __webpack_require__(9);
+const Parachuter = __webpack_require__(2);
+const Blimp = __webpack_require__(3);
+const Cloud = __webpack_require__(4);
+const Lightning = __webpack_require__(5);
+const Bird = __webpack_require__(6);
+const Mosquito = __webpack_require__(7);
+const Helicopter = __webpack_require__(8);
+const Arrow = __webpack_require__(9);
+const Wind = __webpack_require__(10);
 
-const BlueBird = __webpack_require__(10);
+const BlueBird = __webpack_require__(11);
 
-const Util = __webpack_require__(11);
+const Util = __webpack_require__(0);
 
 let reset;
 let paused = false;
@@ -410,8 +524,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports) {
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
 
 let wah = new Audio('./assets/wah.wav');
 wah.volume = 0.05;
@@ -448,17 +564,9 @@ class Parachuter {
       wah.load();
       wah.play();
     }
-    if (this.inWindRange(wind)){
+    if (Util.inWindRange(this, wind)){
       this.posX += 3;
     }
-  }
-
-  inWindRange(wind) {
-  if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-      (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-        return true;
-      }
-  return false;
   }
 
   resetPos(saved) {
@@ -469,16 +577,17 @@ class Parachuter {
     }
     this.posX = 960 * Math.random();
     this.posY = -600 * Math.random();
-    }
+  }
 }
 
 module.exports = Parachuter;
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
 
+const Util = __webpack_require__(0);
 
 class Blimp {
   constructor(options) {
@@ -499,20 +608,10 @@ class Blimp {
     } else {
       this.posX += 1/2;
     }
-    if (this.inWindRange(wind)){
+    if (Util.inWindRange(this, wind)){
       this.posX += 2;
     }
   }
-
-
-    inWindRange(wind) {
-    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-          return true;
-        }
-    return false;
-    }
-
 
   resetPos() {
     this.posX = - 600 - (1000 * Math.random());
@@ -525,14 +624,15 @@ module.exports = Blimp;
 
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports) {
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
 
+const Util = __webpack_require__(0);
 
 class Cloud {
   constructor(options) {
     this.posX = 1200 + (1000 * Math.random());
-    this.posY = (600 * Math.random()) - 100;
+    this.posY = (500 * Math.random()) - 100;
     this.cloudIcon = new Image();
     this.cloudIcon.src = "./assets/cloudIcon.png";
   }
@@ -540,7 +640,6 @@ class Cloud {
   draw(ctx) {
     ctx.drawImage(this.cloudIcon, this.posX, this.posY, 350, 350);
   }
-
 
   updatePos(wind) {
     if (this.posX < -500) {
@@ -550,32 +649,22 @@ class Cloud {
     } else {
       this.posX -= 1;
     }
-    if (this.inWindRange(wind)){
+    if (Util.inWindRange(this, wind)){
       this.posX += 3;
     }
   }
 
-  inWindRange(wind) {
-  if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-      (this.posY < wind.posY + 300 && this.posY > wind.posY - 300))) {
-        return true;
-      }
-  return false;
-  }
-
-
   resetPos() {
     this.posX = 1200 + 1000 * Math.random();
-    this.posY = 600 * Math.random();
+    this.posY = 500 * Math.random();
   }
-
 }
 
 module.exports = Cloud;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 
@@ -608,8 +697,10 @@ module.exports = Lightning;
 
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports) {
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
 
 class Bird {
   constructor(options) {
@@ -648,23 +739,16 @@ class Bird {
       this.resetPos();
     }
 
-    if (this.inWindRange(wind)){
+    if (Util.inWindRange(this, wind)){
       this.posX += 3;
     }
-  }
-
-  inWindRange(wind) {
-    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-          return true;
-        }
-    return false;
   }
 
   resetPos() {
     this.posX = 1050;
     this.posY = 600 * Math.random();
     this.speed = 3 * (Math.random() + 0.35);
+    this.feathers = 0;
   }
 }
 
@@ -672,9 +756,10 @@ module.exports = Bird;
 
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports) {
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
 
+const Util = __webpack_require__(0);
 
 class Mosquito {
   constructor(options) {
@@ -701,18 +786,9 @@ class Mosquito {
       this.posY -= 3/4;
     }
 
-    if (this.inWindRange(wind)){
+    if (Util.inWindRange(this, wind)){
       this.posX += 2.5;
     }
-  }
-
-
-  inWindRange(wind) {
-    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-          return true;
-        }
-    return false;
   }
 
   resetPos() {
@@ -726,9 +802,10 @@ module.exports = Mosquito;
 
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports) {
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
 
+const Util = __webpack_require__(0);
 
 class Helicopter {
   constructor(options) {
@@ -773,19 +850,10 @@ class Helicopter {
       this.flipped = false;
       }
 
-    if (this.inWindRange(wind)){
+    if (Util.inWindRange(this, wind)){
       this.posX += 6.1;
     }
   }
-
-  inWindRange(wind) {
-    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-          return true;
-        }
-    return false;
-  }
-
 
   resetPos() {
     this.posX = 100;
@@ -799,8 +867,10 @@ module.exports = Helicopter;
 
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports) {
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
 
 class Arrow {
   constructor(posX, posY) {
@@ -837,17 +907,9 @@ class Arrow {
       this.resetPos();
     }
 
-    if (this.inWindRange(wind)){
+    if (Util.inWindRange(this, wind)){
       this.posX += 3;
     }
-  }
-
-  inWindRange(wind) {
-  if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-      (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-        return true;
-      }
-  return false;
   }
 
   resetPos() {
@@ -860,14 +922,14 @@ module.exports = Arrow;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 
 class Wind {
   constructor(options) {
     this.posX = -1200 - (1000 * Math.random());
-    this.posY = (600 * Math.random()) - 100;
+    this.posY = (500 * Math.random());
     this.windIcon = new Image();
     this.windIcon.src = "./assets/windIcon.png";
   }
@@ -875,7 +937,6 @@ class Wind {
   draw(ctx) {
     ctx.drawImage(this.windIcon, this.posX, this.posY, 250, 250);
   }
-
 
   updatePos() {
     this.posX += 3;
@@ -886,17 +947,18 @@ class Wind {
 
   resetPos() {
     this.posX = -1200 - (1000 * Math.random());
-    this.posY = 600 * Math.random() - 100;
+    this.posY = 500 * Math.random();
   }
-
 }
 
 module.exports = Wind;
 
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports) {
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
 
 class BlueBird {
   constructor(options) {
@@ -908,57 +970,17 @@ class BlueBird {
     this.feathersIcon.src = "./assets/feathersIcon.png";
     this.blueBirdGif = new Image();
     this.blueBirdGif.src = "./assets/blueBirdGif.gif";
-    this.speed = 4 * (Math.random() + 0.4);
+    this.speed = 3 * (Math.random() + 0.4);
 
     this.blueBirdImages = [];
-
-    this.blueBirdGif1 = new Image();
-    this.blueBirdGif1.src = "./assets/blueBirdImages/blueBird1.gif";
-    this.blueBirdGif2 = new Image();
-    this.blueBirdGif2.src = "./assets/blueBirdImages/blueBird2.gif";
-    this.blueBirdGif3 = new Image();
-    this.blueBirdGif3.src = "./assets/blueBirdImages/blueBird3.gif";
-    this.blueBirdGif4 = new Image();
-    this.blueBirdGif4.src = "./assets/blueBirdImages/blueBird4.gif";
-    this.blueBirdGif5 = new Image();
-    this.blueBirdGif5.src = "./assets/blueBirdImages/blueBird5.gif";
-    this.blueBirdGif6 = new Image();
-    this.blueBirdGif6.src = "./assets/blueBirdImages/blueBird6.gif";
-    this.blueBirdGif7 = new Image();
-    this.blueBirdGif7.src = "./assets/blueBirdImages/blueBird7.gif";
-    this.blueBirdGif8 = new Image();
-    this.blueBirdGif8.src = "./assets/blueBirdImages/blueBird8.gif";
-    this.blueBirdGif9 = new Image();
-    this.blueBirdGif9.src = "./assets/blueBirdImages/blueBird9.gif";
-    this.blueBirdGif10 = new Image();
-    this.blueBirdGif10.src = "./assets/blueBirdImages/blueBird10.gif";
-    this.blueBirdGif11 = new Image();
-    this.blueBirdGif11.src = "./assets/blueBirdImages/blueBird11.gif";
-    this.blueBirdGif12 = new Image();
-    this.blueBirdGif12.src = "./assets/blueBirdImages/blueBird12.gif";
-    this.blueBirdGif13 = new Image();
-    this.blueBirdGif13.src = "./assets/blueBirdImages/blueBird13.gif";
-    this.blueBirdGif14 = new Image();
-    this.blueBirdGif14.src = "./assets/blueBirdImages/blueBird14.gif";
-    this.blueBirdGif15 = new Image();
-    this.blueBirdGif15.src = "./assets/blueBirdImages/blueBird15.gif";
-
-    this.blueBirdImages.push(this.blueBirdGif1);
-    this.blueBirdImages.push(this.blueBirdGif2);
-    this.blueBirdImages.push(this.blueBirdGif3);
-    this.blueBirdImages.push(this.blueBirdGif4);
-    this.blueBirdImages.push(this.blueBirdGif5);
-    this.blueBirdImages.push(this.blueBirdGif6);
-    this.blueBirdImages.push(this.blueBirdGif7);
-    this.blueBirdImages.push(this.blueBirdGif8);
-    this.blueBirdImages.push(this.blueBirdGif9);
-    this.blueBirdImages.push(this.blueBirdGif10);
-    this.blueBirdImages.push(this.blueBirdGif11);
-    this.blueBirdImages.push(this.blueBirdGif12);
-    this.blueBirdImages.push(this.blueBirdGif13);
-    this.blueBirdImages.push(this.blueBirdGif14);
-    this.blueBirdImages.push(this.blueBirdGif15);
     this.imageCounter = 0;
+
+    for (let i = 1; i <= 15; i++){
+      let name = `blueBirdGif${i}`;
+      this.name = new Image();
+      this.name.src = `./assets/blueBirdImages/blueBird${i}.gif`;
+      this.blueBirdImages.push(this.name);
+    }
   }
 
   draw(ctx) {
@@ -987,133 +1009,20 @@ class BlueBird {
       this.resetPos();
     }
 
-    if (this.inWindRange(wind)){
+    if (Util.inWindRange(this, wind)){
       this.speed += 0.03;
     }
-  }
-
-  inWindRange(wind) {
-    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-          return true;
-        }
-    return false;
   }
 
   resetPos() {
     this.posX = -1000 * Math.random();
     this.posY = 600 * Math.random();
     this.speed = 3 * (Math.random() + 0.35);
+    this.feathers = 0;
   }
 }
 
 module.exports = BlueBird;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-let wah = new Audio('./assets/wah.wav');
-wah.volume = 0.05;
-
-let catchSound = new Audio('./assets/catchSound.wav');
-catchSound.volume = 0.3;
-
-const Util = {
-
-  checkCrash({helicopter, bird, blueBird, blimp, mosquito, lightning}) {
-    if (helicopter.posY > 550 || helicopter.posY < -100 ||
-        helicopter.posX > 1100 || helicopter.posX < -100) {
-      return true;
-    }
-
-    let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [bird.posX + 25, bird.posY + 25]);
-    if (space < 70 && bird.feathers === 0){
-      bird.feathers = 25;
-      return true;
-    }
-
-    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [blueBird.posX + 25, blueBird.posY + 25]);
-    if (space < 70 && blueBird.feathers === 0){
-      blueBird.feathers = 25;
-      return true;
-    }
-
-    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [blimp.posX + 100, blimp.posY + 100]);
-    if (space < 100){
-      return true;
-    }
-
-    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [mosquito.posX + 10, mosquito.posY + 10]);
-    if (space < 40){
-      return true;
-    }
-
-    let xDistance = Math.abs(helicopter.posX - lightning.posX);
-    let yDistance = lightning.posY + 650 - helicopter.posY;
-
-    if ((yDistance > 0 && yDistance < 700) && xDistance < 50){
-      return true;
-    }
-  },
-
-  checkCatch({helicopter, parachuter}) {
-    let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [parachuter.posX + 25, parachuter.posY + 25]);
-    if (space < 60){
-      catchSound.load();
-      catchSound.play();
-      return true;
-    }
-  },
-
-  checkHit({arrowArr, bird, blueBird, mosquito, parachuter}) {
-    let answer = false;
-    arrowArr.forEach((arrow) => {
-    let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
-      if (space < 35){
-        bird.feathers = 25;
-        bird.birdShotCount += 1;
-        arrow.resetPos();
-        answer = true;
-      }
-
-      space = this.distance([arrow.posX + 10, arrow.posY], [blueBird.posX + 30, blueBird.posY + 20]);
-      if (space < 35){
-        blueBird.feathers = 25;
-        blueBird.birdShotCount += 1;
-        arrow.resetPos();
-        answer = true;
-      }
-
-      space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
-      if (space < 30){
-        parachuter.dead = 25;
-        wah.load();
-        wah.play();
-        arrow.resetPos();
-        answer = true;
-      }
-
-      space = this.distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
-      if (space < 30) {
-        mosquito.resetPos();
-        arrow.resetPos();
-        answer = true;
-      }
-    });
-    return answer;
-  },
-
-  distance(pos1, pos2){
-    let a = pos1[0] - pos2[0];
-    let b = pos1[1] - pos2[1];
-
-    return Math.sqrt(a*a + b*b);
-  },
-};
-
-module.exports = Util;
 
 
 /***/ })

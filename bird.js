@@ -1,3 +1,5 @@
+const Util = require("./util");
+
 class Bird {
   constructor(options) {
     this.posX = 1050;
@@ -35,23 +37,16 @@ class Bird {
       this.resetPos();
     }
 
-    if (this.inWindRange(wind)){
+    if (Util.inWindRange(this, wind)){
       this.posX += 3;
     }
-  }
-
-  inWindRange(wind) {
-    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-          return true;
-        }
-    return false;
   }
 
   resetPos() {
     this.posX = 1050;
     this.posY = 600 * Math.random();
     this.speed = 3 * (Math.random() + 0.35);
+    this.feathers = 0;
   }
 }
 

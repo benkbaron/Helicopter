@@ -1,3 +1,4 @@
+const Util = require("./util");
 
 class Mosquito {
   constructor(options) {
@@ -24,18 +25,9 @@ class Mosquito {
       this.posY -= 3/4;
     }
 
-    if (this.inWindRange(wind)){
+    if (Util.inWindRange(this, wind)){
       this.posX += 2.5;
     }
-  }
-
-
-  inWindRange(wind) {
-    if ((this.posX > wind.posX && this.posX < wind.posX + 500) && ((wind.posX > -300) &&
-        (this.posY < wind.posY + 200 && this.posY > wind.posY))) {
-          return true;
-        }
-    return false;
   }
 
   resetPos() {
