@@ -172,6 +172,10 @@ const Util = {
         }
     return false;
   },
+
+  draw(ctx, image, xCoord, yCoord, width, height) {
+    ctx.drawImage(image, xCoord, yCoord, width, height);
+  },
 };
 
 module.exports = Util;
@@ -181,18 +185,18 @@ module.exports = Util;
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Arrow = __webpack_require__(15);
-const Bird = __webpack_require__(21);
-const Blimp = __webpack_require__(14);
-const BlueBird = __webpack_require__(13);
-const Cloud = __webpack_require__(12);
-const Helicopter = __webpack_require__(20);
-const Lightning = __webpack_require__(17);
-const Mosquito = __webpack_require__(16);
-const Parachuter = __webpack_require__(19);
-const Sound = __webpack_require__(22);
+const Arrow = __webpack_require__(2);
+const Bird = __webpack_require__(3);
+const Blimp = __webpack_require__(4);
+const BlueBird = __webpack_require__(5);
+const Cloud = __webpack_require__(6);
+const Helicopter = __webpack_require__(7);
+const Lightning = __webpack_require__(8);
+const Mosquito = __webpack_require__(9);
+const Parachuter = __webpack_require__(10);
+const Sound = __webpack_require__(11);
 const Util = __webpack_require__(0);
-const Wind = __webpack_require__(18);
+const Wind = __webpack_require__(12);
 
 let reset;
 let paused = false;
@@ -486,168 +490,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
 /***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Util = __webpack_require__(0);
-
-class Cloud {
-  constructor(options) {
-    this.posX = 1200 + (1000 * Math.random());
-    this.posY = (500 * Math.random()) - 100;
-    this.cloudIcon = new Image();
-    this.cloudIcon.src = "./assets/cloudIcon.png";
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.cloudIcon, this.posX, this.posY, 350, 350);
-  }
-
-  updatePos(wind) {
-    if (this.posX < -500) {
-      this.resetPos();
-    } else if (this.posX > 400 && this.posX < 500) {
-      this.posX -= 1/4;
-    } else {
-      this.posX -= 1;
-    }
-    if (Util.inWindRange(this, wind)){
-      this.posX += 3;
-    }
-  }
-
-  resetPos() {
-    this.posX = 1200 + 1000 * Math.random();
-    this.posY = 500 * Math.random();
-  }
-}
-
-module.exports = Cloud;
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Util = __webpack_require__(0);
-
-class BlueBird {
-  constructor(options) {
-    this.posX = -1000 * Math.random();
-    this.posY = 600 * Math.random();
-    this.feathers = 0;
-    this.birdShotCount = 0;
-    this.feathersIcon = new Image();
-    this.feathersIcon.src = "./assets/feathersIcon.png";
-    this.blueBirdGif = new Image();
-    this.blueBirdGif.src = "./assets/blueBirdGif.gif";
-    this.speed = 2.5 * (Math.random() + 0.4);
-
-    this.blueBirdImages = [];
-    this.imageCounter = 0;
-
-    for (let i = 1; i <= 15; i++){
-      let name = `blueBirdGif${i}`;
-      this.name = new Image();
-      this.name.src = `./assets/blueBirdImages/blueBird${i}.gif`;
-      this.blueBirdImages.push(this.name);
-    }
-  }
-
-  draw(ctx) {
-    if (this.feathers > 0) {
-      this.feathers -= 1;
-      ctx.drawImage(this.feathersIcon, this.posX, this.posY, 100, 100);
-      if (this.feathers === 0) {
-        this.resetPos();
-      }
-    } else {
-      ctx.drawImage(this.blueBirdImages[Math.floor(this.imageCounter)], this.posX, this.posY, 60, 60);
-      this.imageCounter += (this.speed / 6);
-      this.imageCounter = this.imageCounter % 15;
-    }
-  }
-
-  updatePos(helicopterPosY, wind) {
-    this.posX += this.speed + (this.birdShotCount / 8);
-    if (helicopterPosY > this.posY) {
-      this.posY += 1;
-    } else {
-      this.posY -= 1;
-    }
-
-    if (this.posX > 1050) {
-      this.resetPos();
-    }
-
-    if (Util.inWindRange(this, wind)){
-      this.speed += 0.03;
-    }
-  }
-
-  resetPos() {
-    this.posX = -1000 * Math.random();
-    this.posY = 600 * Math.random();
-    this.speed = 2.5 * (Math.random() + 0.35);
-    this.feathers = 0;
-  }
-}
-
-module.exports = BlueBird;
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Util = __webpack_require__(0);
-
-class Blimp {
-  constructor(options) {
-    this.posX = - 500 - (1000 * Math.random());
-    this.posY = (600 * Math.random()) - 100;
-    this.blimpIcon = new Image();
-    this.blimpIcon.src = "./assets/blimpIcon.png";
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.blimpIcon, this.posX, this.posY, 200, 200);
-  }
-
-
-  updatePos(wind) {
-    if (this.posX > 1200) {
-      this.resetPos();
-    } else {
-      this.posX += 1/2;
-    }
-    if (Util.inWindRange(this, wind)){
-      this.posX += 2;
-    }
-  }
-
-  resetPos() {
-    this.posX = - 600 - (1000 * Math.random());
-    this.posY = (600 * Math.random()) - 100;
-  }
-
-}
-
-module.exports = Blimp;
-
-
-/***/ }),
-/* 15 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -664,8 +507,8 @@ class Arrow {
   }
 
   draw(ctx) {
-      let arrowImage = this.direction === "right" ? this.arrowIconRight : this.arrowIconLeft;
-      ctx.drawImage(arrowImage, this.posX, this.posY, 50, 50);
+    let arrowImage = this.direction === "right" ? this.arrowIconRight : this.arrowIconLeft;
+    Util.draw(ctx, arrowImage, this.posX, this.posY, 50, 50);
   }
 
   shoot(helicopter) {
@@ -702,179 +545,216 @@ module.exports = Arrow;
 
 
 /***/ }),
-/* 16 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
 
-class Mosquito {
+class Bird {
   constructor(options) {
-    this.posX = 600 * Math.random();
-    this.posY = 800;
-    this.mosquitoIcon = new Image();
-    this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
+    this.posX = 1050;
+    this.posY = 600 * Math.random();
+    this.feathers = 0;
+    this.birdShotCount = 0;
+    this.feathersIcon = new Image();
+    this.feathersIcon.src = "./assets/feathersIcon.png";
+    this.birdIcon = new Image();
+    this.birdIcon.src = "./assets/birdIcon.png";
+    this.speed = 3.5 * (Math.random() + 0.4);
   }
 
   draw(ctx) {
-    ctx.drawImage(this.mosquitoIcon, this.posX, this.posY, 25, 25);
-  }
-
-  updatePos(helicopterPosX, helicopterPosY, wind) {
-    if (helicopterPosX > this.posX) {
-      this.posX += 3/4;
-    } else {
-      this.posX -= 3/4;
-    }
-
-    if (helicopterPosY > this.posY) {
-      this.posY += 3/4;
-    } else {
-      this.posY -= 3/4;
-    }
-
-    if (Util.inWindRange(this, wind)){
-      this.posX += 2.5;
-    }
-  }
-
-  resetPos() {
-    this.posX = 600 * Math.random();
-    this.posY = 800;
-  }
-
-}
-
-module.exports = Mosquito;
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
-
-class Lightning {
-  constructor(options) {
-    this.posX = 1000 * Math.random();
-    this.posY = (-7000 * Math.random()) - 1000;
-    this.lightningIcon = new Image();
-    this.lightningIcon.src = "./assets/lightningIcon.png";
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.lightningIcon, this.posX, this.posY, 100, 700);
-  }
-
-  updatePos() {
-    this.posY += 4.5;
-    if (this.posY > 1100) {
-      this.resetPos();
-    }
-  }
-
-  resetPos() {
-    this.posX = 1000 * Math.random();
-    this.posY = -10000 * Math.random() - 1000;
-    }
-}
-
-module.exports = Lightning;
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-
-class Wind {
-  constructor(options) {
-    this.posX = -1200 - (1000 * Math.random());
-    this.posY = (500 * Math.random());
-    this.windIcon = new Image();
-    this.windIcon.src = "./assets/windIcon.png";
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.windIcon, this.posX, this.posY, 250, 250);
-  }
-
-  updatePos() {
-    this.posX += 3;
-    if (this.posX > 1200) {
-      this.resetPos();
-    }
-  }
-
-  resetPos() {
-    this.posX = -1200 - (1000 * Math.random());
-    this.posY = 500 * Math.random();
-  }
-}
-
-module.exports = Wind;
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Util = __webpack_require__(0);
-
-let wah = new Audio('./assets/wah.wav');
-wah.volume = 0.05;
-
-class Parachuter {
-  constructor(options) {
-    this.posX = 960 * Math.random();
-    this.posY = -600 * Math.random();
-    this.parachuterIcon = new Image();
-    this.parachuterIcon.src = "./assets/parachuterIcon.png";
-    this.parachuterSkullIcon = new Image();
-    this.parachuterSkullIcon.src = "./assets/skullIcon.png";
-    this.rescueCount = 0;
-    this.lostCount = -1;
-    this.dead = 0;
-  }
-
-  draw(ctx) {
-    if (this.dead > 0) {
-      this.dead -= 1;
-      ctx.drawImage(this.parachuterSkullIcon, this.posX, this.posY, 60, 60);
-      if (this.dead === 0) {
+    if (this.feathers > 0) {
+      this.feathers -= 1;
+      Util.draw(ctx, this.feathersIcon, this.posX, this.posY, 100, 100);
+      if (this.feathers === 0) {
         this.resetPos();
       }
     } else {
-      ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 60, 60);
+      Util.draw(ctx, this.birdIcon, this.posX, this.posY, 50, 50);
     }
   }
 
-  updatePos(wind) {
-    this.posY += 1.4 + (this.rescueCount / 8);
-    if (this.posY > 610) {
+  updatePos(helicopterPosY, wind) {
+    this.posX -= this.speed + (this.birdShotCount / 8);
+    if (helicopterPosY > this.posY) {
+      this.posY += 1;
+    } else {
+      this.posY -= 1;
+    }
+
+    if (this.posX < -100) {
       this.resetPos();
-      wah.load();
-      wah.play();
+    }
+
+    if (Util.inWindRange(this, wind)){
+      this.posX += 3;
+    }
+  }
+
+  resetPos() {
+    this.posX = 1050;
+    this.posY = 600 * Math.random();
+    this.speed = 3 * (Math.random() + 0.35);
+    this.feathers = 0;
+  }
+}
+
+module.exports = Bird;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+class Blimp {
+  constructor(options) {
+    this.posX = - 500 - (1000 * Math.random());
+    this.posY = (600 * Math.random()) - 100;
+    this.blimpIcon = new Image();
+    this.blimpIcon.src = "./assets/blimpIcon.png";
+  }
+
+  draw(ctx) {
+    Util.draw(ctx, this.blimpIcon, this.posX, this.posY, 200, 200);
+  }
+
+  updatePos(wind) {
+    if (this.posX > 1200) {
+      this.resetPos();
+    } else {
+      this.posX += 1/2;
+    }
+    if (Util.inWindRange(this, wind)){
+      this.posX += 2;
+    }
+  }
+
+  resetPos() {
+    this.posX = - 600 - (1000 * Math.random());
+    this.posY = (600 * Math.random()) - 100;
+  }
+
+}
+
+module.exports = Blimp;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+class BlueBird {
+  constructor(options) {
+    this.posX = -1000 * Math.random();
+    this.posY = 600 * Math.random();
+    this.feathers = 0;
+    this.birdShotCount = 0;
+    this.feathersIcon = new Image();
+    this.feathersIcon.src = "./assets/feathersIcon.png";
+    this.blueBirdGif = new Image();
+    this.blueBirdGif.src = "./assets/blueBirdGif.gif";
+    this.speed = 2.5 * (Math.random() + 0.4);
+
+    this.blueBirdImages = [];
+    this.imageCounter = 0;
+
+    for (let i = 1; i <= 15; i++){
+      let name = `blueBirdGif${i}`;
+      this.name = new Image();
+      this.name.src = `./assets/blueBirdImages/blueBird${i}.gif`;
+      this.blueBirdImages.push(this.name);
+    }
+  }
+
+  draw(ctx) {
+    if (this.feathers > 0) {
+      this.feathers -= 1;
+      Util.draw(ctx, this.feathersIcon, this.posX, this.posY, 100, 100);
+      if (this.feathers === 0) {
+        this.resetPos();
+      }
+    } else {
+      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this.posX, this.posY, 60, 60);
+      this.imageCounter += (this.speed / 6);
+      this.imageCounter = this.imageCounter % 15;
+    }
+  }
+
+  updatePos(helicopterPosY, wind) {
+    this.posX += this.speed + (this.birdShotCount / 8);
+    if (helicopterPosY > this.posY) {
+      this.posY += 1;
+    } else {
+      this.posY -= 1;
+    }
+
+    if (this.posX > 1050) {
+      this.resetPos();
+    }
+
+    if (Util.inWindRange(this, wind)){
+      this.speed += 0.03;
+    }
+  }
+
+  resetPos() {
+    this.posX = -1000 * Math.random();
+    this.posY = 600 * Math.random();
+    this.speed = 2.5 * (Math.random() + 0.35);
+    this.feathers = 0;
+  }
+}
+
+module.exports = BlueBird;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+class Cloud {
+  constructor(options) {
+    this.posX = 1200 + (1000 * Math.random());
+    this.posY = (500 * Math.random()) - 100;
+    this.cloudIcon = new Image();
+    this.cloudIcon.src = "./assets/cloudIcon.png";
+  }
+
+  draw(ctx) {
+    Util.draw(ctx, this.cloudIcon, this.posX, this.posY, 350, 350);
+  }
+
+  updatePos(wind) {
+    if (this.posX < -500) {
+      this.resetPos();
+    } else if (this.posX > 400 && this.posX < 500) {
+      this.posX -= 1/4;
+    } else {
+      this.posX -= 1;
     }
     if (Util.inWindRange(this, wind)){
       this.posX += 3;
     }
   }
 
-  resetPos(saved) {
-    if (saved) {
-      this.rescueCount += 1;
-    } else {
-      this.lostCount += 1;
-    }
-    this.posX = 960 * Math.random();
-    this.posY = -600 * Math.random();
+  resetPos() {
+    this.posX = 1200 + 1000 * Math.random();
+    this.posY = 500 * Math.random();
   }
 }
 
-module.exports = Parachuter;
+module.exports = Cloud;
 
 
 /***/ }),
-/* 20 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -896,7 +776,7 @@ class Helicopter {
 
   draw(ctx) {
     let helicopterImage = this.flipped ? this.helicopterIconFlipped : this.helicopterIcon;
-    ctx.drawImage(helicopterImage, this.posX, this.posY, 100, 100);
+    Util.draw(ctx, helicopterImage, this.posX, this.posY, 100, 100);
   }
 
   drawSkull(ctx) {
@@ -939,66 +819,147 @@ module.exports = Helicopter;
 
 
 /***/ }),
-/* 21 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
 
-class Bird {
+class Lightning {
   constructor(options) {
-    this.posX = 1050;
-    this.posY = 600 * Math.random();
-    this.feathers = 0;
-    this.birdShotCount = 0;
-    this.feathersIcon = new Image();
-    this.feathersIcon.src = "./assets/feathersIcon.png";
-    this.birdIcon = new Image();
-    this.birdIcon.src = "./assets/birdIcon.png";
-    this.speed = 3.5 * (Math.random() + 0.4);
+    this.posX = 1000 * Math.random();
+    this.posY = (-7000 * Math.random()) - 1000;
+    this.lightningIcon = new Image();
+    this.lightningIcon.src = "./assets/lightningIcon.png";
   }
 
   draw(ctx) {
-    if (this.feathers > 0) {
-      this.feathers -= 1;
-      ctx.drawImage(this.feathersIcon, this.posX, this.posY, 100, 100);
-      if (this.feathers === 0) {
-        this.resetPos();
-      }
-    } else {
-      ctx.drawImage(this.birdIcon, this.posX, this.posY, 50, 50);
+    Util.draw(ctx, this.lightningIcon, this.posX, this.posY, 100, 700);
+  }
+
+  updatePos() {
+    this.posY += 4.5;
+    if (this.posY > 1100) {
+      this.resetPos();
     }
   }
 
-  updatePos(helicopterPosY, wind) {
-    this.posX -= this.speed + (this.birdShotCount / 8);
-    if (helicopterPosY > this.posY) {
-      this.posY += 1;
+  resetPos() {
+    this.posX = 1000 * Math.random();
+    this.posY = -10000 * Math.random() - 1000;
+    }
+}
+
+module.exports = Lightning;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+class Mosquito {
+  constructor(options) {
+    this.posX = 600 * Math.random();
+    this.posY = 800;
+    this.mosquitoIcon = new Image();
+    this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
+  }
+
+  draw(ctx) {
+    Util.draw(ctx, this.mosquitoIcon, this.posX, this.posY, 25, 25);
+  }
+
+  updatePos(helicopterPosX, helicopterPosY, wind) {
+    if (helicopterPosX > this.posX) {
+      this.posX += 3/4;
     } else {
-      this.posY -= 1;
+      this.posX -= 3/4;
     }
 
-    if (this.posX < -100) {
+    if (helicopterPosY > this.posY) {
+      this.posY += 3/4;
+    } else {
+      this.posY -= 3/4;
+    }
+
+    if (Util.inWindRange(this, wind)){
+      this.posX += 2.5;
+    }
+  }
+
+  resetPos() {
+    this.posX = 600 * Math.random();
+    this.posY = 800;
+  }
+
+}
+
+module.exports = Mosquito;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+let wah = new Audio('./assets/wah.wav');
+wah.volume = 0.05;
+
+class Parachuter {
+  constructor(options) {
+    this.posX = 960 * Math.random();
+    this.posY = -600 * Math.random();
+    this.parachuterIcon = new Image();
+    this.parachuterIcon.src = "./assets/parachuterIcon.png";
+    this.parachuterSkullIcon = new Image();
+    this.parachuterSkullIcon.src = "./assets/skullIcon.png";
+    this.rescueCount = 0;
+    this.lostCount = -1;
+    this.dead = 0;
+  }
+
+  draw(ctx) {
+    if (this.dead > 0) {
+      this.dead -= 1;
+      Util.draw(ctx, this.parachuterSkullIcon, this.posX, this.posY, 60, 60);
+      if (this.dead === 0) {
+        this.resetPos();
+      }
+    } else {
+      Util.draw(ctx, this.parachuterIcon, this.posX, this.posY, 60, 60);
+    }
+  }
+
+  updatePos(wind) {
+    this.posY += 1.4 + (this.rescueCount / 8);
+    if (this.posY > 610) {
       this.resetPos();
+      wah.load();
+      wah.play();
     }
-
     if (Util.inWindRange(this, wind)){
       this.posX += 3;
     }
   }
 
-  resetPos() {
-    this.posX = 1050;
-    this.posY = 600 * Math.random();
-    this.speed = 3 * (Math.random() + 0.35);
-    this.feathers = 0;
+  resetPos(saved) {
+    if (saved) {
+      this.rescueCount += 1;
+    } else {
+      this.lostCount += 1;
+    }
+    this.posX = 960 * Math.random();
+    this.posY = -600 * Math.random();
   }
 }
 
-module.exports = Bird;
+module.exports = Parachuter;
 
 
 /***/ }),
-/* 22 */
+/* 11 */
 /***/ (function(module, exports) {
 
 let wah = new Audio('./assets/wah.wav');
@@ -1056,6 +1017,40 @@ const Sound = {
 };
 
 module.exports = Sound;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+class Wind {
+  constructor(options) {
+    this.posX = -1200 - (1000 * Math.random());
+    this.posY = (500 * Math.random());
+    this.windIcon = new Image();
+    this.windIcon.src = "./assets/windIcon.png";
+  }
+
+  draw(ctx) {
+    Util.draw(ctx, this.windIcon, this.posX, this.posY, 250, 250);
+  }
+
+  updatePos() {
+    this.posX += 3;
+    if (this.posX > 1200) {
+      this.resetPos();
+    }
+  }
+
+  resetPos() {
+    this.posX = -1200 - (1000 * Math.random());
+    this.posY = 500 * Math.random();
+  }
+}
+
+module.exports = Wind;
 
 
 /***/ })

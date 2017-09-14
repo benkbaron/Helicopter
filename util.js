@@ -103,6 +103,10 @@ const Util = {
         }
     return false;
   },
+
+  draw(ctx, image, xCoord, yCoord, width, height) {
+    ctx.drawImage(image, xCoord, yCoord, width, height);
+  },
 };
 
 module.exports = Util;

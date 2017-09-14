@@ -9,7 +9,7 @@ class Cloud {
   }
 
   draw(ctx) {
-    ctx.drawImage(this.cloudIcon, this.posX, this.posY, 350, 350);
+    Util.draw(ctx, this.cloudIcon, this.posX, this.posY, 350, 350);
   }
 
   updatePos(wind) {

@@ -17,7 +17,7 @@ class Helicopter {
 
   draw(ctx) {
     let helicopterImage = this.flipped ? this.helicopterIconFlipped : this.helicopterIcon;
-    ctx.drawImage(helicopterImage, this.posX, this.posY, 100, 100);
+    Util.draw(ctx, helicopterImage, this.posX, this.posY, 100, 100);
   }
 
   drawSkull(ctx) {

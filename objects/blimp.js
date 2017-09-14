@@ -9,9 +9,8 @@ class Blimp {
   }
 
   draw(ctx) {
-    ctx.drawImage(this.blimpIcon, this.posX, this.posY, 200, 200);
+    Util.draw(ctx, this.blimpIcon, this.posX, this.posY, 200, 200);
   }
-
 
   updatePos(wind) {
     if (this.posX > 1200) {

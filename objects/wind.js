@@ -1,3 +1,4 @@
+const Util = require("../util");
 
 class Wind {
   constructor(options) {
@@ -8,7 +9,7 @@ class Wind {
   }
 
   draw(ctx) {
-    ctx.drawImage(this.windIcon, this.posX, this.posY, 250, 250);
+    Util.draw(ctx, this.windIcon, this.posX, this.posY, 250, 250);
   }
 
   updatePos() {

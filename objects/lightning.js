@@ -1,3 +1,4 @@
+const Util = require("../util");
 
 class Lightning {
   constructor(options) {
@@ -8,7 +9,7 @@ class Lightning {
   }
 
   draw(ctx) {
-    ctx.drawImage(this.lightningIcon, this.posX, this.posY, 100, 700);
+    Util.draw(ctx, this.lightningIcon, this.posX, this.posY, 100, 700);
   }
 
   updatePos() {

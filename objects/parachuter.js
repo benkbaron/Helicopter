@@ -19,12 +19,12 @@ class Parachuter {
   draw(ctx) {
     if (this.dead > 0) {
       this.dead -= 1;
-      ctx.drawImage(this.parachuterSkullIcon, this.posX, this.posY, 60, 60);
+      Util.draw(ctx, this.parachuterSkullIcon, this.posX, this.posY, 60, 60);
       if (this.dead === 0) {
         this.resetPos();
       }
     } else {
-      ctx.drawImage(this.parachuterIcon, this.posX, this.posY, 60, 60);
+      Util.draw(ctx, this.parachuterIcon, this.posX, this.posY, 60, 60);
     }
   }
 

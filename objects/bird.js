@@ -16,12 +16,12 @@ class Bird {
   draw(ctx) {
     if (this.feathers > 0) {
       this.feathers -= 1;
-      ctx.drawImage(this.feathersIcon, this.posX, this.posY, 100, 100);
+      Util.draw(ctx, this.feathersIcon, this.posX, this.posY, 100, 100);
       if (this.feathers === 0) {
         this.resetPos();
       }
     } else {
-      ctx.drawImage(this.birdIcon, this.posX, this.posY, 50, 50);
+      Util.draw(ctx, this.birdIcon, this.posX, this.posY, 50, 50);
     }
   }
 
