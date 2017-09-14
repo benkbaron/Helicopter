@@ -55,7 +55,7 @@ const Util = {
     let answer = false;
     arrowArr.forEach((arrow) => {
     let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
-      if (space < 35){
+      if (space < 35 && bird.feathers === 0){
         bird.feathers = 25;
         bird.birdShotCount += 1;
         arrow.resetPos();
@@ -71,7 +71,7 @@ const Util = {
       }
 
       space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
-      if (space < 30){
+      if (space < 30 && parachuter.dead === 0){
         parachuter.dead = 25;
         wah.load();
         wah.play();
