@@ -54,7 +54,7 @@ class Parachuter {
     }
     this.posX = 960 * Math.random();
     this.posY = -600 * Math.random();
-    }
+  }
 }
 
 module.exports = Parachuter;

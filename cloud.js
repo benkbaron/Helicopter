@@ -2,7 +2,7 @@
 class Cloud {
   constructor(options) {
     this.posX = 1200 + (1000 * Math.random());
-    this.posY = (600 * Math.random()) - 100;
+    this.posY = (500 * Math.random()) - 100;
     this.cloudIcon = new Image();
     this.cloudIcon.src = "./assets/cloudIcon.png";
   }
@@ -10,7 +10,6 @@ class Cloud {
   draw(ctx) {
     ctx.drawImage(this.cloudIcon, this.posX, this.posY, 350, 350);
   }
-
 
   updatePos(wind) {
     if (this.posX < -500) {
@@ -33,12 +32,10 @@ class Cloud {
   return false;
   }
 
-
   resetPos() {
     this.posX = 1200 + 1000 * Math.random();
-    this.posY = 600 * Math.random();
+    this.posY = 500 * Math.random();
   }
-
 }
 
 module.exports = Cloud;
