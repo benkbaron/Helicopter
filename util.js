@@ -1,6 +1,9 @@
 let wah = new Audio('./assets/wah.wav');
 wah.volume = 0.05;
 
+let catchSound = new Audio('./assets/catchSound.wav');
+catchSound.volume = 0.3;
+
 const Util = {
 
   checkCrash({helicopter, bird, blueBird, blimp, mosquito, lightning}) {
@@ -42,6 +45,8 @@ const Util = {
   checkCatch({helicopter, parachuter}) {
     let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [parachuter.posX + 25, parachuter.posY + 25]);
     if (space < 60){
+      catchSound.load();
+      catchSound.play();
       return true;
     }
   },
