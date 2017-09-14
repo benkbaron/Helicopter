@@ -190,6 +190,7 @@ const Bird = __webpack_require__(3);
 const Blimp = __webpack_require__(4);
 const BlueBird = __webpack_require__(5);
 const Cloud = __webpack_require__(6);
+const DrawCanvas = __webpack_require__(13);
 const Helicopter = __webpack_require__(7);
 const Lightning = __webpack_require__(8);
 const Mosquito = __webpack_require__(9);
@@ -205,20 +206,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let canvas = document.querySelector("canvas");
   let ctx = canvas.getContext("2d");
 
-  ctx.clearRect(0, 0, 1000, 600);
-  ctx.fillStyle = "#053fff";
-  ctx.fillRect(0, 0, 1000, 600);
-  ctx.fillStyle = "white";
-  ctx.font = '80px tahoma';
-  ctx.fillText('Helicopter', 320, 150);
-  ctx.fillStyle = "white";
-  ctx.font = '45px tahoma';
-  ctx.fillText("Press 'p' to Start and Pause", 220, 270);
-  ctx.fillStyle = "black";
-  ctx.font = '26px tahoma';
-  ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 130, 380);
-  ctx.fillText('All objects, but clouds and wind, are dangerous! Careful to stay in the borders!', 60, 440);
-  ctx.fillText('Shoot birds and mosquitos using spacebar.', 250, 500);
+  DrawCanvas.startPage(ctx);
 
   let parachuter1 = new Parachuter();
   let blimp1 = new Blimp();
@@ -241,24 +229,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let inputs = [];
 
   resetPage = () => {
-    ctx.clearRect(0, 0, 1000, 600);
-    ctx.fillStyle = "#053fff";
-    ctx.fillRect(0, 0, 1000, 600);
-    ctx.fillStyle = "white";
-    ctx.font = '18px tahoma';
-    ctx.fillText(`Parachuters Saved: ${parachuter1.rescueCount}`, 10, 22);
-    ctx.fillText(`Parachuters Lost: ${parachuter1.lostCount}`, 10, 44);
-    ctx.fillText(`Birds Shot: ${bird1.birdShotCount + blueBird1.birdShotCount}`, 10, 66);
-    ctx.fillText(`Lives Left: ${lifeCount}`, 10, 88);
+    DrawCanvas.playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount);
 
     if (lifeCount === 0) {
       displayGameOver();
       return;
     } else if (paused) {
-      ctx.font = '60px tahoma';
-      ctx.fillText("Paused", 410, 220);
-      ctx.font = '40px tahoma';
-      ctx.fillText("Press 'p' to resume", 340, 350);
+      DrawCanvas.pausedPage(ctx);
     } else if (reset) {
       resetObjects();
       intervalSpeed = 1000/60;
@@ -1051,6 +1028,52 @@ class Wind {
 }
 
 module.exports = Wind;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+const DrawCanvas = {
+
+  startPage(ctx){
+    ctx.clearRect(0, 0, 1000, 600);
+    ctx.fillStyle = "#053fff";
+    ctx.fillRect(0, 0, 1000, 600);
+    ctx.fillStyle = "white";
+    ctx.font = '80px tahoma';
+    ctx.fillText('Helicopter', 320, 150);
+    ctx.fillStyle = "white";
+    ctx.font = '45px tahoma';
+    ctx.fillText("Press 'p' to Start and Pause", 220, 270);
+    ctx.fillStyle = "black";
+    ctx.font = '26px tahoma';
+    ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 130, 380);
+    ctx.fillText('All objects, but clouds and wind, are dangerous! Careful to stay in the borders!', 60, 440);
+    ctx.fillText('Shoot birds and mosquitos using spacebar.', 250, 500);
+  },
+
+  playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount){
+    ctx.clearRect(0, 0, 1000, 600);
+    ctx.fillStyle = "#053fff";
+    ctx.fillRect(0, 0, 1000, 600);
+    ctx.fillStyle = "white";
+    ctx.font = '18px tahoma';
+    ctx.fillText(`Parachuters Saved: ${parachuter1.rescueCount}`, 10, 22);
+    ctx.fillText(`Parachuters Lost: ${parachuter1.lostCount}`, 10, 44);
+    ctx.fillText(`Birds Shot: ${bird1.birdShotCount + blueBird1.birdShotCount}`, 10, 66);
+    ctx.fillText(`Lives Left: ${lifeCount}`, 10, 88);
+  },
+
+  pausedPage(ctx){
+    ctx.font = '60px tahoma';
+    ctx.fillText("Paused", 410, 220);
+    ctx.font = '40px tahoma';
+    ctx.fillText("Press 'p' to resume", 340, 350);
+  },
+};
+
+module.exports = DrawCanvas;
 
 
 /***/ })
