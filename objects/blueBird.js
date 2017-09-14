@@ -10,7 +10,7 @@ class BlueBird {
     this.feathersIcon.src = "./assets/feathersIcon.png";
     this.blueBirdGif = new Image();
     this.blueBirdGif.src = "./assets/blueBirdGif.gif";
-    this.speed = 2 * (Math.random() + 0.4);
+    this.speed = 2.5 * (Math.random() + 0.4);
 
     this.blueBirdImages = [];
     this.imageCounter = 0;
@@ -57,7 +57,7 @@ class BlueBird {
   resetPos() {
     this.posX = -1000 * Math.random();
     this.posY = 600 * Math.random();
-    this.speed = 2 * (Math.random() + 0.35);
+    this.speed = 2.5 * (Math.random() + 0.35);
     this.feathers = 0;
   }
 }

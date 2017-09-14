@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         Sound.playSound("arrowShot", soundEffects);
         arrowArr = arrowArr.slice(1);
         arrowArr.push(firstArrow);
-        arrowCounter = 45;
+        arrowCounter = 35;
       }
     }
 
@@ -283,7 +283,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let musicButton = document.getElementById("musicButton");
   let playing = true;
   musicButton.addEventListener("click", () => {
-    Sound.musicControl();
+    Sound.musicControl(playing);
+    playing = playing ? false : true;
   });
 
   let soundEffects = true;

@@ -301,7 +301,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         Sound.playSound("arrowShot", soundEffects);
         arrowArr = arrowArr.slice(1);
         arrowArr.push(firstArrow);
-        arrowCounter = 45;
+        arrowCounter = 35;
       }
     }
 
@@ -466,7 +466,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let musicButton = document.getElementById("musicButton");
   let playing = true;
   musicButton.addEventListener("click", () => {
-    Sound.musicControl();
+    Sound.musicControl(playing);
+    playing = playing ? false : true;
   });
 
   let soundEffects = true;
@@ -550,7 +551,7 @@ class BlueBird {
     this.feathersIcon.src = "./assets/feathersIcon.png";
     this.blueBirdGif = new Image();
     this.blueBirdGif.src = "./assets/blueBirdGif.gif";
-    this.speed = 2 * (Math.random() + 0.4);
+    this.speed = 2.5 * (Math.random() + 0.4);
 
     this.blueBirdImages = [];
     this.imageCounter = 0;
@@ -597,7 +598,7 @@ class BlueBird {
   resetPos() {
     this.posX = -1000 * Math.random();
     this.posY = 600 * Math.random();
-    this.speed = 2 * (Math.random() + 0.35);
+    this.speed = 2.5 * (Math.random() + 0.35);
     this.feathers = 0;
   }
 }
@@ -1040,7 +1041,7 @@ const Sound = {
     }
   },
 
-  musicControl() {
+  musicControl(playing) {
     if (!playing){
       musicButton.innerHTML = "Turn Music Off";
       music.play();

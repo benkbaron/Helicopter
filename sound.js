@@ -38,7 +38,7 @@ const Sound = {
     }
   },
 
-  musicControl() {
+  musicControl(playing) {
     if (!playing){
       musicButton.innerHTML = "Turn Music Off";
       music.play();
