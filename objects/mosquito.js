@@ -4,12 +4,14 @@ class Mosquito {
   constructor(options) {
     this.posX = 600 * Math.random();
     this.posY = 800;
+    this.width = 25;
+    this.height = 25;
     this.mosquitoIcon = new Image();
     this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.mosquitoIcon, this.posX, this.posY, 25, 25);
+    Util.draw(ctx, this.mosquitoIcon, this.posX, this.posY, this.width, this.width);
   }
 
   updatePos(helicopterPosX, helicopterPosY, wind) {

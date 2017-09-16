@@ -9,6 +9,7 @@ const Lightning = require("./objects/lightning");
 const Mosquito = require("./objects/mosquito");
 const Parachuter = require("./objects/parachuter");
 const Sound = require("./sound");
+const Sun = require("./objects/sun");
 const Util = require("./util");
 const Wind = require("./objects/wind");
 
@@ -21,19 +22,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   DrawCanvas.startPage(ctx);
 
-  let parachuter1 = new Parachuter();
+  let arrowArr = [];
+  let bird1 = new Bird();
   let blimp1 = new Blimp();
   let cloud1 = new Cloud();
-  let lightning1 = new Lightning();
-  let bird1 = new Bird();
-  let mosquito1 = new Mosquito();
   let helicopter1 = new Helicopter();
-  let arrowArr = [];
+  let lightning1 = new Lightning();
+  let mosquito1 = new Mosquito();
+  let parachuter1 = new Parachuter();
+  let sun1 = new Sun();
   let wind1 = new Wind();
 
   let blueBird1 = new BlueBird();
 
-  let allObjects = [parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1, helicopter1, wind1, cloud1];
+  let allObjects = [parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1, helicopter1, wind1, cloud1, sun1];
 
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = -1;
@@ -43,7 +45,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   resetPage = () => {
     DrawCanvas.playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount);
-
+    helicopter1.alive = true;
     if (lifeCount === 0) {
       displayGameOver();
       return;
@@ -55,6 +57,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       reset = false;
     } else if (Util.checkCrash({helicopter: helicopter1, bird: bird1, blueBird: blueBird1,
                                 blimp: blimp1, mosquito: mosquito1, lightning: lightning1})) {
+      helicopter1.alive = false;
       displayCrash();
       intervalSpeed = 2000;
       lifeCount -= 1;
@@ -89,7 +92,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     if (event.keyCode === 32 && !paused){
-      if ( gameStarted && (arrowCounter < 1 || passwordEntered())){
+      if ( (gameStarted && helicopter1.alive) && (arrowCounter < 1 || passwordEntered())){
         firstArrow = arrowArr[0];
         firstArrow.shoot(helicopter1);
         Sound.playSound("arrowShot", soundEffects);
@@ -118,22 +121,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let gameStarted = false;
 
   displayCrash = () => {
-    addSadSun(ctx);
-    bird1.draw(ctx);
-    blueBird1.draw(ctx);
-    helicopter1.drawSkull(ctx);
-    parachuter1.draw(ctx);
-    blimp1.draw(ctx);
-    mosquito1.draw(ctx);
-    lightning1.draw(ctx);
-    wind1.draw(ctx);
-    cloud1.draw(ctx);
+    drawAll();
     drawArrows();
     Sound.playSound("lifeLost", soundEffects);
   };
 
   resetObjects = () => {
-    addSadSun(ctx);
     bird1.resetPos();
     blueBird1.resetPos();
     helicopter1.resetPos();
@@ -150,7 +143,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayCaught = () => {
-    addSun(ctx);
     helicopter1.updatePos(wind1);
     bird1.updatePos(helicopter1.posY, wind1);
     blueBird1.updatePos(helicopter1.posY, wind1);
@@ -165,7 +157,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayStandard = () => {
-    addSun(ctx);
     helicopter1.updatePos(wind1);
     bird1.updatePos(helicopter1.posY, wind1);
     blueBird1.updatePos(helicopter1.posY, wind1);
@@ -185,7 +176,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.fillText('So sorry you lost!', 220, 280);
     ctx.font = '50px tahoma';
     ctx.fillText("Press 'p' to Try Again", 270, 400);
-    addSadSun(ctx);
     gameStarted = false;
   };
 
@@ -212,14 +202,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     resetPage();
   };
 
-  let sunIcon = new Image();
-  sunIcon.src = "./assets/sunIcon.png";
-  addSun = (ctx) => { ctx.drawImage(sunIcon, 920, 20, 70, 70); };
-
-  let sadSunIcon = new Image();
-  sadSunIcon.src = "./assets/sadSunIcon.png";
-  addSadSun = (ctx) => { ctx.drawImage(sadSunIcon, 920, 20, 70, 70); };
-
   drawArrows = () => {
     arrowArr.forEach((arrow) => {
       arrow.updatePos(wind1);
@@ -241,7 +223,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   drawAll = () => {
     allObjects.forEach((obj) => {
-      obj.draw(ctx);
+      obj.draw(ctx, helicopter1);
     });
   };
 

@@ -4,12 +4,14 @@ class Wind {
   constructor(options) {
     this.posX = -1200 - (1000 * Math.random());
     this.posY = (500 * Math.random());
+    this.width = 250;
+    this.height = 250;
     this.windIcon = new Image();
     this.windIcon.src = "./assets/windIcon.png";
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.windIcon, this.posX, this.posY, 250, 250);
+    Util.draw(ctx, this.windIcon, this.posX, this.posY, this.width, this.height);
   }
 
   updatePos() {

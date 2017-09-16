@@ -7,6 +7,8 @@ class Parachuter {
   constructor(options) {
     this.posX = 960 * Math.random();
     this.posY = -600 * Math.random();
+    this.width = 60;
+    this.height = 60;
     this.parachuterIcon = new Image();
     this.parachuterIcon.src = "./assets/parachuterIcon.png";
     this.parachuterSkullIcon = new Image();
@@ -17,15 +19,16 @@ class Parachuter {
   }
 
   draw(ctx) {
+    let image = this.parachuterIcon;
     if (this.dead > 0) {
       this.dead -= 1;
-      Util.draw(ctx, this.parachuterSkullIcon, this.posX, this.posY, 60, 60);
+      image = this.parachuterSkullIcon;
       if (this.dead === 0) {
         this.resetPos();
       }
-    } else {
-      Util.draw(ctx, this.parachuterIcon, this.posX, this.posY, 60, 60);
     }
+
+    Util.draw(ctx, image, this.posX, this.posY, this.width, this.height);
   }
 
   updatePos(wind) {

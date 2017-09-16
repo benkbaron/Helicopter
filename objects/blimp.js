@@ -4,12 +4,14 @@ class Blimp {
   constructor(options) {
     this.posX = - 500 - (1000 * Math.random());
     this.posY = (600 * Math.random()) - 100;
+    this.width = 200;
+    this.height = 200;
     this.blimpIcon = new Image();
     this.blimpIcon.src = "./assets/blimpIcon.png";
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.blimpIcon, this.posX, this.posY, 200, 200);
+    Util.draw(ctx, this.blimpIcon, this.posX, this.posY, this.width, this.height);
   }
 
   updatePos(wind) {

@@ -6,10 +6,12 @@ class Lightning {
     this.posY = (-7000 * Math.random()) - 1000;
     this.lightningIcon = new Image();
     this.lightningIcon.src = "./assets/lightningIcon.png";
+    this.width = 100;
+    this.height = 700;
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.lightningIcon, this.posX, this.posY, 100, 700);
+    Util.draw(ctx, this.lightningIcon, this.posX, this.posY, this.width, this.height);
   }
 
   updatePos() {

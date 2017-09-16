@@ -4,6 +4,8 @@ class Arrow {
   constructor(posX, posY) {
     this.posX = -100;
     this.posY = -100;
+    this.width = 50;
+    this.height = 50;
     this.direction = "right";
     this.arrowIconLeft = new Image();
     this.arrowIconRight = new Image();
@@ -13,7 +15,7 @@ class Arrow {
 
   draw(ctx) {
     let arrowImage = this.direction === "right" ? this.arrowIconRight : this.arrowIconLeft;
-    Util.draw(ctx, arrowImage, this.posX, this.posY, 50, 50);
+    Util.draw(ctx, arrowImage, this.posX, this.posY, this.width, this.height);
   }
 
   shoot(helicopter) {

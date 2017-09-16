@@ -4,6 +4,10 @@ class BlueBird {
   constructor(options) {
     this.posX = -1000 * Math.random();
     this.posY = 600 * Math.random();
+    this.feathersWidth = 100;
+    this.feathersHeight = 100;
+    this.birdWidth = 60;
+    this.birdHeight = 60;
     this.feathers = 0;
     this.birdShotCount = 0;
     this.feathersIcon = new Image();
@@ -26,12 +30,12 @@ class BlueBird {
   draw(ctx) {
     if (this.feathers > 0) {
       this.feathers -= 1;
-      Util.draw(ctx, this.feathersIcon, this.posX, this.posY, 100, 100);
+      Util.draw(ctx, this.feathersIcon, this.posX, this.posY, this.feathersWidth, this.feathersHeight);
       if (this.feathers === 0) {
         this.resetPos();
       }
     } else {
-      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this.posX, this.posY, 60, 60);
+      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this.posX, this.posY, this.birdWidth, this.birdHeight);
       this.imageCounter += (this.speed / 6);
       this.imageCounter = this.imageCounter % 15;
     }

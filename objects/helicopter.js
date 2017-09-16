@@ -6,6 +6,9 @@ class Helicopter {
     this.posY = 100;
     this.flipped = false;
     this.keysDown = [];
+    this.alive = true;
+    this.width = 100;
+    this.height = 100;
 
     this.helicopterIconFlipped = new Image();
     this.helicopterIconFlipped.src = "./assets/flippedhelicopterIcon.png";
@@ -17,13 +20,9 @@ class Helicopter {
 
   draw(ctx) {
     let helicopterImage = this.flipped ? this.helicopterIconFlipped : this.helicopterIcon;
-    Util.draw(ctx, helicopterImage, this.posX, this.posY, 100, 100);
+    helicopterImage = this.alive ? helicopterImage : this.skullIcon;
+    Util.draw(ctx, helicopterImage, this.posX, this.posY, this.width, this.height);
   }
-
-  drawSkull(ctx) {
-    ctx.drawImage(this.skullIcon, this.posX, this.posY, 100, 100);
-  }
-
 
   updatePos(wind) {
     this.posY += 2;
@@ -44,7 +43,7 @@ class Helicopter {
       }
 
     if (Util.inWindRange(this, wind)){
-      this.posX += 6.1;
+      this.posX += 5;
     }
   }
 

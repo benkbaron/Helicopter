@@ -167,7 +167,7 @@ const Util = {
 
   inWindRange(object, wind) {
     if ((object.posX > wind.posX && object.posX < wind.posX + 500) && ((wind.posX > -300) &&
-        (object.posY < wind.posY + 200 && object.posY > wind.posY))) {
+        (object.posY < wind.posY + 150 && object.posY > wind.posY - 50))) {
           return true;
         }
     return false;
@@ -190,14 +190,15 @@ const Bird = __webpack_require__(3);
 const Blimp = __webpack_require__(4);
 const BlueBird = __webpack_require__(5);
 const Cloud = __webpack_require__(6);
-const DrawCanvas = __webpack_require__(13);
-const Helicopter = __webpack_require__(7);
-const Lightning = __webpack_require__(8);
-const Mosquito = __webpack_require__(9);
-const Parachuter = __webpack_require__(10);
-const Sound = __webpack_require__(11);
+const DrawCanvas = __webpack_require__(7);
+const Helicopter = __webpack_require__(8);
+const Lightning = __webpack_require__(9);
+const Mosquito = __webpack_require__(10);
+const Parachuter = __webpack_require__(11);
+const Sound = __webpack_require__(12);
+const Sun = __webpack_require__(14);
 const Util = __webpack_require__(0);
-const Wind = __webpack_require__(12);
+const Wind = __webpack_require__(13);
 
 let reset;
 let paused = false;
@@ -208,19 +209,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   DrawCanvas.startPage(ctx);
 
-  let parachuter1 = new Parachuter();
+  let arrowArr = [];
+  let bird1 = new Bird();
   let blimp1 = new Blimp();
   let cloud1 = new Cloud();
-  let lightning1 = new Lightning();
-  let bird1 = new Bird();
-  let mosquito1 = new Mosquito();
   let helicopter1 = new Helicopter();
-  let arrowArr = [];
+  let lightning1 = new Lightning();
+  let mosquito1 = new Mosquito();
+  let parachuter1 = new Parachuter();
+  let sun1 = new Sun();
   let wind1 = new Wind();
 
   let blueBird1 = new BlueBird();
 
-  let allObjects = [parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1, helicopter1, wind1, cloud1];
+  let allObjects = [parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1, helicopter1, wind1, cloud1, sun1];
 
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = -1;
@@ -230,7 +232,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   resetPage = () => {
     DrawCanvas.playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount);
-
+    helicopter1.alive = true;
     if (lifeCount === 0) {
       displayGameOver();
       return;
@@ -242,6 +244,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       reset = false;
     } else if (Util.checkCrash({helicopter: helicopter1, bird: bird1, blueBird: blueBird1,
                                 blimp: blimp1, mosquito: mosquito1, lightning: lightning1})) {
+      helicopter1.alive = false;
       displayCrash();
       intervalSpeed = 2000;
       lifeCount -= 1;
@@ -276,7 +279,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     if (event.keyCode === 32 && !paused){
-      if ( gameStarted && (arrowCounter < 1 || passwordEntered())){
+      if ( (gameStarted && helicopter1.alive) && (arrowCounter < 1 || passwordEntered())){
         firstArrow = arrowArr[0];
         firstArrow.shoot(helicopter1);
         Sound.playSound("arrowShot", soundEffects);
@@ -305,22 +308,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let gameStarted = false;
 
   displayCrash = () => {
-    addSadSun(ctx);
-    bird1.draw(ctx);
-    blueBird1.draw(ctx);
-    helicopter1.drawSkull(ctx);
-    parachuter1.draw(ctx);
-    blimp1.draw(ctx);
-    mosquito1.draw(ctx);
-    lightning1.draw(ctx);
-    wind1.draw(ctx);
-    cloud1.draw(ctx);
+    drawAll();
     drawArrows();
     Sound.playSound("lifeLost", soundEffects);
   };
 
   resetObjects = () => {
-    addSadSun(ctx);
     bird1.resetPos();
     blueBird1.resetPos();
     helicopter1.resetPos();
@@ -337,7 +330,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayCaught = () => {
-    addSun(ctx);
     helicopter1.updatePos(wind1);
     bird1.updatePos(helicopter1.posY, wind1);
     blueBird1.updatePos(helicopter1.posY, wind1);
@@ -352,7 +344,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayStandard = () => {
-    addSun(ctx);
     helicopter1.updatePos(wind1);
     bird1.updatePos(helicopter1.posY, wind1);
     blueBird1.updatePos(helicopter1.posY, wind1);
@@ -372,7 +363,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.fillText('So sorry you lost!', 220, 280);
     ctx.font = '50px tahoma';
     ctx.fillText("Press 'p' to Try Again", 270, 400);
-    addSadSun(ctx);
     gameStarted = false;
   };
 
@@ -399,14 +389,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     resetPage();
   };
 
-  let sunIcon = new Image();
-  sunIcon.src = "./assets/sunIcon.png";
-  addSun = (ctx) => { ctx.drawImage(sunIcon, 920, 20, 70, 70); };
-
-  let sadSunIcon = new Image();
-  sadSunIcon.src = "./assets/sadSunIcon.png";
-  addSadSun = (ctx) => { ctx.drawImage(sadSunIcon, 920, 20, 70, 70); };
-
   drawArrows = () => {
     arrowArr.forEach((arrow) => {
       arrow.updatePos(wind1);
@@ -428,7 +410,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   drawAll = () => {
     allObjects.forEach((obj) => {
-      obj.draw(ctx);
+      obj.draw(ctx, helicopter1);
     });
   };
 
@@ -476,6 +458,8 @@ class Arrow {
   constructor(posX, posY) {
     this.posX = -100;
     this.posY = -100;
+    this.width = 50;
+    this.height = 50;
     this.direction = "right";
     this.arrowIconLeft = new Image();
     this.arrowIconRight = new Image();
@@ -485,7 +469,7 @@ class Arrow {
 
   draw(ctx) {
     let arrowImage = this.direction === "right" ? this.arrowIconRight : this.arrowIconLeft;
-    Util.draw(ctx, arrowImage, this.posX, this.posY, 50, 50);
+    Util.draw(ctx, arrowImage, this.posX, this.posY, this.width, this.height);
   }
 
   shoot(helicopter) {
@@ -590,12 +574,14 @@ class Blimp {
   constructor(options) {
     this.posX = - 500 - (1000 * Math.random());
     this.posY = (600 * Math.random()) - 100;
+    this.width = 200;
+    this.height = 200;
     this.blimpIcon = new Image();
     this.blimpIcon.src = "./assets/blimpIcon.png";
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.blimpIcon, this.posX, this.posY, 200, 200);
+    Util.draw(ctx, this.blimpIcon, this.posX, this.posY, this.width, this.height);
   }
 
   updatePos(wind) {
@@ -629,6 +615,10 @@ class BlueBird {
   constructor(options) {
     this.posX = -1000 * Math.random();
     this.posY = 600 * Math.random();
+    this.feathersWidth = 100;
+    this.feathersHeight = 100;
+    this.birdWidth = 60;
+    this.birdHeight = 60;
     this.feathers = 0;
     this.birdShotCount = 0;
     this.feathersIcon = new Image();
@@ -651,12 +641,12 @@ class BlueBird {
   draw(ctx) {
     if (this.feathers > 0) {
       this.feathers -= 1;
-      Util.draw(ctx, this.feathersIcon, this.posX, this.posY, 100, 100);
+      Util.draw(ctx, this.feathersIcon, this.posX, this.posY, this.feathersWidth, this.feathersHeight);
       if (this.feathers === 0) {
         this.resetPos();
       }
     } else {
-      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this.posX, this.posY, 60, 60);
+      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this.posX, this.posY, this.birdWidth, this.birdHeight);
       this.imageCounter += (this.speed / 6);
       this.imageCounter = this.imageCounter % 15;
     }
@@ -700,12 +690,14 @@ class Cloud {
   constructor(options) {
     this.posX = 1200 + (1000 * Math.random());
     this.posY = (500 * Math.random()) - 100;
+    this.width = 350;
+    this.height = 350;
     this.cloudIcon = new Image();
     this.cloudIcon.src = "./assets/cloudIcon.png";
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.cloudIcon, this.posX, this.posY, 350, 350);
+    Util.draw(ctx, this.cloudIcon, this.posX, this.posY, this.width, this.height);
   }
 
   updatePos(wind) {
@@ -732,6 +724,52 @@ module.exports = Cloud;
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports) {
+
+const DrawCanvas = {
+
+  startPage(ctx){
+    ctx.clearRect(0, 0, 1000, 600);
+    ctx.fillStyle = "#053fff";
+    ctx.fillRect(0, 0, 1000, 600);
+    ctx.fillStyle = "white";
+    ctx.font = '80px tahoma';
+    ctx.fillText('Helicopter', 320, 150);
+    ctx.fillStyle = "white";
+    ctx.font = '45px tahoma';
+    ctx.fillText("Press 'p' to Start and Pause", 220, 270);
+    ctx.fillStyle = "black";
+    ctx.font = '26px tahoma';
+    ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 130, 380);
+    ctx.fillText('All objects, but clouds and wind, are dangerous! Careful to stay in the borders!', 60, 440);
+    ctx.fillText('Shoot birds and mosquitos using spacebar.', 250, 500);
+  },
+
+  playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount){
+    ctx.clearRect(0, 0, 1000, 600);
+    ctx.fillStyle = "#053fff";
+    ctx.fillRect(0, 0, 1000, 600);
+    ctx.fillStyle = "white";
+    ctx.font = '18px tahoma';
+    ctx.fillText(`Parachuters Saved: ${parachuter1.rescueCount}`, 10, 22);
+    ctx.fillText(`Parachuters Lost: ${parachuter1.lostCount}`, 10, 44);
+    ctx.fillText(`Birds Shot: ${bird1.birdShotCount + blueBird1.birdShotCount}`, 10, 66);
+    ctx.fillText(`Lives Left: ${lifeCount}`, 10, 88);
+  },
+
+  pausedPage(ctx){
+    ctx.font = '60px tahoma';
+    ctx.fillText("Paused", 410, 220);
+    ctx.font = '40px tahoma';
+    ctx.fillText("Press 'p' to resume", 340, 350);
+  },
+};
+
+module.exports = DrawCanvas;
+
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -742,6 +780,9 @@ class Helicopter {
     this.posY = 100;
     this.flipped = false;
     this.keysDown = [];
+    this.alive = true;
+    this.width = 100;
+    this.height = 100;
 
     this.helicopterIconFlipped = new Image();
     this.helicopterIconFlipped.src = "./assets/flippedhelicopterIcon.png";
@@ -753,13 +794,9 @@ class Helicopter {
 
   draw(ctx) {
     let helicopterImage = this.flipped ? this.helicopterIconFlipped : this.helicopterIcon;
-    Util.draw(ctx, helicopterImage, this.posX, this.posY, 100, 100);
+    helicopterImage = this.alive ? helicopterImage : this.skullIcon;
+    Util.draw(ctx, helicopterImage, this.posX, this.posY, this.width, this.height);
   }
-
-  drawSkull(ctx) {
-    ctx.drawImage(this.skullIcon, this.posX, this.posY, 100, 100);
-  }
-
 
   updatePos(wind) {
     this.posY += 2;
@@ -780,7 +817,7 @@ class Helicopter {
       }
 
     if (Util.inWindRange(this, wind)){
-      this.posX += 6.1;
+      this.posX += 5;
     }
   }
 
@@ -796,7 +833,7 @@ module.exports = Helicopter;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -807,10 +844,12 @@ class Lightning {
     this.posY = (-7000 * Math.random()) - 1000;
     this.lightningIcon = new Image();
     this.lightningIcon.src = "./assets/lightningIcon.png";
+    this.width = 100;
+    this.height = 700;
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.lightningIcon, this.posX, this.posY, 100, 700);
+    Util.draw(ctx, this.lightningIcon, this.posX, this.posY, this.width, this.height);
   }
 
   updatePos() {
@@ -830,7 +869,7 @@ module.exports = Lightning;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -839,12 +878,14 @@ class Mosquito {
   constructor(options) {
     this.posX = 600 * Math.random();
     this.posY = 800;
+    this.width = 25;
+    this.height = 25;
     this.mosquitoIcon = new Image();
     this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.mosquitoIcon, this.posX, this.posY, 25, 25);
+    Util.draw(ctx, this.mosquitoIcon, this.posX, this.posY, this.width, this.width);
   }
 
   updatePos(helicopterPosX, helicopterPosY, wind) {
@@ -876,7 +917,7 @@ module.exports = Mosquito;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -888,6 +929,8 @@ class Parachuter {
   constructor(options) {
     this.posX = 960 * Math.random();
     this.posY = -600 * Math.random();
+    this.width = 60;
+    this.height = 60;
     this.parachuterIcon = new Image();
     this.parachuterIcon.src = "./assets/parachuterIcon.png";
     this.parachuterSkullIcon = new Image();
@@ -898,15 +941,16 @@ class Parachuter {
   }
 
   draw(ctx) {
+    let image = this.parachuterIcon;
     if (this.dead > 0) {
       this.dead -= 1;
-      Util.draw(ctx, this.parachuterSkullIcon, this.posX, this.posY, 60, 60);
+      image = this.parachuterSkullIcon;
       if (this.dead === 0) {
         this.resetPos();
       }
-    } else {
-      Util.draw(ctx, this.parachuterIcon, this.posX, this.posY, 60, 60);
     }
+
+    Util.draw(ctx, image, this.posX, this.posY, this.width, this.height);
   }
 
   updatePos(wind) {
@@ -936,7 +980,7 @@ module.exports = Parachuter;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 let wah = new Audio('./assets/wah.wav');
@@ -997,7 +1041,7 @@ module.exports = Sound;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -1006,12 +1050,14 @@ class Wind {
   constructor(options) {
     this.posX = -1200 - (1000 * Math.random());
     this.posY = (500 * Math.random());
+    this.width = 250;
+    this.height = 250;
     this.windIcon = new Image();
     this.windIcon.src = "./assets/windIcon.png";
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.windIcon, this.posX, this.posY, 250, 250);
+    Util.draw(ctx, this.windIcon, this.posX, this.posY, this.width, this.height);
   }
 
   updatePos() {
@@ -1031,49 +1077,36 @@ module.exports = Wind;
 
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports) {
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
 
-const DrawCanvas = {
+const Util = __webpack_require__(0);
 
-  startPage(ctx){
-    ctx.clearRect(0, 0, 1000, 600);
-    ctx.fillStyle = "#053fff";
-    ctx.fillRect(0, 0, 1000, 600);
-    ctx.fillStyle = "white";
-    ctx.font = '80px tahoma';
-    ctx.fillText('Helicopter', 320, 150);
-    ctx.fillStyle = "white";
-    ctx.font = '45px tahoma';
-    ctx.fillText("Press 'p' to Start and Pause", 220, 270);
-    ctx.fillStyle = "black";
-    ctx.font = '26px tahoma';
-    ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 130, 380);
-    ctx.fillText('All objects, but clouds and wind, are dangerous! Careful to stay in the borders!', 60, 440);
-    ctx.fillText('Shoot birds and mosquitos using spacebar.', 250, 500);
-  },
+class Sun {
+  constructor(options) {
+    this.posX = 920;
+    this.posY = 20;
+    this.width = 70;
+    this.height = 70;
+    this.flipped = false;
+    this.keysDown = [];
+    this.alive = true;
 
-  playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount){
-    ctx.clearRect(0, 0, 1000, 600);
-    ctx.fillStyle = "#053fff";
-    ctx.fillRect(0, 0, 1000, 600);
-    ctx.fillStyle = "white";
-    ctx.font = '18px tahoma';
-    ctx.fillText(`Parachuters Saved: ${parachuter1.rescueCount}`, 10, 22);
-    ctx.fillText(`Parachuters Lost: ${parachuter1.lostCount}`, 10, 44);
-    ctx.fillText(`Birds Shot: ${bird1.birdShotCount + blueBird1.birdShotCount}`, 10, 66);
-    ctx.fillText(`Lives Left: ${lifeCount}`, 10, 88);
-  },
+    this.sunIcon = new Image();
+    this.sunIcon.src = "./assets/sunIcon.png";
 
-  pausedPage(ctx){
-    ctx.font = '60px tahoma';
-    ctx.fillText("Paused", 410, 220);
-    ctx.font = '40px tahoma';
-    ctx.fillText("Press 'p' to resume", 340, 350);
-  },
-};
+    this.sadSunIcon = new Image();
+    this.sadSunIcon.src = "./assets/sadSunIcon.png";
+  }
 
-module.exports = DrawCanvas;
+  draw(ctx, helicopter) {
+    let sunImage = helicopter.alive ? this.sunIcon : this.sadSunIcon;
+    Util.draw(ctx, sunImage, this.posX, this.posY, this.width, this.height);
+  }
+
+}
+
+module.exports = Sun;
 
 
 /***/ })
