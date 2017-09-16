@@ -26,6 +26,10 @@ class Sun {
     return true;
   }
 
+  resetPos(){
+    return true;
+  }
+
 }
 
 module.exports = Sun;

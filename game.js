@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let allObjects = [parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1, helicopter1, wind1, cloud1, sun1];
 
   parachuter1.rescueCount = 0;
-  parachuter1.lostCount = -1;
+  parachuter1.lostCount = 0;
   bird1.birdShotCount = 0;
   let lifeCount = 3;
   let inputs = [];
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         displayStandard();
       }
 
-    arrowCounter -= 1;
+    arrowTimer -= 1;
     setTimeout(resetPage, intervalSpeed);
   };
 
@@ -92,13 +92,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     if (event.keyCode === 32 && !paused){
-      if ( (gameStarted && helicopter1.alive) && (arrowCounter < 1 || passwordEntered())){
+      if ( (gameStarted && helicopter1.alive) && (arrowTimer < 1 || passwordEntered())){
         firstArrow = arrowArr[0];
         firstArrow.shoot(helicopter1);
         Sound.playSound("arrowShot", soundEffects);
         arrowArr = arrowArr.slice(1);
         arrowArr.push(firstArrow);
-        arrowCounter = 35;
+        arrowTimer = 35;
       }
     }
 
@@ -127,23 +127,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   resetObjects = () => {
-    bird1.resetPos();
-    blueBird1.resetPos();
-    helicopter1.resetPos();
-    parachuter1.resetPos();
-    parachuter1.lostCount -= 1;
-    blimp1.resetPos();
-    mosquito1.resetPos();
-    lightning1.resetPos();
-    wind1.resetPos();
-    cloud1.resetPos();
+    resetAllPos();
     resetArrows();
     drawArrows();
     drawAll();
   };
 
   displayCaught = () => {
-    parachuter1.resetPos(true);
     updateAllPos();
     drawArrows();
     drawAll();
@@ -166,22 +156,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   restartGame = () => {
     parachuter1.rescueCount = 0;
-    parachuter1.lostCount = -1;
+    parachuter1.lostCount = 0;
     bird1.birdShotCount = 0;
     blueBird1.birdShotCount = 0;
     lifeCount = 3;
-    helicopter1.resetPos();
     helicopter1.keysDown = [];
-    bird1.resetPos();
-    blueBird1.resetPos();
-    wind1.resetPos();
-    cloud1.resetPos();
+    resetAllPos();
     resetArrows();
-    parachuter1.resetPos(false);
-    blimp1.resetPos();
-    mosquito1.resetPos();
-    blimp1.resetPos();
-    lightning1.resetPos();
     gameStarted = true;
     inputs = [];
     resetPage();
@@ -218,7 +199,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
   };
 
-  let arrowCounter = 0;
+  resetAllPos = () => {
+    allObjects.forEach((obj) => {
+      obj.resetPos();
+    });
+  };
+
+  let arrowTimer = 0;
   addArrows();
 
   passwordEntered = () => {

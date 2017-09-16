@@ -14,7 +14,7 @@ class Parachuter {
     this.parachuterSkullIcon = new Image();
     this.parachuterSkullIcon.src = "./assets/skullIcon.png";
     this.rescueCount = 0;
-    this.lostCount = -1;
+    this.lostCount = 0;
     this.dead = 0;
   }
 
@@ -23,7 +23,8 @@ class Parachuter {
     if (this.dead > 0) {
       this.dead -= 1;
       image = this.parachuterSkullIcon;
-      if (this.dead === 0) {
+      if (this.dead === 1) {
+        this.lostCount += 1;
         this.resetPos();
       }
     }
@@ -34,6 +35,7 @@ class Parachuter {
   updatePos(wind) {
     this.posY += 1.4 + (this.rescueCount / 8);
     if (this.posY > 610) {
+      this.lostCount += 1;
       this.resetPos();
       wah.load();
       wah.play();
@@ -43,12 +45,7 @@ class Parachuter {
     }
   }
 
-  resetPos(saved) {
-    if (saved) {
-      this.rescueCount += 1;
-    } else {
-      this.lostCount += 1;
-    }
+  resetPos() {
     this.posX = 960 * Math.random();
     this.posY = -600 * Math.random();
   }

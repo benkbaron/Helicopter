@@ -37,7 +37,7 @@ const Util = {
     let xDistance = Math.abs(helicopter.posX - lightning.posX);
     let yDistance = lightning.posY + 650 - helicopter.posY;
 
-    if ((yDistance > 0 && yDistance < 700) && xDistance < 50){
+    if ((yDistance > 0 && yDistance < 700) && xDistance < 55){
       return true;
     }
   },
@@ -45,9 +45,13 @@ const Util = {
   checkCatch({helicopter, parachuter}) {
     let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [parachuter.posX + 25, parachuter.posY + 25]);
     if (space < 60){
-      catchSound.load();
-      catchSound.play();
-      return true;
+      if (parachuter.dead === 0) {
+        parachuter.rescueCount += 1;
+        parachuter.resetPos();
+        catchSound.load();
+        catchSound.play();
+        return true;
+      }
     }
   },
 

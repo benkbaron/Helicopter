@@ -106,7 +106,7 @@ const Util = {
     let xDistance = Math.abs(helicopter.posX - lightning.posX);
     let yDistance = lightning.posY + 650 - helicopter.posY;
 
-    if ((yDistance > 0 && yDistance < 700) && xDistance < 50){
+    if ((yDistance > 0 && yDistance < 700) && xDistance < 55){
       return true;
     }
   },
@@ -114,9 +114,13 @@ const Util = {
   checkCatch({helicopter, parachuter}) {
     let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [parachuter.posX + 25, parachuter.posY + 25]);
     if (space < 60){
-      catchSound.load();
-      catchSound.play();
-      return true;
+      if (parachuter.dead === 0) {
+        parachuter.rescueCount += 1;
+        parachuter.resetPos();
+        catchSound.load();
+        catchSound.play();
+        return true;
+      }
     }
   },
 
@@ -225,7 +229,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let allObjects = [parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1, helicopter1, wind1, cloud1, sun1];
 
   parachuter1.rescueCount = 0;
-  parachuter1.lostCount = -1;
+  parachuter1.lostCount = 0;
   bird1.birdShotCount = 0;
   let lifeCount = 3;
   let inputs = [];
@@ -261,7 +265,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         displayStandard();
       }
 
-    arrowCounter -= 1;
+    arrowTimer -= 1;
     setTimeout(resetPage, intervalSpeed);
   };
 
@@ -279,13 +283,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     if (event.keyCode === 32 && !paused){
-      if ( (gameStarted && helicopter1.alive) && (arrowCounter < 1 || passwordEntered())){
+      if ( (gameStarted && helicopter1.alive) && (arrowTimer < 1 || passwordEntered())){
         firstArrow = arrowArr[0];
         firstArrow.shoot(helicopter1);
         Sound.playSound("arrowShot", soundEffects);
         arrowArr = arrowArr.slice(1);
         arrowArr.push(firstArrow);
-        arrowCounter = 35;
+        arrowTimer = 35;
       }
     }
 
@@ -314,23 +318,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   resetObjects = () => {
-    bird1.resetPos();
-    blueBird1.resetPos();
-    helicopter1.resetPos();
-    parachuter1.resetPos();
-    parachuter1.lostCount -= 1;
-    blimp1.resetPos();
-    mosquito1.resetPos();
-    lightning1.resetPos();
-    wind1.resetPos();
-    cloud1.resetPos();
+    resetAllPos();
     resetArrows();
     drawArrows();
     drawAll();
   };
 
   displayCaught = () => {
-    parachuter1.resetPos(true);
     updateAllPos();
     drawArrows();
     drawAll();
@@ -353,22 +347,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   restartGame = () => {
     parachuter1.rescueCount = 0;
-    parachuter1.lostCount = -1;
+    parachuter1.lostCount = 0;
     bird1.birdShotCount = 0;
     blueBird1.birdShotCount = 0;
     lifeCount = 3;
-    helicopter1.resetPos();
     helicopter1.keysDown = [];
-    bird1.resetPos();
-    blueBird1.resetPos();
-    wind1.resetPos();
-    cloud1.resetPos();
+    resetAllPos();
     resetArrows();
-    parachuter1.resetPos(false);
-    blimp1.resetPos();
-    mosquito1.resetPos();
-    blimp1.resetPos();
-    lightning1.resetPos();
     gameStarted = true;
     inputs = [];
     resetPage();
@@ -405,7 +390,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
   };
 
-  let arrowCounter = 0;
+  resetAllPos = () => {
+    allObjects.forEach((obj) => {
+      obj.resetPos();
+    });
+  };
+
+  let arrowTimer = 0;
   addArrows();
 
   passwordEntered = () => {
@@ -927,7 +918,7 @@ class Parachuter {
     this.parachuterSkullIcon = new Image();
     this.parachuterSkullIcon.src = "./assets/skullIcon.png";
     this.rescueCount = 0;
-    this.lostCount = -1;
+    this.lostCount = 0;
     this.dead = 0;
   }
 
@@ -936,7 +927,8 @@ class Parachuter {
     if (this.dead > 0) {
       this.dead -= 1;
       image = this.parachuterSkullIcon;
-      if (this.dead === 0) {
+      if (this.dead === 1) {
+        this.lostCount += 1;
         this.resetPos();
       }
     }
@@ -947,6 +939,7 @@ class Parachuter {
   updatePos(wind) {
     this.posY += 1.4 + (this.rescueCount / 8);
     if (this.posY > 610) {
+      this.lostCount += 1;
       this.resetPos();
       wah.load();
       wah.play();
@@ -956,12 +949,7 @@ class Parachuter {
     }
   }
 
-  resetPos(saved) {
-    if (saved) {
-      this.rescueCount += 1;
-    } else {
-      this.lostCount += 1;
-    }
+  resetPos() {
     this.posX = 960 * Math.random();
     this.posY = -600 * Math.random();
   }
@@ -1096,6 +1084,10 @@ class Sun {
   }
 
   updatePos(){
+    return true;
+  }
+
+  resetPos(){
     return true;
   }
 
