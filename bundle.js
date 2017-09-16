@@ -173,8 +173,8 @@ const Util = {
     return false;
   },
 
-  draw(ctx, image, xCoord, yCoord, width, height) {
-    ctx.drawImage(image, xCoord, yCoord, width, height);
+  draw(ctx, image, object, width, height) {
+    ctx.drawImage(image, object.posX, object.posY, width, height);
   },
 };
 
@@ -469,7 +469,7 @@ class Arrow {
 
   draw(ctx) {
     let arrowImage = this.direction === "right" ? this.arrowIconRight : this.arrowIconLeft;
-    Util.draw(ctx, arrowImage, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, arrowImage, this, this.width, this.height);
   }
 
   shoot(helicopter) {
@@ -527,12 +527,12 @@ class Bird {
   draw(ctx) {
     if (this.feathers > 0) {
       this.feathers -= 1;
-      Util.draw(ctx, this.feathersIcon, this.posX, this.posY, 100, 100);
+      Util.draw(ctx, this.feathersIcon, this, 100, 100);
       if (this.feathers === 0) {
         this.resetPos();
       }
     } else {
-      Util.draw(ctx, this.birdIcon, this.posX, this.posY, 50, 50);
+      Util.draw(ctx, this.birdIcon, this, 50, 50);
     }
   }
 
@@ -581,7 +581,7 @@ class Blimp {
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.blimpIcon, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, this.blimpIcon, this, this.width, this.height);
   }
 
   updatePos(wind) {
@@ -641,12 +641,12 @@ class BlueBird {
   draw(ctx) {
     if (this.feathers > 0) {
       this.feathers -= 1;
-      Util.draw(ctx, this.feathersIcon, this.posX, this.posY, this.feathersWidth, this.feathersHeight);
+      Util.draw(ctx, this.feathersIcon, this, this.feathersWidth, this.feathersHeight);
       if (this.feathers === 0) {
         this.resetPos();
       }
     } else {
-      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this.posX, this.posY, this.birdWidth, this.birdHeight);
+      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this, this.birdWidth, this.birdHeight);
       this.imageCounter += (this.speed / 6);
       this.imageCounter = this.imageCounter % 15;
     }
@@ -697,7 +697,7 @@ class Cloud {
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.cloudIcon, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, this.cloudIcon, this, this.width, this.height);
   }
 
   updatePos(wind) {
@@ -795,7 +795,7 @@ class Helicopter {
   draw(ctx) {
     let helicopterImage = this.flipped ? this.helicopterIconFlipped : this.helicopterIcon;
     helicopterImage = this.alive ? helicopterImage : this.skullIcon;
-    Util.draw(ctx, helicopterImage, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, helicopterImage, this, this.width, this.height);
   }
 
   updatePos(wind) {
@@ -849,7 +849,7 @@ class Lightning {
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.lightningIcon, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, this.lightningIcon, this, this.width, this.height);
   }
 
   updatePos() {
@@ -885,7 +885,7 @@ class Mosquito {
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.mosquitoIcon, this.posX, this.posY, this.width, this.width);
+    Util.draw(ctx, this.mosquitoIcon, this, this.width, this.width);
   }
 
   updatePos(helicopterPosX, helicopterPosY, wind) {
@@ -950,7 +950,7 @@ class Parachuter {
       }
     }
 
-    Util.draw(ctx, image, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, image, this, this.width, this.height);
   }
 
   updatePos(wind) {
@@ -1057,7 +1057,7 @@ class Wind {
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.windIcon, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, this.windIcon, this, this.width, this.height);
   }
 
   updatePos() {
@@ -1101,7 +1101,7 @@ class Sun {
 
   draw(ctx, helicopter) {
     let sunImage = helicopter.alive ? this.sunIcon : this.sadSunIcon;
-    Util.draw(ctx, sunImage, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, sunImage, this, this.width, this.height);
   }
 
 }

@@ -11,7 +11,7 @@ class Blimp {
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.blimpIcon, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, this.blimpIcon, this, this.width, this.height);
   }
 
   updatePos(wind) {

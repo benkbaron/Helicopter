@@ -19,7 +19,7 @@ class Sun {
 
   draw(ctx, helicopter) {
     let sunImage = helicopter.alive ? this.sunIcon : this.sadSunIcon;
-    Util.draw(ctx, sunImage, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, sunImage, this, this.width, this.height);
   }
 
 }

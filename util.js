@@ -104,8 +104,8 @@ const Util = {
     return false;
   },
 
-  draw(ctx, image, xCoord, yCoord, width, height) {
-    ctx.drawImage(image, xCoord, yCoord, width, height);
+  draw(ctx, image, object, width, height) {
+    ctx.drawImage(image, object.posX, object.posY, width, height);
   },
 };
 

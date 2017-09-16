@@ -11,7 +11,7 @@ class Lightning {
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.lightningIcon, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, this.lightningIcon, this, this.width, this.height);
   }
 
   updatePos() {

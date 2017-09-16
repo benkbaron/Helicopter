@@ -11,7 +11,7 @@ class Mosquito {
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.mosquitoIcon, this.posX, this.posY, this.width, this.width);
+    Util.draw(ctx, this.mosquitoIcon, this, this.width, this.width);
   }
 
   updatePos(helicopterPosX, helicopterPosY, wind) {

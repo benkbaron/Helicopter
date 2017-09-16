@@ -15,7 +15,7 @@ class Arrow {
 
   draw(ctx) {
     let arrowImage = this.direction === "right" ? this.arrowIconRight : this.arrowIconLeft;
-    Util.draw(ctx, arrowImage, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, arrowImage, this, this.width, this.height);
   }
 
   shoot(helicopter) {

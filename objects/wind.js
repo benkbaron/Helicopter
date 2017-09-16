@@ -11,7 +11,7 @@ class Wind {
   }
 
   draw(ctx) {
-    Util.draw(ctx, this.windIcon, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, this.windIcon, this, this.width, this.height);
   }
 
   updatePos() {

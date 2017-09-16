@@ -28,7 +28,7 @@ class Parachuter {
       }
     }
 
-    Util.draw(ctx, image, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, image, this, this.width, this.height);
   }
 
   updatePos(wind) {

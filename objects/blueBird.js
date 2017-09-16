@@ -30,12 +30,12 @@ class BlueBird {
   draw(ctx) {
     if (this.feathers > 0) {
       this.feathers -= 1;
-      Util.draw(ctx, this.feathersIcon, this.posX, this.posY, this.feathersWidth, this.feathersHeight);
+      Util.draw(ctx, this.feathersIcon, this, this.feathersWidth, this.feathersHeight);
       if (this.feathers === 0) {
         this.resetPos();
       }
     } else {
-      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this.posX, this.posY, this.birdWidth, this.birdHeight);
+      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this, this.birdWidth, this.birdHeight);
       this.imageCounter += (this.speed / 6);
       this.imageCounter = this.imageCounter % 15;
     }

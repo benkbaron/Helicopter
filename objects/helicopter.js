@@ -21,7 +21,7 @@ class Helicopter {
   draw(ctx) {
     let helicopterImage = this.flipped ? this.helicopterIconFlipped : this.helicopterIcon;
     helicopterImage = this.alive ? helicopterImage : this.skullIcon;
-    Util.draw(ctx, helicopterImage, this.posX, this.posY, this.width, this.height);
+    Util.draw(ctx, helicopterImage, this, this.width, this.height);
   }
 
   updatePos(wind) {
