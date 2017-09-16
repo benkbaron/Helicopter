@@ -28,9 +28,9 @@ class Arrow {
 
   updatePos(wind) {
     if (this.direction === "right") {
-      this.posX += 4;
+      this.posX += 5;
     } else {
-      this.posX -= 4;
+      this.posX -= 5;
     }
 
     if (this.posX > 1050 || this.posX < -50) {

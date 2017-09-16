@@ -25,9 +25,9 @@ class Bird {
     }
   }
 
-  updatePos(helicopterPosY, wind) {
+  updatePos(wind, helicopter) {
     this.posX -= this.speed + (this.birdShotCount / 8);
-    if (helicopterPosY > this.posY) {
+    if (helicopter.posY > this.posY) {
       this.posY += 1;
     } else {
       this.posY -= 1;

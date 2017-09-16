@@ -97,8 +97,8 @@ const Util = {
   },
 
   inWindRange(object, wind) {
-    if ((object.posX > wind.posX && object.posX < wind.posX + 500) && ((wind.posX > -300) &&
-        (object.posY < wind.posY + 150 && object.posY > wind.posY - 50))) {
+    if ((object.posX > wind.posX && object.posX < wind.posX + 450) && ((wind.posX > -300) &&
+        (object.posY < wind.posY + 200 && object.posY > wind.posY - 100))) {
           return true;
         }
     return false;

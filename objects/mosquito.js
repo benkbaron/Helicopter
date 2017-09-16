@@ -14,14 +14,14 @@ class Mosquito {
     Util.draw(ctx, this.mosquitoIcon, this, this.width, this.width);
   }
 
-  updatePos(helicopterPosX, helicopterPosY, wind) {
-    if (helicopterPosX > this.posX) {
+  updatePos(wind, helicopter) {
+    if (helicopter.posX > this.posX) {
       this.posX += 3/4;
     } else {
       this.posX -= 3/4;
     }
 
-    if (helicopterPosY > this.posY) {
+    if (helicopter.posY > this.posY) {
       this.posY += 3/4;
     } else {
       this.posY -= 3/4;

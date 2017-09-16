@@ -143,29 +143,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayCaught = () => {
-    helicopter1.updatePos(wind1);
-    bird1.updatePos(helicopter1.posY, wind1);
-    blueBird1.updatePos(helicopter1.posY, wind1);
     parachuter1.resetPos(true);
-    blimp1.updatePos(wind1);
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
-    lightning1.updatePos();
-    wind1.updatePos();
-    cloud1.updatePos(wind1);
+    updateAllPos();
     drawArrows();
     drawAll();
   };
 
   displayStandard = () => {
-    helicopter1.updatePos(wind1);
-    bird1.updatePos(helicopter1.posY, wind1);
-    blueBird1.updatePos(helicopter1.posY, wind1);
-    parachuter1.updatePos(wind1);
-    blimp1.updatePos(wind1);
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
-    lightning1.updatePos();
-    wind1.updatePos();
-    cloud1.updatePos(wind1);
+    updateAllPos();
     drawArrows();
     drawAll();
   };
@@ -224,6 +209,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
   drawAll = () => {
     allObjects.forEach((obj) => {
       obj.draw(ctx, helicopter1);
+    });
+  };
+
+  updateAllPos = () => {
+    allObjects.forEach((obj) => {
+      obj.updatePos(wind1, helicopter1);
     });
   };
 

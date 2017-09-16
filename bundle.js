@@ -166,8 +166,8 @@ const Util = {
   },
 
   inWindRange(object, wind) {
-    if ((object.posX > wind.posX && object.posX < wind.posX + 500) && ((wind.posX > -300) &&
-        (object.posY < wind.posY + 150 && object.posY > wind.posY - 50))) {
+    if ((object.posX > wind.posX && object.posX < wind.posX + 450) && ((wind.posX > -300) &&
+        (object.posY < wind.posY + 200 && object.posY > wind.posY - 100))) {
           return true;
         }
     return false;
@@ -330,29 +330,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayCaught = () => {
-    helicopter1.updatePos(wind1);
-    bird1.updatePos(helicopter1.posY, wind1);
-    blueBird1.updatePos(helicopter1.posY, wind1);
     parachuter1.resetPos(true);
-    blimp1.updatePos(wind1);
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
-    lightning1.updatePos();
-    wind1.updatePos();
-    cloud1.updatePos(wind1);
+    updateAllPos();
     drawArrows();
     drawAll();
   };
 
   displayStandard = () => {
-    helicopter1.updatePos(wind1);
-    bird1.updatePos(helicopter1.posY, wind1);
-    blueBird1.updatePos(helicopter1.posY, wind1);
-    parachuter1.updatePos(wind1);
-    blimp1.updatePos(wind1);
-    mosquito1.updatePos(helicopter1.posX, helicopter1.posY, wind1);
-    lightning1.updatePos();
-    wind1.updatePos();
-    cloud1.updatePos(wind1);
+    updateAllPos();
     drawArrows();
     drawAll();
   };
@@ -411,6 +396,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
   drawAll = () => {
     allObjects.forEach((obj) => {
       obj.draw(ctx, helicopter1);
+    });
+  };
+
+  updateAllPos = () => {
+    allObjects.forEach((obj) => {
+      obj.updatePos(wind1, helicopter1);
     });
   };
 
@@ -482,9 +473,9 @@ class Arrow {
 
   updatePos(wind) {
     if (this.direction === "right") {
-      this.posX += 4;
+      this.posX += 5;
     } else {
-      this.posX -= 4;
+      this.posX -= 5;
     }
 
     if (this.posX > 1050 || this.posX < -50) {
@@ -536,9 +527,9 @@ class Bird {
     }
   }
 
-  updatePos(helicopterPosY, wind) {
+  updatePos(wind, helicopter) {
     this.posX -= this.speed + (this.birdShotCount / 8);
-    if (helicopterPosY > this.posY) {
+    if (helicopter.posY > this.posY) {
       this.posY += 1;
     } else {
       this.posY -= 1;
@@ -652,9 +643,9 @@ class BlueBird {
     }
   }
 
-  updatePos(helicopterPosY, wind) {
+  updatePos(wind, helicopter) {
     this.posX += this.speed + (this.birdShotCount / 8);
-    if (helicopterPosY > this.posY) {
+    if (helicopter.posY > this.posY) {
       this.posY += 1;
     } else {
       this.posY -= 1;
@@ -888,14 +879,14 @@ class Mosquito {
     Util.draw(ctx, this.mosquitoIcon, this, this.width, this.width);
   }
 
-  updatePos(helicopterPosX, helicopterPosY, wind) {
-    if (helicopterPosX > this.posX) {
+  updatePos(wind, helicopter) {
+    if (helicopter.posX > this.posX) {
       this.posX += 3/4;
     } else {
       this.posX -= 3/4;
     }
 
-    if (helicopterPosY > this.posY) {
+    if (helicopter.posY > this.posY) {
       this.posY += 3/4;
     } else {
       this.posY -= 3/4;
@@ -1102,6 +1093,10 @@ class Sun {
   draw(ctx, helicopter) {
     let sunImage = helicopter.alive ? this.sunIcon : this.sadSunIcon;
     Util.draw(ctx, sunImage, this, this.width, this.height);
+  }
+
+  updatePos(){
+    return true;
   }
 
 }

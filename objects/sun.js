@@ -22,6 +22,10 @@ class Sun {
     Util.draw(ctx, sunImage, this, this.width, this.height);
   }
 
+  updatePos(){
+    return true;
+  }
+
 }
 
 module.exports = Sun;
