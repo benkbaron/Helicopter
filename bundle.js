@@ -71,7 +71,7 @@ let wah = new Audio('./assets/wah.wav');
 wah.volume = 0.05;
 
 let catchSound = new Audio('./assets/catchSound.wav');
-catchSound.volume = 0.3;
+catchSound.volume = 0.25;
 
 const Util = {
 
