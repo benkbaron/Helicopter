@@ -4,6 +4,10 @@ class Bird {
   constructor(options) {
     this.posX = 1050;
     this.posY = 600 * Math.random();
+    this.width = 50;
+    this.height = 50;
+    this.featherWidth = 100;
+    this.featherHeight = 100;
     this.feathers = 0;
     this.birdShotCount = 0;
     this.feathersIcon = new Image();
@@ -16,12 +20,12 @@ class Bird {
   draw(ctx) {
     if (this.feathers > 0) {
       this.feathers -= 1;
-      Util.draw(ctx, this.feathersIcon, this, 100, 100);
+      Util.draw(ctx, this.feathersIcon, this, this.featherWidth, this.featherHeight);
       if (this.feathers === 0) {
         this.resetPos();
       }
     } else {
-      Util.draw(ctx, this.birdIcon, this, 50, 50);
+      Util.draw(ctx, this.birdIcon, this, this.width, this.height);
     }
   }
 

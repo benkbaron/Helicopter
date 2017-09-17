@@ -127,7 +127,9 @@ const Util = {
   checkHit({arrowArr, bird, blueBird, mosquito, parachuter}) {
     let answer = false;
     arrowArr.forEach((arrow) => {
-    let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
+    let arrowX = arrow.posX + (arrow.width / 2);
+    let arrowY = arrow.posY + (arrow.height / 2);
+    let space = this.distance([arrowX, arrowY], [bird.posX + (bird.width / 2), bird.posY + (bird.height / 2)]);
       if (space < 35 && bird.feathers === 0){
         bird.feathers = 25;
         bird.birdShotCount += 1;
@@ -135,15 +137,15 @@ const Util = {
         answer = true;
       }
 
-      space = this.distance([arrow.posX + 10, arrow.posY], [blueBird.posX + 30, blueBird.posY + 20]);
-      if (space < 35){
+      space = this.distance([arrowX, arrowY], [blueBird.posX + (blueBird.width / 2), blueBird.posY + (blueBird.height / 2)]);
+      if (space < 30){
         blueBird.feathers = 25;
         blueBird.birdShotCount += 1;
         arrow.resetPos();
         answer = true;
       }
 
-      space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
+      space = this.distance([arrowX, arrowY], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
         parachuter.dead = 25;
         wah.load();
@@ -152,8 +154,8 @@ const Util = {
         answer = true;
       }
 
-      space = this.distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
-      if (space < 30) {
+      space = this.distance([arrowX, arrowY], [mosquito.posX + (mosquito.width / 2), mosquito.posY + (mosquito.height / 2)]);
+      if (space < 20) {
         mosquito.resetPos();
         arrow.resetPos();
         answer = true;
@@ -169,11 +171,9 @@ const Util = {
     return Math.sqrt(a*a + b*b);
   },
 
-  inWindRange(object, wind) {
-    if ((object.posX > wind.posX && object.posX < wind.posX + 450) && ((wind.posX > -300) &&
-        (object.posY < wind.posY + 200 && object.posY > wind.posY - 100))) {
-          return true;
-        }
+  inWindRange(obj, wind) {
+    let space = this.distance([wind.posX, wind.posY], [obj.posX + (obj.width / 2), obj.posY + (obj.height / 2)]);
+    if (space < 450 && wind.posX < obj.posX) return true;
     return false;
   },
 
@@ -200,9 +200,9 @@ const Lightning = __webpack_require__(9);
 const Mosquito = __webpack_require__(10);
 const Parachuter = __webpack_require__(11);
 const Sound = __webpack_require__(12);
-const Sun = __webpack_require__(14);
+const Sun = __webpack_require__(13);
 const Util = __webpack_require__(0);
-const Wind = __webpack_require__(13);
+const Wind = __webpack_require__(14);
 
 let reset;
 let paused = false;
@@ -497,6 +497,10 @@ class Bird {
   constructor(options) {
     this.posX = 1050;
     this.posY = 600 * Math.random();
+    this.width = 50;
+    this.height = 50;
+    this.featherWidth = 100;
+    this.featherHeight = 100;
     this.feathers = 0;
     this.birdShotCount = 0;
     this.feathersIcon = new Image();
@@ -509,12 +513,12 @@ class Bird {
   draw(ctx) {
     if (this.feathers > 0) {
       this.feathers -= 1;
-      Util.draw(ctx, this.feathersIcon, this, 100, 100);
+      Util.draw(ctx, this.feathersIcon, this, this.featherWidth, this.featherHeight);
       if (this.feathers === 0) {
         this.resetPos();
       }
     } else {
-      Util.draw(ctx, this.birdIcon, this, 50, 50);
+      Util.draw(ctx, this.birdIcon, this, this.width, this.height);
     }
   }
 
@@ -595,12 +599,12 @@ const Util = __webpack_require__(0);
 
 class BlueBird {
   constructor(options) {
-    this.posX = -1000 * Math.random();
+    this.posX = (-1000 * Math.random()) - 50;
     this.posY = 600 * Math.random();
     this.feathersWidth = 100;
     this.feathersHeight = 100;
-    this.birdWidth = 60;
-    this.birdHeight = 60;
+    this.width = 60;
+    this.height = 60;
     this.feathers = 0;
     this.birdShotCount = 0;
     this.feathersIcon = new Image();
@@ -628,7 +632,7 @@ class BlueBird {
         this.resetPos();
       }
     } else {
-      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this, this.birdWidth, this.birdHeight);
+      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this, this.width, this.height);
       this.imageCounter += (this.speed / 6);
       this.imageCounter = this.imageCounter % 15;
     }
@@ -652,7 +656,7 @@ class BlueBird {
   }
 
   resetPos() {
-    this.posX = -1000 * Math.random();
+    this.posX = (-1000 * Math.random()) - 50;
     this.posY = 600 * Math.random();
     this.speed = 2.5 * (Math.random() + 0.35);
     this.feathers = 0;
@@ -1025,42 +1029,6 @@ module.exports = Sound;
 
 const Util = __webpack_require__(0);
 
-class Wind {
-  constructor(options) {
-    this.posX = -1200 - (1000 * Math.random());
-    this.posY = (500 * Math.random());
-    this.width = 250;
-    this.height = 250;
-    this.windIcon = new Image();
-    this.windIcon.src = "./assets/windIcon.png";
-  }
-
-  draw(ctx) {
-    Util.draw(ctx, this.windIcon, this, this.width, this.height);
-  }
-
-  updatePos() {
-    this.posX += 3;
-    if (this.posX > 1200) {
-      this.resetPos();
-    }
-  }
-
-  resetPos() {
-    this.posX = -1200 - (1000 * Math.random());
-    this.posY = 500 * Math.random();
-  }
-}
-
-module.exports = Wind;
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Util = __webpack_require__(0);
-
 class Sun {
   constructor(options) {
     this.posX = 920;
@@ -1094,6 +1062,42 @@ class Sun {
 }
 
 module.exports = Sun;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(0);
+
+class Wind {
+  constructor(options) {
+    this.posX = -1200 - (1000 * Math.random());
+    this.posY = (500 * Math.random());
+    this.width = 250;
+    this.height = 250;
+    this.windIcon = new Image();
+    this.windIcon.src = "./assets/windIcon.png";
+  }
+
+  draw(ctx) {
+    Util.draw(ctx, this.windIcon, this, this.width, this.height);
+  }
+
+  updatePos() {
+    this.posX += 3;
+    if (this.posX > 1200) {
+      this.resetPos();
+    }
+  }
+
+  resetPos() {
+    this.posX = -1200 - (1000 * Math.random());
+    this.posY = 500 * Math.random();
+  }
+}
+
+module.exports = Wind;
 
 
 /***/ })

@@ -2,12 +2,12 @@ const Util = require("../util");
 
 class BlueBird {
   constructor(options) {
-    this.posX = -1000 * Math.random();
+    this.posX = (-1000 * Math.random()) - 50;
     this.posY = 600 * Math.random();
     this.feathersWidth = 100;
     this.feathersHeight = 100;
-    this.birdWidth = 60;
-    this.birdHeight = 60;
+    this.width = 60;
+    this.height = 60;
     this.feathers = 0;
     this.birdShotCount = 0;
     this.feathersIcon = new Image();
@@ -35,7 +35,7 @@ class BlueBird {
         this.resetPos();
       }
     } else {
-      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this, this.birdWidth, this.birdHeight);
+      Util.draw(ctx, this.blueBirdImages[Math.floor(this.imageCounter)], this, this.width, this.height);
       this.imageCounter += (this.speed / 6);
       this.imageCounter = this.imageCounter % 15;
     }
@@ -59,7 +59,7 @@ class BlueBird {
   }
 
   resetPos() {
-    this.posX = -1000 * Math.random();
+    this.posX = (-1000 * Math.random()) - 50;
     this.posY = 600 * Math.random();
     this.speed = 2.5 * (Math.random() + 0.35);
     this.feathers = 0;

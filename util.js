@@ -58,7 +58,9 @@ const Util = {
   checkHit({arrowArr, bird, blueBird, mosquito, parachuter}) {
     let answer = false;
     arrowArr.forEach((arrow) => {
-    let space = this.distance([arrow.posX + 10, arrow.posY], [bird.posX + 30, bird.posY + 20]);
+    let arrowX = arrow.posX + (arrow.width / 2);
+    let arrowY = arrow.posY + (arrow.height / 2);
+    let space = this.distance([arrowX, arrowY], [bird.posX + (bird.width / 2), bird.posY + (bird.height / 2)]);
       if (space < 35 && bird.feathers === 0){
         bird.feathers = 25;
         bird.birdShotCount += 1;
@@ -66,15 +68,15 @@ const Util = {
         answer = true;
       }
 
-      space = this.distance([arrow.posX + 10, arrow.posY], [blueBird.posX + 30, blueBird.posY + 20]);
-      if (space < 35){
+      space = this.distance([arrowX, arrowY], [blueBird.posX + (blueBird.width / 2), blueBird.posY + (blueBird.height / 2)]);
+      if (space < 30){
         blueBird.feathers = 25;
         blueBird.birdShotCount += 1;
         arrow.resetPos();
         answer = true;
       }
 
-      space = this.distance([arrow.posX + 10, arrow.posY], [parachuter.posX + 25, parachuter.posY + 15]);
+      space = this.distance([arrowX, arrowY], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
         parachuter.dead = 25;
         wah.load();
@@ -83,8 +85,8 @@ const Util = {
         answer = true;
       }
 
-      space = this.distance([arrow.posX + 10, arrow.posY], [mosquito.posX, mosquito.posY]);
-      if (space < 30) {
+      space = this.distance([arrowX, arrowY], [mosquito.posX + (mosquito.width / 2), mosquito.posY + (mosquito.height / 2)]);
+      if (space < 20) {
         mosquito.resetPos();
         arrow.resetPos();
         answer = true;
@@ -100,11 +102,9 @@ const Util = {
     return Math.sqrt(a*a + b*b);
   },
 
-  inWindRange(object, wind) {
-    if ((object.posX > wind.posX && object.posX < wind.posX + 450) && ((wind.posX > -300) &&
-        (object.posY < wind.posY + 200 && object.posY > wind.posY - 100))) {
-          return true;
-        }
+  inWindRange(obj, wind) {
+    let space = this.distance([wind.posX, wind.posY], [obj.posX + (obj.width / 2), obj.posY + (obj.height / 2)]);
+    if (space < 450 && wind.posX < obj.posX) return true;
     return false;
   },
 
