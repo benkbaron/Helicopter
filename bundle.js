@@ -87,7 +87,7 @@ const Util = {
       return true;
     }
 
-    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [blueBird.posX + 25, blueBird.posY + 25]);
+    space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [blueBird.posX + (blueBird.width / 2), blueBird.posY + (blueBird.height / 2)]);
     if (space < 70 && blueBird.feathers === 0){
       blueBird.feathers = 25;
       return true;
@@ -137,10 +137,46 @@ const Util = {
         answer = true;
       }
 
+      space = this.distance([bird.posX + (bird.width / 2), bird.posY + (bird.height / 2)], [blueBird.posX + (blueBird.width / 2), blueBird.posY + (blueBird.height / 2)]);
+      if (space < 20 && (bird.feathers === 0 && blueBird.feathers === 0)){
+        blueBird.feathers = 25;
+        bird.feathers = 25;
+        answer = true;
+      }
+
       space = this.distance([arrowX, arrowY], [blueBird.posX + (blueBird.width / 2), blueBird.posY + (blueBird.height / 2)]);
       if (space < 30){
         blueBird.feathers = 25;
         blueBird.birdShotCount += 1;
+        arrow.resetPos();
+        answer = true;
+      }
+
+      space = this.distance([bird.posX + (bird.width / 2), bird.posY + (bird.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
+      if (space < 30 && parachuter.dead === 0){
+        bird.feathers = 25;
+        parachuter.dead = 25;
+        wah.load();
+        wah.play();
+        arrow.resetPos();
+        answer = true;
+      }
+      space = this.distance([mosquito.posX + (mosquito.width / 2), mosquito.posY + (mosquito.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
+      if (space < 30 && parachuter.dead === 0){
+        mosquito.resetPos();
+        parachuter.dead = 25;
+        wah.load();
+        wah.play();
+        arrow.resetPos();
+        answer = true;
+      }
+
+      space = this.distance([blueBird.posX + (blueBird.width / 2), blueBird.posY + (blueBird.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
+      if (space < 30 && parachuter.dead === 0){
+        blueBird.feathers = 25;
+        parachuter.dead = 25;
+        wah.load();
+        wah.play();
         arrow.resetPos();
         answer = true;
       }
