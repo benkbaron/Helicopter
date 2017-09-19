@@ -251,6 +251,18 @@ fetchHighScores = () => {
   });
 };
 
+let scoreData;
+
+sendScores = () => {
+  $DJ.ajax({
+    method: "POST",
+    url: "https://helicopterbackend.herokuapp.com/api/scores",
+    data: scoreData,
+    success: (data) => {},
+    error: () => alert("Error in highscores. Sorry."),
+  });
+};
+
 let parachuterHighScore;
 let birdsHighScore;
 
@@ -392,6 +404,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayGameOver = () => {
+    scoreData = new FormData();
+    scoreData.append("score[parachuters]", parachuter1.rescueCount);
+    scoreData.append("score[birds]", bird1.birdShotCount + blueBird1.birdShotCount);
+
     ctx.fillStyle = "white";
     ctx.font = '80px tahoma';
     ctx.fillText('So sorry you lost!', 220, 280);
