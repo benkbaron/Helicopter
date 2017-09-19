@@ -20,7 +20,7 @@ fetchHighScores = () => {
     method: "GET",
     url: "https://helicopterbackend.herokuapp.com/api/scores",
     success: (data) => { showHighScores(data);},
-    error: () => alert("Error in highscores. Sorry."),
+    error: () => alert("Error in fetching highscores. Sorry."),
   });
 };
 
@@ -32,7 +32,7 @@ sendScores = (scoreData) => {
     url: "https://helicopterbackend.herokuapp.com/api/scores",
     data: scoreData,
     success: (data) => {},
-    error: () => alert("Error in highscores. Sorry."),
+    error: () => alert("Error in sending score to database. Sorry."),
   });
 };
 
@@ -183,12 +183,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     sendScores(scoreData);
     ctx.fillStyle = "white";
     ctx.font = '80px tahoma';
-    ctx.fillText('So sorry you lost!', 220, 280);
+    ctx.fillText('So sorry you lost!', 220, 170);
     ctx.font = '50px tahoma';
-    ctx.fillText("Press 'p' to Try Again", 270, 400);
+    ctx.fillText("Press 'p' to Try Again", 270, 260);
     ctx.font = '28px tahoma';
-    ctx.fillText(`Parachuters Saved Highscore: ${parachuterHighScore}`, 320, 450);
-    ctx.fillText(`Birds Shot Highscore: ${birdsHighScore}`, 365, 500);
+    ctx.fillText(`Parachuters Saved Highscore: ${parachuterHighScore}`, 320, 350);
+    ctx.fillText(`Birds Shot Highscore: ${birdsHighScore}`, 365, 390);
+    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, 320, 430);
+    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, 365, 470);
     gameStarted = false;
   };
 
