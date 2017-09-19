@@ -76,7 +76,7 @@ const Util = {
       }
 
       space = this.distance([arrowX, arrowY], [blueBird.posX + (blueBird.width / 2), blueBird.posY + (blueBird.height / 2)]);
-      if (space < 30){
+      if (space < 20 && blueBird.feathers === 0){
         blueBird.feathers = 25;
         blueBird.birdShotCount += 1;
         arrow.resetPos();

@@ -145,7 +145,7 @@ const Util = {
       }
 
       space = this.distance([arrowX, arrowY], [blueBird.posX + (blueBird.width / 2), blueBird.posY + (blueBird.height / 2)]);
-      if (space < 30){
+      if (space < 20 && blueBird.feathers === 0){
         blueBird.feathers = 25;
         blueBird.birdShotCount += 1;
         arrow.resetPos();
@@ -416,8 +416,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     ctx.font = '28px tahoma';
     ctx.fillText(`Parachuters Saved Highscore: ${parachuterHighScore}`, 320, 350);
     ctx.fillText(`Birds Shot Highscore: ${birdsHighScore}`, 365, 390);
-    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, 320, 430);
-    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, 365, 470);
+    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, 320, 460);
+    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, 365, 500);
     gameStarted = false;
   };
 
