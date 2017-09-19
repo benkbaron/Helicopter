@@ -26,7 +26,7 @@ fetchHighScores = () => {
 
 let scoreData;
 
-sendScores = () => {
+sendScores = (scoreData) => {
   $DJ.ajax({
     method: "POST",
     url: "https://helicopterbackend.herokuapp.com/api/scores",
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     scoreData = new FormData();
     scoreData.append("score[parachuters]", parachuter1.rescueCount);
     scoreData.append("score[birds]", bird1.birdShotCount + blueBird1.birdShotCount);
-    sendScores();
+    sendScores(scoreData);
     ctx.fillStyle = "white";
     ctx.font = '80px tahoma';
     ctx.fillText('So sorry you lost!', 220, 280);
