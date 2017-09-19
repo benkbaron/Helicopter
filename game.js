@@ -13,6 +13,25 @@ const Sun = require("./objects/sun");
 const Util = require("./util");
 const Wind = require("./objects/wind");
 
+const $DJ = require("./lib/main.js");
+
+fetchHighScores = () => {
+  $DJ.ajax({
+    method: "GET",
+    url: "https://helicopterbackend.herokuapp.com/api/scores",
+    success: (data) => { showHighScores(data);},
+    error: () => alert("Error in highscores. Sorry."),
+  });
+};
+
+let parachuterHighScore;
+let birdsHighScore;
+
+showHighScores = (data) => {
+  parachuterHighScore = data["parachuter_highscore"][0]["parachuters"];
+  birdsHighScore = data["bird_highscore"][0]["birds"];
+};
+
 let reset;
 let paused = false;
 
@@ -146,11 +165,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayGameOver = () => {
+    fetchHighScores();
     ctx.fillStyle = "white";
     ctx.font = '80px tahoma';
     ctx.fillText('So sorry you lost!', 220, 280);
     ctx.font = '50px tahoma';
     ctx.fillText("Press 'p' to Try Again", 270, 400);
+    ctx.font = '28px tahoma';
+    ctx.fillText(`Parachuters Saved Highscore: ${parachuterHighScore}`, 320, 450);
+    ctx.fillText(`Birds Shot Highscore: ${birdsHighScore}`, 365, 500);
     gameStarted = false;
   };
 

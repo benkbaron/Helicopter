@@ -240,6 +240,25 @@ const Sun = __webpack_require__(13);
 const Util = __webpack_require__(0);
 const Wind = __webpack_require__(14);
 
+const $DJ = __webpack_require__(15);
+
+fetchHighScores = () => {
+  $DJ.ajax({
+    method: "GET",
+    url: "https://helicopterbackend.herokuapp.com/api/scores",
+    success: (data) => { showHighScores(data);},
+    error: () => alert("Error in highscores. Sorry."),
+  });
+};
+
+let parachuterHighScore;
+let birdsHighScore;
+
+showHighScores = (data) => {
+  parachuterHighScore = data["parachuter_highscore"][0]["parachuters"];
+  birdsHighScore = data["bird_highscore"][0]["birds"];
+};
+
 let reset;
 let paused = false;
 
@@ -373,11 +392,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayGameOver = () => {
+    fetchHighScores();
     ctx.fillStyle = "white";
     ctx.font = '80px tahoma';
     ctx.fillText('So sorry you lost!', 220, 280);
     ctx.font = '50px tahoma';
     ctx.fillText("Press 'p' to Try Again", 270, 400);
+    ctx.font = '28px tahoma';
+    ctx.fillText(`Parachuters Saved Highscore: ${parachuterHighScore}`, 320, 450);
+    ctx.fillText(`Birds Shot Highscore: ${birdsHighScore}`, 365, 500);
     gameStarted = false;
   };
 
@@ -1134,6 +1157,212 @@ class Wind {
 }
 
 module.exports = Wind;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const DOMNodeCollection = __webpack_require__(16);
+
+const funcArr = [];
+
+window.$DJ = function(ele){
+  if (ele instanceof HTMLElement){
+    ele = Array.from(ele);
+    let domEl = new DOMNodeCollection(ele);
+    return domEl;
+
+  } else if (typeof ele === 'string'){
+    let eles = document.querySelectorAll(ele);
+    eles = Array.from(eles);
+    let domEl = new DOMNodeCollection(eles);
+    return domEl;
+
+  } else if (typeof ele === 'function'){
+      if (document.readyState === "complete"){
+        ele();
+      } else {
+      funcArr.push(ele);
+      }
+    }
+};
+
+document.addEventListener("DOMContentLoaded", function(){
+  funcArr.forEach((fn) => fn());
+});
+
+$DJ.extend = function(mainObject, ...objs){
+  return Object.assign(mainObject, ...objs);
+};
+
+ $DJ.ajax = (options) => {
+
+   const defaultOptions = {
+     method: "",
+     url: "",
+     data: {},
+     contentType: "application/x-www-form-urlencoded; charset=utf-8",
+     success: () => {},
+     error: () => {},
+   };
+   let mergedOptions = $DJ.extend(defaultOptions, options);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open(mergedOptions.method, mergedOptions.url);
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        mergedOptions.success(JSON.parse(xhr.response));
+      } else {
+        mergedOptions.error(JSON.parse(xhr.response));
+      }
+    };
+    xhr.send(mergedOptions.data);
+  };
+
+module.exports = $DJ;
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+class DOMNodeCollection {
+  constructor(htmlArr){
+    this.htmlArr = htmlArr;
+  }
+
+  each(callback){
+    this.htmlArr.forEach(callback);
+  }
+
+  html(str){
+    if(str){
+      this.each(function(el){
+        el.innerHtml = str;
+      });
+    } else if (this.htmlArr.length > 0){
+      return this.htmlArr[0].innerHtml;
+    }
+  }
+
+  empty(){
+    this.html("");
+  }
+
+  append(el){
+    if (this.htmlArr.length === 0) return;
+
+    if (typeof el === 'string'){
+      this.each(item => item.innerHTML += el);
+    } else if (el instanceof DOMNodeCollection) {
+      this.htmlArr.appendChild(el);
+    }
+  }
+
+
+  attr(str, value){
+    if (value) {
+      this.htmlArr[0].setAttribute(str, value);
+    }
+    return this.htmlArr[0].getAttribute(str);
+  }
+
+  addClass(newClass){
+    this.each(function(el){
+      el.classList.add(newClass);
+    });
+  }
+
+  removeClass(rmClass){
+    this.each(function(el){
+      el.classList.remove(rmClass);
+    });
+  }
+
+  children(){
+    let allChildren = [];
+    this.each(function(el){
+      let childArr = Array.from(el.childNodes);
+      // avoids nesting arrays
+      allChildren = allChildren.concat(childArr);
+    });
+    return new DOMNodeCollection(allChildren);
+  }
+
+  parent(){
+    let allParents = [];
+    this.each(function(el){
+      // ensures allParents does not contain duplicates
+      if(!allParents.includes(el.parentNode)){
+        allParents.push(el.parentNode);
+      }
+    });
+    return new DOMNodeCollection(allParents);
+  }
+
+  find(selector){
+    let result = [];
+    this.each((el) =>{
+      let elements = el.querySelectorAll(selector);
+      if(elements){
+        Array.from(elements).forEach((el) => {
+          if(!result.includes(el)) result.push(el);
+        });
+      }
+    });
+    return new DOMNodeCollection(result);
+  }
+
+  remove(){
+    this.each(function(el){
+      el.parentNode.removeChild(el);
+    });
+  }
+
+  on(eventName, cb){
+    this.each(function(el) {
+      DOMNodeCollection.addEvent(el, eventName, cb);
+      el.addEventListener(eventName, cb);
+    });
+  }
+
+  off(eventName){
+    this.each(function(el) {
+      DOMNodeCollection.getCallBacks(el, eventName).forEach((cb) => {
+          el.removeEventListener(eventName, cb);
+        });
+        DOMNodeCollection.resetEvents(el, eventName);
+    });
+  }
+
+  static addEvent(el, eventName, cb) {
+    DOMNodeCollection.getCallBacks(el, eventName).push(cb);
+  }
+
+  static getCallBacks(el, eventName) {
+    let events = DOMNodeCollection.getEvents(el);
+
+    if (events[eventName] === undefined) {
+      events[eventName] = [];
+    }
+
+    return events[eventName];
+  }
+
+  static getEvents(el) {
+    if (el.domJuanEvents === undefined) {
+      el.domJuanEvents = {};
+    }
+    return el.domJuanEvents;
+  }
+
+  static resetEvents(el, eventName) {
+    DOMNodeCollection.getEvents(el)[eventName] = [];
+  }
+}
+
+module.exports = DOMNodeCollection;
 
 
 /***/ })
