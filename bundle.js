@@ -392,7 +392,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   displayGameOver = () => {
-    fetchHighScores();
     ctx.fillStyle = "white";
     ctx.font = '80px tahoma';
     ctx.fillText('So sorry you lost!', 220, 280);
@@ -405,6 +404,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   restartGame = () => {
+    fetchHighScores();
     parachuter1.rescueCount = 0;
     parachuter1.lostCount = 0;
     bird1.birdShotCount = 0;
