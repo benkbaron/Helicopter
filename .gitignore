@@ -13,9 +13,8 @@
 /tmp
 
 node_modules/
-bundle.js
+
 bundle.js.map
 
-bundle.js*
 
 .DS_Store
