@@ -14,11 +14,14 @@ Player guides the helicopter using the arrow keys to rescue falling parachuters 
 - [ ] Birds fly faster as the birds destroyed count increases.
 - [ ] Game can be paused and music and sound individually toggled.
 - [ ] Infinite arrow hack is available by typing in password "vern" immediately after beginning a new game.
+- [ ] High scores are stored in a separate domain's backend PostgreSQL. Helicopter sends AJAX requests to fetch and update high score data.
 
 ### Architecture and Technologies
 
 This project is implemented using vanilla JavaScript, HTML5 with Canvas, and CSS3.
 
 Each object has its own class, which will interact with other objects based upon its own unique specifications.
+
+Helicopter incorporates another project created by Ben Baron, DOMJuan, which provides the ability to send AJAX requests across domains to fetch and update high scores.
 
 ![](./assets/screenshots/game.png)
