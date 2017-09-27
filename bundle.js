@@ -209,13 +209,14 @@ const Util = {
 
   inWindRange(obj, wind) {
     let space = this.distance([wind.posX, wind.posY], [obj.posX + (obj.width / 2), obj.posY + (obj.height / 2)]);
-    if (space < 450 && wind.posX < obj.posX) return true;
+    if (space < 400 && wind.posX < obj.posX) return true;
     return false;
   },
 
   draw(ctx, image, object, width, height) {
     ctx.drawImage(image, object.posX, object.posY, width, height);
   },
+
 };
 
 module.exports = Util;
@@ -239,47 +240,19 @@ const Sound = __webpack_require__(12);
 const Sun = __webpack_require__(13);
 const Util = __webpack_require__(0);
 const Wind = __webpack_require__(14);
-
 const $DJ = __webpack_require__(15);
 
-fetchHighScores = () => {
-  $DJ.ajax({
-    method: "GET",
-    url: "https://helicopterbackend.herokuapp.com/api/scores",
-    success: (data) => { showHighScores(data);},
-    error: () => alert("Error in fetching highscores. Sorry."),
-  });
-};
-
-let scoreData;
-
-sendScores = (scoreData) => {
-  $DJ.ajax({
-    method: "POST",
-    url: "https://helicopterbackend.herokuapp.com/api/scores",
-    data: scoreData,
-    success: (data) => {},
-    error: () => alert("Error in sending score to database. Sorry."),
-  });
-};
-
-let parachuterHighScore;
-let birdsHighScore;
-
-showHighScores = (data) => {
-  parachuterHighScore = data["parachuter_highscore"][0]["parachuters"];
-  birdsHighScore = data["bird_highscore"][0]["birds"];
-};
-
-let reset;
-let paused = false;
-
 document.addEventListener("DOMContentLoaded", (event) => {
+  Sound.playMusic();
+  let gameStarted = false;
+  let scoreData;
+  let parachuterHighScore;
+  let birdsHighScore;
+  let reset;
+  let paused = false;
   let canvas = document.querySelector("canvas");
   let ctx = canvas.getContext("2d");
-
   DrawCanvas.startPage(ctx);
-
   let arrowArr = [];
   let bird1 = new Bird();
   let blimp1 = new Blimp();
@@ -290,16 +263,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let parachuter1 = new Parachuter();
   let sun1 = new Sun();
   let wind1 = new Wind();
-
   let blueBird1 = new BlueBird();
-
-  let allObjects = [parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1, helicopter1, wind1, cloud1, sun1];
-
+  let allObjects = [parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1,
+                    helicopter1, wind1, cloud1, sun1];
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = 0;
   bird1.birdShotCount = 0;
   let lifeCount = 3;
   let inputs = [];
+  let arrowTimer = 0;
 
   resetPage = () => {
     DrawCanvas.playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount);
@@ -376,7 +348,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   });
 
-  let gameStarted = false;
 
   displayCrash = () => {
     drawAll();
@@ -455,6 +426,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   };
 
+  addArrows();
+
   drawAll = () => {
     allObjects.forEach((obj) => {
       obj.draw(ctx, helicopter1);
@@ -473,17 +446,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
   };
 
-  let arrowTimer = 0;
-  addArrows();
-
   passwordEntered = () => {
     if (inputs[0] === 86 && inputs[1] === 69 && inputs[2] === 82 && inputs[3] === 78) {
       return true;
     }
     return false;
   };
-
-  Sound.playMusic();
 
   let musicButton = document.getElementById("musicButton");
   let playing = true;
@@ -503,6 +471,30 @@ document.addEventListener("DOMContentLoaded", (event) => {
       soundButton.innerHTML = "Turn Sound Effects Off";
     }
   });
+
+  fetchHighScores = () => {
+    $DJ.ajax({
+      method: "GET",
+      url: "https://helicopterbackend.herokuapp.com/api/scores",
+      success: (data) => { showHighScores(data);},
+      error: () => alert("Error in fetching highscores. Sorry."),
+    });
+  };
+
+  sendScores = (scoreData) => {
+    $DJ.ajax({
+      method: "POST",
+      url: "https://helicopterbackend.herokuapp.com/api/scores",
+      data: scoreData,
+      success: (data) => {},
+      error: () => alert("Error in sending score to database. Sorry."),
+    });
+  };
+
+  showHighScores = (data) => {
+    parachuterHighScore = data["parachuter_highscore"][0]["parachuters"];
+    birdsHighScore = data["bird_highscore"][0]["birds"];
+  };
 
 });
 

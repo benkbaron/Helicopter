@@ -140,13 +140,14 @@ const Util = {
 
   inWindRange(obj, wind) {
     let space = this.distance([wind.posX, wind.posY], [obj.posX + (obj.width / 2), obj.posY + (obj.height / 2)]);
-    if (space < 450 && wind.posX < obj.posX) return true;
+    if (space < 400 && wind.posX < obj.posX) return true;
     return false;
   },
 
   draw(ctx, image, object, width, height) {
     ctx.drawImage(image, object.posX, object.posY, width, height);
   },
+
 };
 
 module.exports = Util;
