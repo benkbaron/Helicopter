@@ -14,7 +14,13 @@ class Bird {
     this.feathersIcon.src = "./assets/feathersIcon.png";
     this.birdIcon = new Image();
     this.birdIcon.src = "./assets/birdIcon.png";
-    this.speed = 3.5 * (Math.random() + 0.4);
+    this.difficulty = "easy";
+    this.speed = 1.2 * (Math.random() + 0.4);
+  }
+
+  difficultyChange(level) {
+    this.difficulty = level;
+    this.speed = this.difficulty === "easy" ? 1.2 * (Math.random() + 0.4) : 3.5 * (Math.random() + 0.4);
   }
 
   draw(ctx) {
@@ -49,7 +55,7 @@ class Bird {
   resetPos() {
     this.posX = 1050;
     this.posY = 600 * Math.random();
-    this.speed = 3 * (Math.random() + 0.35);
+    this.speed = this.difficulty === "easy" ? 1.2 * (Math.random() + 0.4) : 3.5 * (Math.random() + 0.4);
     this.feathers = 0;
   }
 }

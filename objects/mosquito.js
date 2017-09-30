@@ -8,6 +8,13 @@ class Mosquito {
     this.height = 25;
     this.mosquitoIcon = new Image();
     this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
+    this.difficulty = "easy";
+    this.speed = 1/4;
+  }
+
+  difficultyChange(level) {
+    this.difficulty = level;
+    this.speed = this.difficulty === "easy" ? 1/4 : 4/5;
   }
 
   draw(ctx) {
@@ -16,15 +23,15 @@ class Mosquito {
 
   updatePos(wind, helicopter) {
     if (helicopter.posX > this.posX) {
-      this.posX += 3/4;
+      this.posX += this.speed;
     } else {
-      this.posX -= 3/4;
+      this.posX -= this.speed;
     }
 
     if (helicopter.posY > this.posY) {
-      this.posY += 3/4;
+      this.posY += this.speed;
     } else {
-      this.posY -= 3/4;
+      this.posY -= this.speed;
     }
 
     if (Util.inWindRange(this, wind)){

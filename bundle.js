@@ -472,6 +472,30 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   });
 
+  let easyDifficulty;
+  let hardDifficulty;
+  let easyButton = document.getElementById("easyButton");
+  easyButton.addEventListener("click", () => {
+      setDifficulty("easy");
+      easyButton.style.background = '#35e504';
+      hardButton.style.background = 'yellow';
+    }
+  );
+
+  let hardButton = document.getElementById("hardButton");
+  hardButton.addEventListener("click", () => {
+      setDifficulty("hard");
+      easyButton.style.background = 'yellow';
+      hardButton.style.background = '#35e504';
+    }
+  );
+
+  setDifficulty = (level) => {
+    mosquito1.difficultyChange(level);
+    bird1.difficultyChange(level);
+    blueBird1.difficultyChange(level);
+  };
+
   fetchHighScores = () => {
     $DJ.ajax({
       method: "GET",
@@ -576,7 +600,13 @@ class Bird {
     this.feathersIcon.src = "./assets/feathersIcon.png";
     this.birdIcon = new Image();
     this.birdIcon.src = "./assets/birdIcon.png";
-    this.speed = 3.5 * (Math.random() + 0.4);
+    this.difficulty = "easy";
+    this.speed = 1.2 * (Math.random() + 0.4);
+  }
+
+  difficultyChange(level) {
+    this.difficulty = level;
+    this.speed = this.difficulty === "easy" ? 1.2 * (Math.random() + 0.4) : 3.5 * (Math.random() + 0.4);
   }
 
   draw(ctx) {
@@ -611,7 +641,7 @@ class Bird {
   resetPos() {
     this.posX = 1050;
     this.posY = 600 * Math.random();
-    this.speed = 3 * (Math.random() + 0.35);
+    this.speed = this.difficulty === "easy" ? 1.2 * (Math.random() + 0.4) : 3.5 * (Math.random() + 0.4);
     this.feathers = 0;
   }
 }
@@ -681,7 +711,7 @@ class BlueBird {
     this.blueBirdGif = new Image();
     this.blueBirdGif.src = "./assets/blueBirdGif.gif";
     this.speed = 2.5 * (Math.random() + 0.4);
-
+    this.difficulty = "easy";
     this.blueBirdImages = [];
     this.imageCounter = 0;
 
@@ -691,6 +721,11 @@ class BlueBird {
       this.name.src = `./assets/blueBirdImages/blueBird${i}.gif`;
       this.blueBirdImages.push(this.name);
     }
+  }
+
+  difficultyChange(level) {
+    this.difficulty = level;
+    this.speed = this.difficulty === "easy" ? (Math.random() + 0.4) : 2.5 * (Math.random() + 0.4);
   }
 
   draw(ctx) {
@@ -727,7 +762,7 @@ class BlueBird {
   resetPos() {
     this.posX = (-1000 * Math.random()) - 50;
     this.posY = 600 * Math.random();
-    this.speed = 2.5 * (Math.random() + 0.35);
+    this.speed = this.difficulty === "easy" ? (Math.random() + 0.4) : 2.5 * (Math.random() + 0.4);
     this.feathers = 0;
   }
 }
@@ -937,6 +972,13 @@ class Mosquito {
     this.height = 25;
     this.mosquitoIcon = new Image();
     this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
+    this.difficulty = "easy";
+    this.speed = 1/4;
+  }
+
+  difficultyChange(level) {
+    this.difficulty = level;
+    this.speed = this.difficulty === "easy" ? 1/4 : 4/5;
   }
 
   draw(ctx) {
@@ -945,15 +987,15 @@ class Mosquito {
 
   updatePos(wind, helicopter) {
     if (helicopter.posX > this.posX) {
-      this.posX += 3/4;
+      this.posX += this.speed;
     } else {
-      this.posX -= 3/4;
+      this.posX -= this.speed;
     }
 
     if (helicopter.posY > this.posY) {
-      this.posY += 3/4;
+      this.posY += this.speed;
     } else {
-      this.posY -= 3/4;
+      this.posY -= this.speed;
     }
 
     if (Util.inWindRange(this, wind)){

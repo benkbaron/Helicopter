@@ -17,19 +17,20 @@ canvas {
 }
 
 .bottomNav {
-  width: 630px;
+  width: 1000px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+
 button {
   height: 40px;
-  width: 90px;
+  width: 130px;
   border-radius: 10px;
   background-color: #ffec19;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 14px;
   outline: none;
   border: 1px solid black;
   font-family: tahoma;
@@ -42,4 +43,8 @@ button:hover {
 a {
   color: blue;
   text-decoration: none;
+}
+
+#easyButton {
+  background-color: #35e504;
 }

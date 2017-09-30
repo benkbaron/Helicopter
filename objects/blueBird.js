@@ -15,7 +15,7 @@ class BlueBird {
     this.blueBirdGif = new Image();
     this.blueBirdGif.src = "./assets/blueBirdGif.gif";
     this.speed = 2.5 * (Math.random() + 0.4);
-
+    this.difficulty = "easy";
     this.blueBirdImages = [];
     this.imageCounter = 0;
 
@@ -25,6 +25,11 @@ class BlueBird {
       this.name.src = `./assets/blueBirdImages/blueBird${i}.gif`;
       this.blueBirdImages.push(this.name);
     }
+  }
+
+  difficultyChange(level) {
+    this.difficulty = level;
+    this.speed = this.difficulty === "easy" ? (Math.random() + 0.4) : 2.5 * (Math.random() + 0.4);
   }
 
   draw(ctx) {
@@ -61,7 +66,7 @@ class BlueBird {
   resetPos() {
     this.posX = (-1000 * Math.random()) - 50;
     this.posY = 600 * Math.random();
-    this.speed = 2.5 * (Math.random() + 0.35);
+    this.speed = this.difficulty === "easy" ? (Math.random() + 0.4) : 2.5 * (Math.random() + 0.4);
     this.feathers = 0;
   }
 }

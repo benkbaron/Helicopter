@@ -244,6 +244,30 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   });
 
+  let easyDifficulty;
+  let hardDifficulty;
+  let easyButton = document.getElementById("easyButton");
+  easyButton.addEventListener("click", () => {
+      setDifficulty("easy");
+      easyButton.style.background = '#35e504';
+      hardButton.style.background = 'yellow';
+    }
+  );
+
+  let hardButton = document.getElementById("hardButton");
+  hardButton.addEventListener("click", () => {
+      setDifficulty("hard");
+      easyButton.style.background = 'yellow';
+      hardButton.style.background = '#35e504';
+    }
+  );
+
+  setDifficulty = (level) => {
+    mosquito1.difficultyChange(level);
+    bird1.difficultyChange(level);
+    blueBird1.difficultyChange(level);
+  };
+
   fetchHighScores = () => {
     $DJ.ajax({
       method: "GET",
