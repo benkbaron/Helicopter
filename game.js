@@ -254,10 +254,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   );
 
+  let mediumButton = document.getElementById("mediumButton");
+  mediumButton.addEventListener("click", () => {
+      setDifficulty("medium");
+      easyButton.style.background = 'yellow';
+      mediumButton.style.background = '#35e504';
+      hardButton.style.background = 'yellow';
+    }
+  );
+
   let hardButton = document.getElementById("hardButton");
   hardButton.addEventListener("click", () => {
       setDifficulty("hard");
       easyButton.style.background = 'yellow';
+      mediumButton.style.background = 'yellow';
       hardButton.style.background = '#35e504';
     }
   );

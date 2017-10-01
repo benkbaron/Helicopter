@@ -3,18 +3,28 @@ const Util = require("../util");
 class Mosquito {
   constructor(options) {
     this.posX = 600 * Math.random();
-    this.posY = 800;
+    this.posY = 700;
     this.width = 25;
     this.height = 25;
     this.mosquitoIcon = new Image();
     this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
     this.difficulty = "easy";
-    this.speed = 1/4;
+    this.speed = 1/5;
   }
 
   difficultyChange(level) {
     this.difficulty = level;
-    this.speed = this.difficulty === "easy" ? 1/4 : 4/5;
+    switch (level) {
+      case "easy":
+        this.speed = 1/5;
+        break;
+      case "medium":
+        this.speed = 3/5;
+        break;
+      case "hard":
+        this.speed = 1;
+        break;
+    }
   }
 
   draw(ctx) {
@@ -41,7 +51,7 @@ class Mosquito {
 
   resetPos() {
     this.posX = 600 * Math.random();
-    this.posY = 800;
+    this.posY = 700;
   }
 
 }

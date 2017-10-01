@@ -482,10 +482,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   );
 
+  let mediumButton = document.getElementById("mediumButton");
+  mediumButton.addEventListener("click", () => {
+      setDifficulty("medium");
+      easyButton.style.background = 'yellow';
+      mediumButton.style.background = '#35e504';
+      hardButton.style.background = 'yellow';
+    }
+  );
+
   let hardButton = document.getElementById("hardButton");
   hardButton.addEventListener("click", () => {
       setDifficulty("hard");
       easyButton.style.background = 'yellow';
+      mediumButton.style.background = 'yellow';
       hardButton.style.background = '#35e504';
     }
   );
@@ -601,12 +611,22 @@ class Bird {
     this.birdIcon = new Image();
     this.birdIcon.src = "./assets/birdIcon.png";
     this.difficulty = "easy";
-    this.speed = 1.2 * (Math.random() + 0.4);
+    this.speed = 1.1 * (Math.random() + 0.4);
   }
 
   difficultyChange(level) {
     this.difficulty = level;
-    this.speed = this.difficulty === "easy" ? 1.2 * (Math.random() + 0.4) : 3.5 * (Math.random() + 0.4);
+    switch (level) {
+      case "easy":
+        this.speed = 1.1 * (Math.random() + 0.4);
+        break;
+      case "medium":
+        this.speed = 3 * (Math.random() + 0.4);
+        break;
+      case "hard":
+        this.speed = 4.5 * (Math.random() + 0.4);
+        break;
+    }
   }
 
   draw(ctx) {
@@ -641,7 +661,7 @@ class Bird {
   resetPos() {
     this.posX = 1050;
     this.posY = 600 * Math.random();
-    this.speed = this.difficulty === "easy" ? 1.2 * (Math.random() + 0.4) : 3.5 * (Math.random() + 0.4);
+    this.difficultyChange(this.difficulty);
     this.feathers = 0;
   }
 }
@@ -710,7 +730,7 @@ class BlueBird {
     this.feathersIcon.src = "./assets/feathersIcon.png";
     this.blueBirdGif = new Image();
     this.blueBirdGif.src = "./assets/blueBirdGif.gif";
-    this.speed = 2.5 * (Math.random() + 0.4);
+    this.speed = 1.1 * (Math.random() + 0.4);
     this.difficulty = "easy";
     this.blueBirdImages = [];
     this.imageCounter = 0;
@@ -725,7 +745,17 @@ class BlueBird {
 
   difficultyChange(level) {
     this.difficulty = level;
-    this.speed = this.difficulty === "easy" ? (Math.random() + 0.4) : 2.5 * (Math.random() + 0.4);
+    switch (level) {
+      case "easy":
+        this.speed = 1.1 * (Math.random() + 0.4);
+        break;
+      case "medium":
+        this.speed = 3 * (Math.random() + 0.4);
+        break;
+      case "hard":
+        this.speed = 4.5 * (Math.random() + 0.4);
+        break;
+    }
   }
 
   draw(ctx) {
@@ -762,7 +792,7 @@ class BlueBird {
   resetPos() {
     this.posX = (-1000 * Math.random()) - 50;
     this.posY = 600 * Math.random();
-    this.speed = this.difficulty === "easy" ? (Math.random() + 0.4) : 2.5 * (Math.random() + 0.4);
+    this.difficultyChange(this.difficulty);
     this.feathers = 0;
   }
 }
@@ -967,18 +997,28 @@ const Util = __webpack_require__(0);
 class Mosquito {
   constructor(options) {
     this.posX = 600 * Math.random();
-    this.posY = 800;
+    this.posY = 700;
     this.width = 25;
     this.height = 25;
     this.mosquitoIcon = new Image();
     this.mosquitoIcon.src = "./assets/mosquitoIcon.png";
     this.difficulty = "easy";
-    this.speed = 1/4;
+    this.speed = 1/5;
   }
 
   difficultyChange(level) {
     this.difficulty = level;
-    this.speed = this.difficulty === "easy" ? 1/4 : 4/5;
+    switch (level) {
+      case "easy":
+        this.speed = 1/5;
+        break;
+      case "medium":
+        this.speed = 3/5;
+        break;
+      case "hard":
+        this.speed = 1;
+        break;
+    }
   }
 
   draw(ctx) {
@@ -1005,7 +1045,7 @@ class Mosquito {
 
   resetPos() {
     this.posX = 600 * Math.random();
-    this.posY = 800;
+    this.posY = 700;
   }
 
 }
