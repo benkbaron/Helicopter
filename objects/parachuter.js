@@ -16,6 +16,23 @@ class Parachuter {
     this.rescueCount = 0;
     this.lostCount = 0;
     this.dead = 0;
+    this.speed = 0.8 + (this.rescueCount / 8);
+    this.difficulty = "easy";
+  }
+
+  difficultyChange(level) {
+    this.difficulty = level;
+    switch (level) {
+      case "easy":
+        this.speed = 0.8 + (this.rescueCount / 8);
+        break;
+      case "medium":
+        this.speed = 1.3 + (this.rescueCount / 8);
+        break;
+      case "hard":
+        this.speed = 2.5 + (this.rescueCount / 8);
+        break;
+    }
   }
 
   draw(ctx) {
@@ -33,7 +50,7 @@ class Parachuter {
   }
 
   updatePos(wind) {
-    this.posY += 1.4 + (this.rescueCount / 8);
+    this.posY += this.speed;
     if (this.posY > 610) {
       this.lostCount += 1;
       this.resetPos();
@@ -48,6 +65,7 @@ class Parachuter {
   resetPos() {
     this.posX = 960 * Math.random();
     this.posY = -600 * Math.random();
+    this.difficultyChange(this.difficulty);
   }
 }
 

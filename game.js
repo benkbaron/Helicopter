@@ -277,6 +277,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     mosquito1.difficultyChange(level);
     bird1.difficultyChange(level);
     blueBird1.difficultyChange(level);
+    parachuter1.difficultyChange(level);
   };
 
   fetchHighScores = () => {

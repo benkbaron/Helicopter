@@ -12,14 +12,14 @@ body {
 
 canvas {
   margin-top: 30px;
-  min-width: 75vw;
-  max-height: 45vw;
+  min-width: 80vw;
+  max-height: 50vw;
 }
 
 .bottomNav {
   display: flex;
   flex-direction: row;
-  max-width: 75vw;
+  max-width: 84vw;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -33,7 +33,7 @@ canvas {
 button {
   height: 40px;
   width: 110px;
-  border-radius: 7px;
+  border-radius: 9px;
   background-color: #ffec19;
   font-weight: 700;
   font-size: 14px;
