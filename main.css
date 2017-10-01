@@ -17,17 +17,23 @@ canvas {
 }
 
 .bottomNav {
-  width: 1040px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  max-width: 75vw;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
+}
+
+.bottomNav > * {
+  margin: 7px;
 }
 
 
 button {
   height: 40px;
   width: 110px;
-  border-radius: 10px;
+  border-radius: 7px;
   background-color: #ffec19;
   font-weight: 700;
   font-size: 14px;
@@ -41,7 +47,7 @@ button:hover {
 }
 
 a {
-  color: blue;
+  color: #0249d1;
   text-decoration: none;
 }
 
