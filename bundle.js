@@ -478,6 +478,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   easyButton.addEventListener("click", () => {
       setDifficulty("easy");
       easyButton.style.background = '#35e504';
+      mediumButton.style.background = 'yellow';
       hardButton.style.background = 'yellow';
     }
   );
