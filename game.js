@@ -17,6 +17,9 @@ const $DJ = require("./lib/main.js");
 document.addEventListener("DOMContentLoaded", (event) => {
   Sound.playMusic();
   let gameStarted = false;
+  let initialsEntered = false;
+  let initials = [" ", " ", " "];
+  let initialCount = 0;
   let scoreData;
   let parachuterHighScore;
   let birdsHighScore;
@@ -24,7 +27,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let paused = false;
   let canvas = document.querySelector("canvas");
   let ctx = canvas.getContext("2d");
-  DrawCanvas.startPage(ctx);
   let arrowArr = [];
   let bird1 = new Bird();
   let blimp1 = new Blimp();
@@ -41,6 +43,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = 0;
   bird1.birdShotCount = 0;
+  DrawCanvas.startPage(ctx, helicopter1);
   let lifeCount = 3;
   let inputs = [];
   let arrowTimer = 0;
@@ -82,35 +85,53 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   document.addEventListener("keydown", (event) => {
     event.preventDefault();
-    if (gameStarted) {
-      if (event.keyCode >= 37 && event.keyCode <= 40 ) {
-        if (helicopter1.keysDown.includes(event.keyCode) === false){
-          helicopter1.keysDown.push(event.keyCode);
+    if (initialsEntered) {
+      if (gameStarted) {
+        if (event.keyCode >= 37 && event.keyCode <= 40 ) {
+          if (helicopter1.keysDown.includes(event.keyCode) === false){
+            helicopter1.keysDown.push(event.keyCode);
+          }
+        }
+        if (inputs.length < 4) {
+          inputs.push(event.keyCode);
         }
       }
-      if (inputs.length < 4) {
-        inputs.push(event.keyCode);
+
+      if (event.keyCode === 32 && !paused){
+        if ( (gameStarted && helicopter1.alive) && (arrowTimer < 1 || passwordEntered())){
+          firstArrow = arrowArr[0];
+          firstArrow.shoot(helicopter1);
+          Sound.playSound("arrowShot", soundEffects);
+          arrowArr = arrowArr.slice(1);
+          arrowArr.push(firstArrow);
+          arrowTimer = 35;
+        }
+      }
+
+      if (event.keyCode === 13){
+          if (!gameStarted) {
+            restartGame();
+          }
+          else {
+            paused = paused ? false : true;
+          }
       }
     }
 
-    if (event.keyCode === 32 && !paused){
-      if ( (gameStarted && helicopter1.alive) && (arrowTimer < 1 || passwordEntered())){
-        firstArrow = arrowArr[0];
-        firstArrow.shoot(helicopter1);
-        Sound.playSound("arrowShot", soundEffects);
-        arrowArr = arrowArr.slice(1);
-        arrowArr.push(firstArrow);
-        arrowTimer = 35;
+      if (!initialsEntered) {
+        if (initialCount < 3 && event.keyCode >= 65 && event.keyCode <= 90) {
+          helicopter1.initials[initialCount] = String.fromCharCode(event.keyCode);
+          initialCount += 1;
+          DrawCanvas.startPage(ctx, helicopter1);
+        } else if (initialCount > 0 && event.keyCode == 8){
+          initialCount -= 1;
+          helicopter1.initials[initialCount] = " ";
+          DrawCanvas.startPage(ctx, helicopter1);
+        } else if (initialCount === 3 && event.keyCode === 13) {
+          initialsEntered = true;
+          restartGame();
+        }
       }
-    }
-
-    if (event.keyCode === 80){
-      if (!gameStarted) {
-        restartGame();
-      } else {
-      paused = paused ? false : true;
-    }
-    }
   });
 
   document.addEventListener("keyup", (event) => {
@@ -119,7 +140,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
       helicopter1.keysDown = helicopter1.keysDown.filter(num => num !== event.keyCode );
     }
   });
-
 
   displayCrash = () => {
     drawAll();
@@ -151,15 +171,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     scoreData.append("score[parachuters]", parachuter1.rescueCount);
     scoreData.append("score[birds]", bird1.birdShotCount + blueBird1.birdShotCount);
     sendScores(scoreData);
-    ctx.fillStyle = "white";
-    ctx.font = '80px tahoma';
-    ctx.fillText('So sorry you lost!', 220, 170);
-    ctx.font = '50px tahoma';
-    ctx.fillText("Press 'p' to Try Again", 270, 260);
-    ctx.font = '28px tahoma';
-    ctx.fillText(`Parachuters Saved Highscore: ${parachuterHighScore}`, 320, 350);
-    ctx.fillText(`Birds Shot Highscore: ${birdsHighScore}`, 365, 390);
-    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, 320, 460);
+    DrawCanvas.gameOver(ctx, parachuterHighScore, birdsHighScore,
+                        parachuter1, bird1, blueBird1);
     ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, 365, 500);
     gameStarted = false;
   };
@@ -300,7 +313,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   showHighScores = (data) => {
-    debugger
     parachuterHighScore = data["parachuter_highscore"][0]["parachuters"];
     birdsHighScore = data["bird_highscore"][0]["birds"];
   };

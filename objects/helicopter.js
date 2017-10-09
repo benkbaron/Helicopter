@@ -9,7 +9,7 @@ class Helicopter {
     this.alive = true;
     this.width = 100;
     this.height = 100;
-
+    this.initials = [" ", " ", " "];
     this.helicopterIconFlipped = new Image();
     this.helicopterIconFlipped.src = "./assets/flippedhelicopterIcon.png";
     this.helicopterIcon = new Image();
