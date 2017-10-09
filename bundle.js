@@ -911,7 +911,7 @@ const DrawCanvas = {
     ctx.font = '80px tahoma';
     ctx.fillText('So sorry you lost!', 220, 170);
     ctx.font = '50px tahoma';
-    ctx.fillText("Hit enter to try again", 270, 260);
+    ctx.fillText("Hit enter to try again", 280, 260);
     ctx.font = '28px tahoma';
     ctx.fillText(`Parachuters Saved Highscore: ${parachuterHighScore}`, 320, 350);
     ctx.fillText(`Birds Shot Highscore: ${birdsHighScore}`, 365, 390);
