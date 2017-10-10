@@ -170,10 +170,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
     scoreData = new FormData();
     scoreData.append("score[parachuters]", parachuter1.rescueCount);
     scoreData.append("score[birds]", bird1.birdShotCount + blueBird1.birdShotCount);
+    scoreData.append("score[initials]", helicopter1.initials.join(""));
     sendScores(scoreData);
-    DrawCanvas.gameOver(ctx, parachuterHighScore, birdsHighScore,
-                        parachuter1, bird1, blueBird1);
-    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, 365, 500);
+    DrawCanvas.gameOver(ctx, parachuterHighScores, birdsHighScores,
+                        parachuter1, bird1, blueBird1, helicopter1);
     gameStarted = false;
   };
 
@@ -313,8 +313,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   showHighScores = (data) => {
-    parachuterHighScore = data["parachuter_highscore"][0]["parachuters"];
-    birdsHighScore = data["bird_highscore"][0]["birds"];
+    // debugger
+    // parachuterHighScore = data["parachuter_highscore"][0]["parachuters"];
+    // birdsHighScore = data["bird_highscore"][0]["birds"];
+    parachuterHighScores = data.parachuter_highscores;
+    birdsHighScores = data.bird_highscores;
   };
 
 });

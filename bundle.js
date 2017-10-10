@@ -398,10 +398,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
     scoreData = new FormData();
     scoreData.append("score[parachuters]", parachuter1.rescueCount);
     scoreData.append("score[birds]", bird1.birdShotCount + blueBird1.birdShotCount);
+    scoreData.append("score[initials]", helicopter1.initials.join(""));
     sendScores(scoreData);
-    DrawCanvas.gameOver(ctx, parachuterHighScore, birdsHighScore,
-                        parachuter1, bird1, blueBird1);
-    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, 365, 500);
+    DrawCanvas.gameOver(ctx, parachuterHighScores, birdsHighScores,
+                        parachuter1, bird1, blueBird1, helicopter1);
     gameStarted = false;
   };
 
@@ -541,8 +541,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   showHighScores = (data) => {
-    parachuterHighScore = data["parachuter_highscore"][0]["parachuters"];
-    birdsHighScore = data["bird_highscore"][0]["birds"];
+    // debugger
+    // parachuterHighScore = data["parachuter_highscore"][0]["parachuters"];
+    // birdsHighScore = data["bird_highscore"][0]["birds"];
+    parachuterHighScores = data.parachuter_highscores;
+    birdsHighScores = data.bird_highscores;
   };
 
 });
@@ -906,16 +909,50 @@ const DrawCanvas = {
     ctx.fillText("Press enter to resume", 310, 350);
   },
 
-  gameOver(ctx, parachuterHighScore, birdsHighScore, parachuter1, bird1, blueBird1){
+  gameOver(ctx, parachuterHighScores, birdsHighScores, parachuter1, bird1, blueBird1, helicopter1){
+    parachuterHighScores.push({initials: helicopter1.initials.join(""), parachuters: parachuter1.rescueCount});
+    birdsHighScores.push({initials: helicopter1.initials.join(""), birds: blueBird1.birdShotCount + bird1.birdShotCount});
+
+    parachuterHighScores.sort(function (a, b) {
+      return b.parachuters - a.parachuters;
+    });
+
+    birdsHighScores.sort(function (a, b) {
+      return b.birds - a.birds;
+    });
+
     ctx.fillStyle = "white";
     ctx.font = '80px tahoma';
-    ctx.fillText('So sorry you lost!', 220, 170);
+    ctx.fillText('So sorry you lost!', 220, 100);
     ctx.font = '50px tahoma';
-    ctx.fillText("Hit enter to try again", 280, 260);
+    ctx.fillText("Hit enter to try again", 280, 180);
     ctx.font = '28px tahoma';
-    ctx.fillText(`Parachuters Saved Highscore: ${parachuterHighScore}`, 320, 350);
-    ctx.fillText(`Birds Shot Highscore: ${birdsHighScore}`, 365, 390);
-    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, 320, 460);
+    ctx.fillText("Parachuters Saved Highscores", 120, 250);
+    ctx.fillText("Birds Shot Highscores", 520, 250);
+    ctx.font = '20px tahoma';
+    ctx.fillText(`1. ${parachuterHighScores[0].initials}:`, 240, 300);
+    ctx.fillText(`${parachuterHighScores[0].parachuters}`, 320, 300);
+    ctx.fillText(`2. ${parachuterHighScores[1].initials}:`, 240, 325);
+    ctx.fillText(`${parachuterHighScores[1].parachuters}`, 320, 325);
+    ctx.fillText(`3. ${parachuterHighScores[2].initials}:`, 240, 350);
+    ctx.fillText(`${parachuterHighScores[2].parachuters}`, 320, 350);
+    ctx.fillText(`4. ${parachuterHighScores[3].initials}:`, 240, 375);
+    ctx.fillText(`${parachuterHighScores[3].parachuters}`, 320, 375);
+    ctx.fillText(`5. ${parachuterHighScores[4].initials}:`, 240, 400);
+    ctx.fillText(`${parachuterHighScores[4].parachuters}`, 320, 400);
+    ctx.fillText(`1. ${birdsHighScores[0].initials}:`, 600, 300);
+    ctx.fillText(`${birdsHighScores[0].birds}`, 680, 300);
+    ctx.fillText(`2. ${birdsHighScores[1].initials}:`, 600, 325);
+    ctx.fillText(`${birdsHighScores[1].birds}`, 680, 325);
+    ctx.fillText(`3. ${birdsHighScores[2].initials}:`, 600, 350);
+    ctx.fillText(`${birdsHighScores[2].birds}`, 680, 350);
+    ctx.fillText(`4. ${birdsHighScores[3].initials}:`, 600, 375);
+    ctx.fillText(`${birdsHighScores[3].birds}`, 680, 375);
+    ctx.fillText(`5. ${birdsHighScores[4].initials}:`, 600, 400);
+    ctx.fillText(`${birdsHighScores[4].birds}`, 680, 400);
+    ctx.font = '24px tahoma';
+    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, 340, 460);
+    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, 380, 490);
   }
 };
 
