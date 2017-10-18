@@ -313,9 +313,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   showHighScores = (data) => {
-    // debugger
-    // parachuterHighScore = data["parachuter_highscore"][0]["parachuters"];
-    // birdsHighScore = data["bird_highscore"][0]["birds"];
     parachuterHighScores = data.parachuter_highscores;
     birdsHighScores = data.bird_highscores;
   };
