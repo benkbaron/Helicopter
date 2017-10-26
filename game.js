@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let arrowTimer = 0;
 
   resetPage = () => {
-    DrawCanvas.playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount);
+    DrawCanvas.playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount, helicopter1);
     helicopter1.alive = true;
     if (lifeCount === 0) {
       displayGameOver();

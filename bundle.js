@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let arrowTimer = 0;
 
   resetPage = () => {
-    DrawCanvas.playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount);
+    DrawCanvas.playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount, helicopter1);
     helicopter1.alive = true;
     if (lifeCount === 0) {
       displayGameOver();
@@ -882,11 +882,11 @@ const DrawCanvas = {
     ctx.fillStyle = "black";
     ctx.font = '26px tahoma';
     ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 130, 380);
-    ctx.fillText('All objects, but clouds and wind, are dangerous! Careful to stay in the borders!', 60, 440);
+    ctx.fillText('Everything except clouds and wind is dangerous!', 220, 440);
     ctx.fillText("Shoot birds and mosquitos using spacebar. Hit enter to pause game.", 115, 500);
   },
 
-  playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount){
+  playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount, helicopter1){
     ctx.clearRect(0, 0, 1000, 600);
     ctx.fillStyle = "#053fff";
     ctx.fillRect(0, 0, 1000, 600);
@@ -896,6 +896,15 @@ const DrawCanvas = {
     ctx.fillText(`Parachuters Lost: ${parachuter1.lostCount}`, 10, 44);
     ctx.fillText(`Birds Shot: ${bird1.birdShotCount + blueBird1.birdShotCount}`, 10, 66);
     ctx.fillText(`Lives Left: ${lifeCount}`, 10, 88);
+    if (helicopter1.posX < -5 || helicopter1.posX > 900 || helicopter1.posY < -20 || helicopter1.posY > 510) {
+      if (helicopter1.alive) {
+      ctx.font = '50px tahoma';
+      ctx.fillStyle = "red";
+      ctx.fillText("Danger!", 420, 250);
+      ctx.fillText("Stay in borders!", 335, 350);
+      }
+    }
+
   },
 
   pausedPage(ctx){
