@@ -491,25 +491,25 @@ document.addEventListener("DOMContentLoaded", (event) => {
   easyButton.addEventListener("click", () => {
       setDifficulty("easy");
       easyButton.style.background = '#35e504';
-      mediumButton.style.background = 'yellow';
-      hardButton.style.background = 'yellow';
+      mediumButton.style.background = 'Transparent';
+      hardButton.style.background = 'Transparent';
     }
   );
 
   let mediumButton = document.getElementById("mediumButton");
   mediumButton.addEventListener("click", () => {
       setDifficulty("medium");
-      easyButton.style.background = 'yellow';
+      easyButton.style.background = 'Transparent';
       mediumButton.style.background = '#35e504';
-      hardButton.style.background = 'yellow';
+      hardButton.style.background = 'Transparent';
     }
   );
 
   let hardButton = document.getElementById("hardButton");
   hardButton.addEventListener("click", () => {
       setDifficulty("hard");
-      easyButton.style.background = 'yellow';
-      mediumButton.style.background = 'yellow';
+      easyButton.style.background = 'Transparent';
+      mediumButton.style.background = 'Transparent';
       hardButton.style.background = '#35e504';
     }
   );
@@ -541,9 +541,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
 
   showHighScores = (data) => {
-    // debugger
-    // parachuterHighScore = data["parachuter_highscore"][0]["parachuters"];
-    // birdsHighScore = data["bird_highscore"][0]["birds"];
     parachuterHighScores = data.parachuter_highscores;
     birdsHighScores = data.bird_highscores;
   };
@@ -887,7 +884,6 @@ const DrawCanvas = {
     ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 130, 380);
     ctx.fillText('All objects, but clouds and wind, are dangerous! Careful to stay in the borders!', 60, 440);
     ctx.fillText("Shoot birds and mosquitos using spacebar. Hit enter to pause game.", 115, 500);
-    ctx.fillText("Select level difficulty below.", 345, 570);
   },
 
   playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount){

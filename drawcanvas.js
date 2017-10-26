@@ -21,7 +21,6 @@ const DrawCanvas = {
     ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 130, 380);
     ctx.fillText('All objects, but clouds and wind, are dangerous! Careful to stay in the borders!', 60, 440);
     ctx.fillText("Shoot birds and mosquitos using spacebar. Hit enter to pause game.", 115, 500);
-    ctx.fillText("Select level difficulty below.", 345, 570);
   },
 
   playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount){

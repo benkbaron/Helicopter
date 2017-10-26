@@ -14,6 +14,7 @@ canvas {
   margin-top: 20px;
   min-width: 80vw;
   max-height: 50vw;
+  border: 1px solid black;
 }
 
 .bottomNav {
@@ -30,19 +31,21 @@ canvas {
 }
 
 button {
-  height: 40px;
+  height: 45px;
   width: 110px;
   border-radius: 9px;
-  background-color: #ffec19;
+  background-color: Transparent;
+  /*background-color: #ffec19;*/
   font-weight: 700;
-  font-size: 14px;
+  font-size: 16px;
   outline: none;
-  border: 1px solid black;
+  border: 1px solid Transparent;
   font-family: tahoma;
 }
 
 button:hover {
-  background-color: #dbcb18;
+  background-color: #35e504;
+  /*background-color: #dbcb18;*/
 }
 
 a {

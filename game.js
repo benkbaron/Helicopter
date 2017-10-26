@@ -263,25 +263,25 @@ document.addEventListener("DOMContentLoaded", (event) => {
   easyButton.addEventListener("click", () => {
       setDifficulty("easy");
       easyButton.style.background = '#35e504';
-      mediumButton.style.background = 'yellow';
-      hardButton.style.background = 'yellow';
+      mediumButton.style.background = 'Transparent';
+      hardButton.style.background = 'Transparent';
     }
   );
 
   let mediumButton = document.getElementById("mediumButton");
   mediumButton.addEventListener("click", () => {
       setDifficulty("medium");
-      easyButton.style.background = 'yellow';
+      easyButton.style.background = 'Transparent';
       mediumButton.style.background = '#35e504';
-      hardButton.style.background = 'yellow';
+      hardButton.style.background = 'Transparent';
     }
   );
 
   let hardButton = document.getElementById("hardButton");
   hardButton.addEventListener("click", () => {
       setDifficulty("hard");
-      easyButton.style.background = 'yellow';
-      mediumButton.style.background = 'yellow';
+      easyButton.style.background = 'Transparent';
+      mediumButton.style.background = 'Transparent';
       hardButton.style.background = '#35e504';
     }
   );
