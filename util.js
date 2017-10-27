@@ -12,8 +12,8 @@ const Util = {
       return true;
     }
 
-    let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [bird.posX + 25, bird.posY + 25]);
-    if (space < 70 && bird.feathers === 0){
+    let space = this.distance([helicopter.posX + 50, helicopter.posY + 50], [bird.posX + 40, bird.posY + 40]);
+    if (space < 50 && bird.feathers === 0){
       bird.feathers = 25;
       return true;
     }
