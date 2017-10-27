@@ -36,7 +36,7 @@ class Parachuter {
   draw(ctx) {
     let image = this.parachuterIcon;
     if (this.dead > 0) {
-      if (this.dead === 30) {
+      if (this.dead === 80) {
         Sound.playSound("parachuterDied");
       }
       this.dead -= 1;
@@ -52,6 +52,9 @@ class Parachuter {
 
   updatePos(wind) {
     this.posY += this.speed;
+    if (this.dead > 0) {
+      this.posY -= 4;
+    }
     if (this.posY > 610 || this.posX > 1100) {
       this.lostCount += 1;
       Sound.playSound("parachuterDied");

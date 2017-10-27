@@ -145,31 +145,31 @@ const Util = {
       }
 
       space = this.distance([bird.posX + (bird.width / 2), bird.posY + (bird.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
-      if (space < 30 && parachuter.dead === 0){
+      if ((space < 30 && parachuter.dead === 0) && bird.feathers === 0){
         bird.feathers = 25;
-        parachuter.dead = 30;
+        parachuter.dead = 80;
         arrow.resetPos();
         answer = true;
       }
       space = this.distance([mosquito.posX + (mosquito.width / 2), mosquito.posY + (mosquito.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
         mosquito.resetPos();
-        parachuter.dead = 30;
+        parachuter.dead = 80;
         arrow.resetPos();
         answer = true;
       }
 
       space = this.distance([blueBird.posX + (blueBird.width / 2), blueBird.posY + (blueBird.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
-      if (space < 30 && parachuter.dead === 0){
+      if ((space < 30 && parachuter.dead === 0) && blueBird.feathers === 0){
         blueBird.feathers = 25;
-        parachuter.dead = 30;
+        parachuter.dead = 80;
         arrow.resetPos();
         answer = true;
       }
 
       space = this.distance([arrowX, arrowY], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
-        parachuter.dead = 30;
+        parachuter.dead = 80;
         arrow.resetPos();
         answer = true;
       }
@@ -1203,7 +1203,7 @@ class Parachuter {
   draw(ctx) {
     let image = this.parachuterIcon;
     if (this.dead > 0) {
-      if (this.dead === 30) {
+      if (this.dead === 80) {
         Sound.playSound("parachuterDied");
       }
       this.dead -= 1;
@@ -1219,6 +1219,9 @@ class Parachuter {
 
   updatePos(wind) {
     this.posY += this.speed;
+    if (this.dead > 0) {
+      this.posY -= 4;
+    }
     if (this.posY > 610 || this.posX > 1100) {
       this.lostCount += 1;
       Sound.playSound("parachuterDied");
