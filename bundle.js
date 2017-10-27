@@ -925,10 +925,10 @@ const DrawCanvas = {
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;
     ctx.strokeText("Danger!", 420, 250);
-    ctx.strokeText("Stay in borders!", 315, 350);
+    ctx.strokeText("Stay in the borders!", 265, 350);
     ctx.fillStyle = "red";
     ctx.fillText("Danger!", 420, 250);
-    ctx.fillText("Stay in borders!", 315, 350);
+    ctx.fillText("Stay in the borders!", 265, 350);
   },
 
   pausedPage(ctx){
