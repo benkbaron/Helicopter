@@ -37,10 +37,7 @@ const DrawCanvas = {
       if (helicopter1.alive) {
       ctx.font = 'bold 50px tahoma';
       ctx.strokeStyle = 'black';
-      ctx.lineWidth = 15;
-      ctx.stroke();
-      ctx.strokeStyle = 'black';
-      ctx.lineWidth = 5;
+      ctx.lineWidth = 4;
       ctx.strokeText("Danger!", 420, 250);
       ctx.strokeText("Stay in borders!", 320, 350);
       ctx.fillStyle = "red";
