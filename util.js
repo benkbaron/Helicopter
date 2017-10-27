@@ -114,7 +114,7 @@ const Util = {
 
       space = this.distance([arrowX, arrowY], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
-        parachuter.dead = 25;
+        parachuter.dead = 30;
         wah.load();
         wah.play();
         arrow.resetPos();

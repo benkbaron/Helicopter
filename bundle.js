@@ -183,7 +183,7 @@ const Util = {
 
       space = this.distance([arrowX, arrowY], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
-        parachuter.dead = 25;
+        parachuter.dead = 30;
         wah.load();
         wah.play();
         arrow.resetPos();
@@ -1183,8 +1183,8 @@ class Parachuter {
     this.height = 60;
     this.parachuterIcon = new Image();
     this.parachuterIcon.src = "./assets/parachuterIcon.png";
-    this.parachuterSkullIcon = new Image();
-    this.parachuterSkullIcon.src = "./assets/skullIcon.png";
+    this.parachuterAngelIcon = new Image();
+    this.parachuterAngelIcon.src = "./assets/angel.png";
     this.rescueCount = 0;
     this.lostCount = 0;
     this.dead = 0;
@@ -1211,7 +1211,7 @@ class Parachuter {
     let image = this.parachuterIcon;
     if (this.dead > 0) {
       this.dead -= 1;
-      image = this.parachuterSkullIcon;
+      image = this.parachuterAngelIcon;
       if (this.dead === 1) {
         this.lostCount += 1;
         this.resetPos();
