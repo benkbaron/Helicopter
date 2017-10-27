@@ -23,8 +23,10 @@ const Sound = {
     music.play();
   },
 
-  playSound(sound, soundEffects) {
-    if (soundEffects) {
+  soundEffects: true,
+
+  playSound(sound) {
+    if (this.soundEffects) {
       if (sound === "arrowShot") {
         arrowShotSound.load();
         arrowShotSound.play();

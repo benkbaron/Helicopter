@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else {
         if (Util.checkHit({arrowArr: arrowArr, bird: bird1, blueBird: blueBird1, mosquito: mosquito1,
                           parachuter: parachuter1})) {
-          Sound.playSound("arrowHit", soundEffects);
+          Sound.playSound("arrowHit");
         }
         intervalSpeed = 1000/60;
         displayStandard();
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if ( (gameStarted && helicopter1.alive) && (arrowTimer < 1 || passwordEntered())){
           firstArrow = arrowArr[0];
           firstArrow.shoot(helicopter1);
-          Sound.playSound("arrowShot", soundEffects);
+          Sound.playSound("arrowShot");
           arrowArr = arrowArr.slice(1);
           arrowArr.push(firstArrow);
           arrowTimer = 35;
@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   displayCrash = () => {
     drawAll();
     drawArrows();
-    Sound.playSound("lifeLost", soundEffects);
+    Sound.playSound("lifeLost");
   };
 
   resetObjects = () => {
@@ -246,14 +246,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     playing = playing ? false : true;
   });
 
-  let soundEffects = true;
+  // let soundEffects = true;
   let soundButton = document.getElementById("soundButton");
   soundButton.addEventListener("click", () => {
-    if (soundEffects) {
-      soundEffects = false;
+    if (Sound.soundEffects) {
+      Sound.soundEffects = false;
       soundButton.innerHTML = "Turn Sound Effects On";
     } else {
-      soundEffects = true;
+      Sound.soundEffects = true;
       soundButton.innerHTML = "Turn Sound Effects Off";
     }
   });
