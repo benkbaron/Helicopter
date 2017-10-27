@@ -1018,7 +1018,7 @@ class Helicopter {
     this.height = 105;
     this.initials = [" ", " ", " "];
     this.helicopterIconFlipped = new Image();
-    this.helicopterIconFlipped.src = "./assets/flippedHelicopterIcon.png";
+    this.helicopterIconFlipped.src = "./assets/helicopterIconFlipped.png";
     this.helicopterIcon = new Image();
     this.helicopterIcon.src = "./assets/helicopterIcon.png";
     this.skullIcon = new Image();
