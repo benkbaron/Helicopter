@@ -1014,11 +1014,11 @@ class Helicopter {
     this.flipped = false;
     this.keysDown = [];
     this.alive = true;
-    this.width = 100;
-    this.height = 100;
+    this.width = 105;
+    this.height = 105;
     this.initials = [" ", " ", " "];
     this.helicopterIconFlipped = new Image();
-    this.helicopterIconFlipped.src = "./assets/flippedhelicopterIcon.png";
+    this.helicopterIconFlipped.src = "./assets/flippedHelicopterIcon.png";
     this.helicopterIcon = new Image();
     this.helicopterIcon.src = "./assets/helicopterIcon.png";
     this.skullIcon = new Image();
