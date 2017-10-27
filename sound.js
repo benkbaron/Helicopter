@@ -1,17 +1,17 @@
-let wah = new Audio('./assets/wah.wav');
-wah.volume = 0.05;
+let parachuterDied = new Audio('./assets/wah.wav');
+parachuterDied.volume = 0.05;
 
 let catchSound = new Audio('./assets/catchSound.wav');
 catchSound.volume = 0.3;
 
-let arrowShotSound = new Audio('./assets/arrowShot.wav');
-arrowShotSound.volume = 0.3;
+let arrowShot = new Audio('./assets/arrowShot.wav');
+arrowShot.volume = 0.3;
 
-let arrowHitSound = new Audio('./assets/arrowHit.wav');
-arrowHitSound.volume = 0.7;
+let arrowHit = new Audio('./assets/arrowHit.wav');
+arrowHit.volume = 0.7;
 
-let lifeLostSound = new Audio('./assets/lifeLost.wav');
-lifeLostSound.volume = 0.5;
+let lifeLost = new Audio('./assets/lifeLost.wav');
+lifeLost.volume = 0.5;
 
 let music = new Audio('./assets/music.m4a');
 music.volume = 0.4;
@@ -27,16 +27,8 @@ const Sound = {
 
   playSound(sound) {
     if (this.soundEffects) {
-      if (sound === "arrowShot") {
-        arrowShotSound.load();
-        arrowShotSound.play();
-      } else if (sound === "arrowHit") {
-        arrowHitSound.load();
-        arrowHitSound.play();
-      } else if (sound === "lifeLost") {
-        lifeLostSound.load();
-        lifeLostSound.play();
-      }
+      eval(`${sound}`).load();
+      eval(`${sound}`).play();
     }
   },
 

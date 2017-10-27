@@ -1,12 +1,10 @@
 const Util = require("../util");
-
-let wah = new Audio('./assets/wah.wav');
-wah.volume = 0.05;
+const Sound = require("../sound");
 
 class Parachuter {
   constructor(options) {
     this.posX = 960 * Math.random();
-    this.posY = -600 * Math.random();
+    this.posY = -300 * Math.random() - 100;
     this.width = 60;
     this.height = 60;
     this.parachuterIcon = new Image();
@@ -38,6 +36,9 @@ class Parachuter {
   draw(ctx) {
     let image = this.parachuterIcon;
     if (this.dead > 0) {
+      if (this.dead === 30) {
+        Sound.playSound("parachuterDied");
+      }
       this.dead -= 1;
       image = this.parachuterAngelIcon;
       if (this.dead === 1) {
@@ -51,20 +52,22 @@ class Parachuter {
 
   updatePos(wind) {
     this.posY += this.speed;
-    if (this.posY > 610) {
+    if (this.posY > 610 || this.posX > 1100) {
       this.lostCount += 1;
+      Sound.playSound("parachuterDied");
       this.resetPos();
-      wah.load();
-      wah.play();
     }
     if (Util.inWindRange(this, wind)){
       this.posX += 3;
     }
   }
 
-  resetPos() {
+  resetPos(saved = false) {
     this.posX = 960 * Math.random();
-    this.posY = -600 * Math.random();
+    this.posY = -300 * Math.random() - 100;
+    if (saved) {
+      Sound.playSound("catchSound");
+    }
     this.difficultyChange(this.difficulty);
   }
 }

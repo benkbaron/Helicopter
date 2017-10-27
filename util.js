@@ -1,9 +1,3 @@
-let wah = new Audio('./assets/wah.wav');
-wah.volume = 0.05;
-
-let catchSound = new Audio('./assets/catchSound.wav');
-catchSound.volume = 0.25;
-
 const Util = {
 
   checkCrash({helicopter, bird, blueBird, blimp, mosquito, lightning}) {
@@ -47,9 +41,7 @@ const Util = {
     if (space < 60){
       if (parachuter.dead === 0) {
         parachuter.rescueCount += 1;
-        parachuter.resetPos();
-        catchSound.load();
-        catchSound.play();
+        parachuter.resetPos(true);
         return true;
       }
     }
@@ -86,18 +78,14 @@ const Util = {
       space = this.distance([bird.posX + (bird.width / 2), bird.posY + (bird.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
         bird.feathers = 25;
-        parachuter.dead = 25;
-        wah.load();
-        wah.play();
+        parachuter.dead = 30;
         arrow.resetPos();
         answer = true;
       }
       space = this.distance([mosquito.posX + (mosquito.width / 2), mosquito.posY + (mosquito.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
         mosquito.resetPos();
-        parachuter.dead = 25;
-        wah.load();
-        wah.play();
+        parachuter.dead = 30;
         arrow.resetPos();
         answer = true;
       }
@@ -105,9 +93,7 @@ const Util = {
       space = this.distance([blueBird.posX + (blueBird.width / 2), blueBird.posY + (blueBird.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
         blueBird.feathers = 25;
-        parachuter.dead = 25;
-        wah.load();
-        wah.play();
+        parachuter.dead = 30;
         arrow.resetPos();
         answer = true;
       }
@@ -115,8 +101,6 @@ const Util = {
       space = this.distance([arrowX, arrowY], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
         parachuter.dead = 30;
-        wah.load();
-        wah.play();
         arrow.resetPos();
         answer = true;
       }
@@ -140,7 +124,7 @@ const Util = {
 
   inWindRange(obj, wind) {
     let space = this.distance([wind.posX, wind.posY], [obj.posX + (obj.width / 2), obj.posY + (obj.height / 2)]);
-    if (space < 400 && wind.posX < obj.posX) return true;
+    if (space < 300 && wind.posX < obj.posX) return true;
     return false;
   },
 

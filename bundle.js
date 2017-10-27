@@ -67,12 +67,6 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-let wah = new Audio('./assets/wah.wav');
-wah.volume = 0.05;
-
-let catchSound = new Audio('./assets/catchSound.wav');
-catchSound.volume = 0.25;
-
 const Util = {
 
   checkCrash({helicopter, bird, blueBird, blimp, mosquito, lightning}) {
@@ -116,9 +110,7 @@ const Util = {
     if (space < 60){
       if (parachuter.dead === 0) {
         parachuter.rescueCount += 1;
-        parachuter.resetPos();
-        catchSound.load();
-        catchSound.play();
+        parachuter.resetPos(true);
         return true;
       }
     }
@@ -155,18 +147,14 @@ const Util = {
       space = this.distance([bird.posX + (bird.width / 2), bird.posY + (bird.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
         bird.feathers = 25;
-        parachuter.dead = 25;
-        wah.load();
-        wah.play();
+        parachuter.dead = 30;
         arrow.resetPos();
         answer = true;
       }
       space = this.distance([mosquito.posX + (mosquito.width / 2), mosquito.posY + (mosquito.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
         mosquito.resetPos();
-        parachuter.dead = 25;
-        wah.load();
-        wah.play();
+        parachuter.dead = 30;
         arrow.resetPos();
         answer = true;
       }
@@ -174,9 +162,7 @@ const Util = {
       space = this.distance([blueBird.posX + (blueBird.width / 2), blueBird.posY + (blueBird.height / 2)], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
         blueBird.feathers = 25;
-        parachuter.dead = 25;
-        wah.load();
-        wah.play();
+        parachuter.dead = 30;
         arrow.resetPos();
         answer = true;
       }
@@ -184,8 +170,6 @@ const Util = {
       space = this.distance([arrowX, arrowY], [parachuter.posX + (parachuter.width / 2), parachuter.posY + (parachuter.height / 2)]);
       if (space < 30 && parachuter.dead === 0){
         parachuter.dead = 30;
-        wah.load();
-        wah.play();
         arrow.resetPos();
         answer = true;
       }
@@ -209,7 +193,7 @@ const Util = {
 
   inWindRange(obj, wind) {
     let space = this.distance([wind.posX, wind.posY], [obj.posX + (obj.width / 2), obj.posY + (obj.height / 2)]);
-    if (space < 400 && wind.posX < obj.posX) return true;
+    if (space < 300 && wind.posX < obj.posX) return true;
     return false;
   },
 
@@ -1182,14 +1166,12 @@ module.exports = Mosquito;
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
-
-let wah = new Audio('./assets/wah.wav');
-wah.volume = 0.05;
+const Sound = __webpack_require__(12);
 
 class Parachuter {
   constructor(options) {
     this.posX = 960 * Math.random();
-    this.posY = -600 * Math.random();
+    this.posY = -300 * Math.random() - 100;
     this.width = 60;
     this.height = 60;
     this.parachuterIcon = new Image();
@@ -1221,6 +1203,9 @@ class Parachuter {
   draw(ctx) {
     let image = this.parachuterIcon;
     if (this.dead > 0) {
+      if (this.dead === 30) {
+        Sound.playSound("parachuterDied");
+      }
       this.dead -= 1;
       image = this.parachuterAngelIcon;
       if (this.dead === 1) {
@@ -1234,20 +1219,22 @@ class Parachuter {
 
   updatePos(wind) {
     this.posY += this.speed;
-    if (this.posY > 610) {
+    if (this.posY > 610 || this.posX > 1100) {
       this.lostCount += 1;
+      Sound.playSound("parachuterDied");
       this.resetPos();
-      wah.load();
-      wah.play();
     }
     if (Util.inWindRange(this, wind)){
       this.posX += 3;
     }
   }
 
-  resetPos() {
+  resetPos(saved = false) {
     this.posX = 960 * Math.random();
-    this.posY = -600 * Math.random();
+    this.posY = -300 * Math.random() - 100;
+    if (saved) {
+      Sound.playSound("catchSound");
+    }
     this.difficultyChange(this.difficulty);
   }
 }
@@ -1259,20 +1246,20 @@ module.exports = Parachuter;
 /* 12 */
 /***/ (function(module, exports) {
 
-let wah = new Audio('./assets/wah.wav');
-wah.volume = 0.05;
+let parachuterDied = new Audio('./assets/wah.wav');
+parachuterDied.volume = 0.05;
 
 let catchSound = new Audio('./assets/catchSound.wav');
 catchSound.volume = 0.3;
 
-let arrowShotSound = new Audio('./assets/arrowShot.wav');
-arrowShotSound.volume = 0.3;
+let arrowShot = new Audio('./assets/arrowShot.wav');
+arrowShot.volume = 0.3;
 
-let arrowHitSound = new Audio('./assets/arrowHit.wav');
-arrowHitSound.volume = 0.7;
+let arrowHit = new Audio('./assets/arrowHit.wav');
+arrowHit.volume = 0.7;
 
-let lifeLostSound = new Audio('./assets/lifeLost.wav');
-lifeLostSound.volume = 0.5;
+let lifeLost = new Audio('./assets/lifeLost.wav');
+lifeLost.volume = 0.5;
 
 let music = new Audio('./assets/music.m4a');
 music.volume = 0.4;
@@ -1288,16 +1275,8 @@ const Sound = {
 
   playSound(sound) {
     if (this.soundEffects) {
-      if (sound === "arrowShot") {
-        arrowShotSound.load();
-        arrowShotSound.play();
-      } else if (sound === "arrowHit") {
-        arrowHitSound.load();
-        arrowHitSound.play();
-      } else if (sound === "lifeLost") {
-        lifeLostSound.load();
-        lifeLostSound.play();
-      }
+      eval(`${sound}`).load();
+      eval(`${sound}`).play();
     }
   },
 
