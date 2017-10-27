@@ -260,6 +260,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   let easyDifficulty;
   let hardDifficulty;
+
   let easyButton = document.getElementById("easyButton");
   easyButton.addEventListener("click", () => {
       setDifficulty("easy");

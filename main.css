@@ -34,7 +34,7 @@ button {
   height: 45px;
   width: 110px;
   border-radius: 9px;
-  background-color: Transparent;
+  background: Transparent;
   font-weight: 700;
   font-size: 16px;
   outline: none;
@@ -43,7 +43,7 @@ button {
 }
 
 button:hover {
-  background-color: #35e504;
+  background: #35e504;
 }
 
 a {
@@ -52,5 +52,15 @@ a {
 }
 
 #easyButton {
-  background-color: #35e504;
+  background: #35e504;
+}
+
+#easyButton:hover {
+  background: #35e504;
+}
+#mediumButton:hover {
+  background: #35e504;
+}
+#hardButton:hover {
+  background: #35e504;
 }
