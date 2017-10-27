@@ -4,8 +4,8 @@ class Bird {
   constructor(options) {
     this.posX = 1050;
     this.posY = 600 * Math.random();
-    this.width = 50;
-    this.height = 50;
+    this.width = 80;
+    this.height = 80;
     this.featherWidth = 100;
     this.featherHeight = 100;
     this.feathers = 0;
@@ -16,13 +16,22 @@ class Bird {
     this.birdIcon.src = "./assets/birdIcon.png";
     this.difficulty = "easy";
     this.speed = 1.1 * (Math.random() + 0.4);
+    this.eagleImages = [];
+    this.imageCounter = 0;
+
+    for (let i = 0; i < 30; i++){
+      let name = `${i}eagle`;
+      this.name = new Image();
+      this.name.src = `./assets/eagleImages/${i}eagle.gif`;
+      this.eagleImages.push(this.name);
+    }
   }
 
   difficultyChange(level) {
     this.difficulty = level;
     switch (level) {
       case "easy":
-        this.speed = 1.1 * (Math.random() + 0.4);
+        this.speed = 1.3 * (Math.random() + 0.8);
         break;
       case "medium":
         this.speed = 3 * (Math.random() + 0.4);
@@ -41,7 +50,9 @@ class Bird {
         this.resetPos();
       }
     } else {
-      Util.draw(ctx, this.birdIcon, this, this.width, this.height);
+      Util.draw(ctx, this.eagleImages[Math.floor(this.imageCounter)], this, this.width, this.height);
+      this.imageCounter += (this.speed / 3);
+      this.imageCounter = this.imageCounter % 30;
     }
   }
 
