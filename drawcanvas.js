@@ -33,18 +33,26 @@ const DrawCanvas = {
     ctx.fillText(`Parachuters Lost: ${parachuter1.lostCount}`, 10, 44);
     ctx.fillText(`Birds Shot: ${bird1.birdShotCount + blueBird1.birdShotCount}`, 10, 66);
     ctx.fillText(`Lives Left: ${lifeCount}`, 10, 88);
-    if (helicopter1.posX < -5 || helicopter1.posX > 900 || helicopter1.posY < -20 || helicopter1.posY > 510) {
-      if (helicopter1.alive) {
-      ctx.font = 'bold 50px tahoma';
-      ctx.strokeStyle = 'black';
-      ctx.lineWidth = 4;
-      ctx.strokeText("Danger!", 420, 250);
-      ctx.strokeText("Stay in borders!", 320, 350);
-      ctx.fillStyle = "red";
-      ctx.fillText("Danger!", 420, 250);
-      ctx.fillText("Stay in borders!", 320, 350);
-      }
+    if (helicopter1.alive && (helicopter1.posX < -5 || helicopter1.posX > 900 || helicopter1.posY < -20 || helicopter1.posY > 515)) {
+      DrawCanvas.drawBorderDanger(ctx);
+      DrawCanvas.borderTimer = 40;
+    } else if (helicopter1.alive && DrawCanvas.borderTimer > 0) {
+      DrawCanvas.drawBorderDanger(ctx);
+      DrawCanvas.borderTimer -= 1;
     }
+  },
+
+  borderTimer: 0,
+
+  drawBorderDanger(ctx) {
+    ctx.font = 'bold 50px tahoma';
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 4;
+    ctx.strokeText("Danger!", 420, 250);
+    ctx.strokeText("Stay in borders!", 320, 350);
+    ctx.fillStyle = "red";
+    ctx.fillText("Danger!", 420, 250);
+    ctx.fillText("Stay in borders!", 320, 350);
   },
 
   pausedPage(ctx){

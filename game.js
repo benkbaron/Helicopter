@@ -58,6 +58,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       DrawCanvas.pausedPage(ctx);
     } else if (reset) {
       resetObjects();
+      DrawCanvas.borderTimer = 0;
       intervalSpeed = 1000/60;
       reset = false;
     } else if (Util.checkCrash({helicopter: helicopter1, bird: bird1, blueBird: blueBird1,
