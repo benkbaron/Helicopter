@@ -38,8 +38,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let sun1 = new Sun();
   let wind1 = new Wind();
   let blueBird1 = new BlueBird();
-  let allObjects = [parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1,
-                    helicopter1, wind1, cloud1, sun1];
+  let allObjects = [sun1, parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1,
+                    helicopter1, wind1, cloud1];
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = 0;
   bird1.birdShotCount = 0;

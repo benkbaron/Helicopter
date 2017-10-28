@@ -2,7 +2,7 @@ const Util = require("../util");
 
 class BlueBird {
   constructor(options) {
-    this.posX = (-1000 * Math.random()) - 50;
+    this.posX = (-500 * Math.random()) - 50;
     this.posY = 600 * Math.random();
     this.feathersWidth = 100;
     this.feathersHeight = 100;
@@ -58,6 +58,9 @@ class BlueBird {
 
   updatePos(wind, helicopter) {
     this.posX += this.speed + (this.birdShotCount / 8);
+    if (this.feathers > 0) {
+      this.posY += 3;
+    }
     if (helicopter.posY > this.posY) {
       this.posY += 1;
     } else {
@@ -74,7 +77,7 @@ class BlueBird {
   }
 
   resetPos() {
-    this.posX = (-1000 * Math.random()) - 50;
+    this.posX = (-500 * Math.random()) - 50;
     this.posY = 600 * Math.random();
     this.difficultyChange(this.difficulty);
     this.feathers = 0;

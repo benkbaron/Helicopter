@@ -250,8 +250,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let sun1 = new Sun();
   let wind1 = new Wind();
   let blueBird1 = new BlueBird();
-  let allObjects = [parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1,
-                    helicopter1, wind1, cloud1, sun1];
+  let allObjects = [sun1, parachuter1, blimp1, lightning1, bird1, blueBird1, mosquito1,
+                    helicopter1, wind1, cloud1];
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = 0;
   bird1.birdShotCount = 0;
@@ -655,10 +655,13 @@ class Bird {
 
   updatePos(wind, helicopter) {
     this.posX -= this.speed + (this.birdShotCount / 8);
+    if (this.feathers > 0) {
+      this.posY += 3;
+    }
     if (helicopter.posY > this.posY) {
-      this.posY += 1;
+      this.posY += 1.3;
     } else {
-      this.posY -= 1;
+      this.posY -= 1.3;
     }
 
     if (this.posX < -100) {
@@ -730,7 +733,7 @@ const Util = __webpack_require__(0);
 
 class BlueBird {
   constructor(options) {
-    this.posX = (-1000 * Math.random()) - 50;
+    this.posX = (-500 * Math.random()) - 50;
     this.posY = 600 * Math.random();
     this.feathersWidth = 100;
     this.feathersHeight = 100;
@@ -786,6 +789,9 @@ class BlueBird {
 
   updatePos(wind, helicopter) {
     this.posX += this.speed + (this.birdShotCount / 8);
+    if (this.feathers > 0) {
+      this.posY += 3;
+    }
     if (helicopter.posY > this.posY) {
       this.posY += 1;
     } else {
@@ -802,7 +808,7 @@ class BlueBird {
   }
 
   resetPos() {
-    this.posX = (-1000 * Math.random()) - 50;
+    this.posX = (-500 * Math.random()) - 50;
     this.posY = 600 * Math.random();
     this.difficultyChange(this.difficulty);
     this.feathers = 0;
