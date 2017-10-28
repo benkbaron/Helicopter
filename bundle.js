@@ -657,13 +657,13 @@ class Bird {
     this.posX -= this.speed + (this.birdShotCount / 8);
     if (this.feathers > 0) {
       this.posY += 3;
-    }
-    if (helicopter.posY > this.posY) {
-      this.posY += 1.3;
     } else {
-      this.posY -= 1.3;
+      if (helicopter.posY > this.posY) {
+        this.posY += 1.3;
+      } else {
+        this.posY -= 1.3;
+      }
     }
-
     if (this.posX < -100) {
       this.resetPos();
     }
@@ -791,11 +791,12 @@ class BlueBird {
     this.posX += this.speed + (this.birdShotCount / 8);
     if (this.feathers > 0) {
       this.posY += 3;
-    }
-    if (helicopter.posY > this.posY) {
-      this.posY += 1;
     } else {
-      this.posY -= 1;
+      if (helicopter.posY > this.posY) {
+        this.posY += 1;
+      } else {
+        this.posY -= 1;
+      }
     }
 
     if (this.posX > 1050) {
