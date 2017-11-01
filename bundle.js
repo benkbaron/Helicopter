@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -208,19 +208,74 @@ module.exports = Util;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+let parachuterDied = new Audio('./assets/wah.wav');
+parachuterDied.volume = 0.05;
+
+let catchSound = new Audio('./assets/catchSound.wav');
+catchSound.volume = 0.3;
+
+let arrowShot = new Audio('./assets/arrowShot.wav');
+arrowShot.volume = 0.3;
+
+let arrowHit = new Audio('./assets/arrowHit.wav');
+arrowHit.volume = 0.7;
+
+let lifeLost = new Audio('./assets/lifeLost.wav');
+lifeLost.volume = 0.5;
+
+let music = new Audio('./assets/music.m4a');
+music.volume = 0.4;
+music.loop = true;
+
+const Sound = {
+
+  playMusic() {
+    music.play();
+  },
+
+  soundEffects: true,
+
+  playSound(sound) {
+    if (this.soundEffects) {
+      eval(`${sound}`).load();
+      eval(`${sound}`).play();
+    }
+  },
+
+  musicControl(playing) {
+    if (!playing){
+      musicButton.innerHTML = "Turn Music Off";
+      music.play();
+      playing = true;
+    } else {
+      musicButton.innerHTML = "Turn Music On";
+      music.pause();
+      playing = false;
+    }
+  },
+
+};
+
+module.exports = Sound;
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Arrow = __webpack_require__(2);
-const Bird = __webpack_require__(3);
-const Blimp = __webpack_require__(4);
-const BlueBird = __webpack_require__(5);
-const Cloud = __webpack_require__(6);
-const DrawCanvas = __webpack_require__(7);
-const Helicopter = __webpack_require__(8);
-const Lightning = __webpack_require__(9);
-const Mosquito = __webpack_require__(10);
-const Parachuter = __webpack_require__(11);
-const Sound = __webpack_require__(12);
+const Arrow = __webpack_require__(3);
+const Bird = __webpack_require__(4);
+const Blimp = __webpack_require__(5);
+const BlueBird = __webpack_require__(6);
+const Cloud = __webpack_require__(7);
+const DrawCanvas = __webpack_require__(8);
+const Helicopter = __webpack_require__(9);
+const Lightning = __webpack_require__(10);
+const Mosquito = __webpack_require__(11);
+const Parachuter = __webpack_require__(12);
+const Sound = __webpack_require__(1);
 const Sun = __webpack_require__(13);
 const Util = __webpack_require__(0);
 const Wind = __webpack_require__(14);
@@ -255,7 +310,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = 0;
   bird1.birdShotCount = 0;
-  DrawCanvas.startPage(ctx, helicopter1);
+
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 10);
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 30);
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 50);
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 100);
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 500);
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 700);
+
   let lifeCount = 3;
   let inputs = [];
   let arrowTimer = 0;
@@ -535,7 +597,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -592,7 +654,7 @@ module.exports = Arrow;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -685,7 +747,7 @@ module.exports = Bird;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -726,7 +788,7 @@ module.exports = Blimp;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -820,7 +882,7 @@ module.exports = BlueBird;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -862,8 +924,33 @@ module.exports = Cloud;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
+
+const arrowIcon = new Image();
+arrowIcon.src = "./assets/arrowIcon.png";
+
+const birdIcon = new Image();
+birdIcon.src = "./assets/eagleImages/0eagle.gif";
+
+const arrowKeyIcon = new Image();
+arrowKeyIcon.src = "./assets/arrowKeyIcon.png";
+
+const enterIcon = new Image();
+enterIcon.src = "./assets/enterIcon.png";
+
+const spacebar = new Image();
+spacebar.src = "./assets/spacebar.png";
+
+const thumbsUpIcon = new Image();
+thumbsUpIcon.src = "./assets/thumbsUpIcon.png";
+
+const pauseIcon = new Image();
+pauseIcon.src = "./assets/pauseIcon.png";
+
+const parachuterIcon = new Image();
+parachuterIcon.src = "./assets/parachuterIcon.png";
+
 
 const DrawCanvas = {
   startPage(ctx, helicopter1){
@@ -882,18 +969,40 @@ const DrawCanvas = {
     ctx.strokeText("Type your initials and press enter to begin!", 90, 250);
     ctx.fillStyle = "red";
     ctx.fillText("Type your initials and press enter to begin!", 90, 250);
-    ctx.fillStyle = "yellow";
-    ctx.font = '35px tahoma';
-    ctx.fillText(`${helicopter1.initials[0]}`, 455, 330);
-    ctx.fillText(`${helicopter1.initials[1]}`, 495, 330);
-    ctx.fillText(`${helicopter1.initials[2]}`, 535, 330);
-    ctx.fillStyle = "white";
-    ctx.fillText("_  _  _", 455, 335);
+    ctx.fillStyle = "red";
+    ctx.font = '40px tahoma';
+    ctx.fillText(`${helicopter1.initials[0]}`, 449, 330);
+    ctx.fillText(`${helicopter1.initials[1]}`, 496, 330);
+    ctx.fillText(`${helicopter1.initials[2]}`, 542, 330);
+
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1.2;
+    ctx.strokeText(`${helicopter1.initials[0]}`, 449, 330);
+    ctx.strokeText(`${helicopter1.initials[1]}`, 496, 330);
+    ctx.strokeText(`${helicopter1.initials[2]}`, 542, 330);
+    ctx.strokeText("_  _  _", 450, 335);
+
+
+    ctx.fillStyle = "red";
+    ctx.fillText("_  _  _", 450, 335);
     ctx.fillStyle = "black";
     ctx.font = '26px tahoma';
-    ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 130, 400);
-    ctx.fillText('Everything except clouds and wind is dangerous!', 220, 460);
-    ctx.fillText("Shoot birds and mosquitos using spacebar. Hit enter to pause game.", 115, 520);
+
+    ctx.drawImage(helicopter1.helicopterIcon, 150, 370, 100, 100);
+    ctx.drawImage(arrowKeyIcon, 295, 360, 130, 130);
+
+    ctx.drawImage(helicopter1.helicopterIcon, 50, 470, 100, 100);
+    ctx.drawImage(birdIcon, 230, 500, 70, 70);
+    ctx.drawImage(arrowIcon, 160, 490, 70, 70);
+    ctx.drawImage(spacebar, 290, 460, 140, 130);
+
+    ctx.drawImage(helicopter1.helicopterIcon, 600, 370, 100, 100);
+    ctx.drawImage(parachuterIcon, 680, 390, 70, 70);
+    ctx.drawImage(thumbsUpIcon, 780, 380, 70, 70);
+
+    ctx.drawImage(pauseIcon, 630, 490, 70, 70);
+    ctx.drawImage(enterIcon, 780, 500, 80, 50);
+
   },
 
   playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount, helicopter1){
@@ -1004,7 +1113,7 @@ module.exports = DrawCanvas;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -1068,7 +1177,7 @@ module.exports = Helicopter;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -1104,7 +1213,7 @@ module.exports = Lightning;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
@@ -1169,11 +1278,11 @@ module.exports = Mosquito;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const Util = __webpack_require__(0);
-const Sound = __webpack_require__(12);
+const Sound = __webpack_require__(1);
 
 class Parachuter {
   constructor(options) {
@@ -1250,61 +1359,6 @@ class Parachuter {
 }
 
 module.exports = Parachuter;
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-let parachuterDied = new Audio('./assets/wah.wav');
-parachuterDied.volume = 0.05;
-
-let catchSound = new Audio('./assets/catchSound.wav');
-catchSound.volume = 0.3;
-
-let arrowShot = new Audio('./assets/arrowShot.wav');
-arrowShot.volume = 0.3;
-
-let arrowHit = new Audio('./assets/arrowHit.wav');
-arrowHit.volume = 0.7;
-
-let lifeLost = new Audio('./assets/lifeLost.wav');
-lifeLost.volume = 0.5;
-
-let music = new Audio('./assets/music.m4a');
-music.volume = 0.4;
-music.loop = true;
-
-const Sound = {
-
-  playMusic() {
-    music.play();
-  },
-
-  soundEffects: true,
-
-  playSound(sound) {
-    if (this.soundEffects) {
-      eval(`${sound}`).load();
-      eval(`${sound}`).play();
-    }
-  },
-
-  musicControl(playing) {
-    if (!playing){
-      musicButton.innerHTML = "Turn Music Off";
-      music.play();
-      playing = true;
-    } else {
-      musicButton.innerHTML = "Turn Music On";
-      music.pause();
-      playing = false;
-    }
-  },
-
-};
-
-module.exports = Sound;
 
 
 /***/ }),

@@ -1,3 +1,28 @@
+const arrowIcon = new Image();
+arrowIcon.src = "./assets/arrowIcon.png";
+
+const birdIcon = new Image();
+birdIcon.src = "./assets/eagleImages/0eagle.gif";
+
+const arrowKeyIcon = new Image();
+arrowKeyIcon.src = "./assets/arrowKeyIcon.png";
+
+const enterIcon = new Image();
+enterIcon.src = "./assets/enterIcon.png";
+
+const spacebar = new Image();
+spacebar.src = "./assets/spacebar.png";
+
+const thumbsUpIcon = new Image();
+thumbsUpIcon.src = "./assets/thumbsUpIcon.png";
+
+const pauseIcon = new Image();
+pauseIcon.src = "./assets/pauseIcon.png";
+
+const parachuterIcon = new Image();
+parachuterIcon.src = "./assets/parachuterIcon.png";
+
+
 const DrawCanvas = {
   startPage(ctx, helicopter1){
     ctx.clearRect(0, 0, 1000, 600);
@@ -15,18 +40,40 @@ const DrawCanvas = {
     ctx.strokeText("Type your initials and press enter to begin!", 90, 250);
     ctx.fillStyle = "red";
     ctx.fillText("Type your initials and press enter to begin!", 90, 250);
-    ctx.fillStyle = "yellow";
-    ctx.font = '35px tahoma';
-    ctx.fillText(`${helicopter1.initials[0]}`, 455, 330);
-    ctx.fillText(`${helicopter1.initials[1]}`, 495, 330);
-    ctx.fillText(`${helicopter1.initials[2]}`, 535, 330);
-    ctx.fillStyle = "white";
-    ctx.fillText("_  _  _", 455, 335);
+    ctx.fillStyle = "red";
+    ctx.font = '40px tahoma';
+    ctx.fillText(`${helicopter1.initials[0]}`, 449, 330);
+    ctx.fillText(`${helicopter1.initials[1]}`, 496, 330);
+    ctx.fillText(`${helicopter1.initials[2]}`, 542, 330);
+
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1.2;
+    ctx.strokeText(`${helicopter1.initials[0]}`, 449, 330);
+    ctx.strokeText(`${helicopter1.initials[1]}`, 496, 330);
+    ctx.strokeText(`${helicopter1.initials[2]}`, 542, 330);
+    ctx.strokeText("_  _  _", 450, 335);
+
+
+    ctx.fillStyle = "red";
+    ctx.fillText("_  _  _", 450, 335);
     ctx.fillStyle = "black";
     ctx.font = '26px tahoma';
-    ctx.fillText('Fly using the arrow keys. Rescue parachuters by flying over them.', 130, 400);
-    ctx.fillText('Everything except clouds and wind is dangerous!', 220, 460);
-    ctx.fillText("Shoot birds and mosquitos using spacebar. Hit enter to pause game.", 115, 520);
+
+    ctx.drawImage(helicopter1.helicopterIcon, 150, 370, 100, 100);
+    ctx.drawImage(arrowKeyIcon, 295, 360, 130, 130);
+
+    ctx.drawImage(helicopter1.helicopterIcon, 50, 470, 100, 100);
+    ctx.drawImage(birdIcon, 230, 500, 70, 70);
+    ctx.drawImage(arrowIcon, 160, 490, 70, 70);
+    ctx.drawImage(spacebar, 290, 460, 140, 130);
+
+    ctx.drawImage(helicopter1.helicopterIcon, 600, 370, 100, 100);
+    ctx.drawImage(parachuterIcon, 680, 390, 70, 70);
+    ctx.drawImage(thumbsUpIcon, 780, 380, 70, 70);
+
+    ctx.drawImage(pauseIcon, 630, 490, 70, 70);
+    ctx.drawImage(enterIcon, 780, 500, 80, 50);
+
   },
 
   playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount, helicopter1){

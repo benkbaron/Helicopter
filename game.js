@@ -43,7 +43,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
   parachuter1.rescueCount = 0;
   parachuter1.lostCount = 0;
   bird1.birdShotCount = 0;
-  DrawCanvas.startPage(ctx, helicopter1);
+
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 10);
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 30);
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 50);
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 100);
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 500);
+    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 700);
+
   let lifeCount = 3;
   let inputs = [];
   let arrowTimer = 0;
