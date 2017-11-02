@@ -311,19 +311,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
   parachuter1.lostCount = 0;
   bird1.birdShotCount = 0;
 
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 10);
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 30);
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 50);
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 100);
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 500);
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 700);
+  setInterval(() => {
+    if (!initialsEntered) {
+      DrawCanvas.startPage(ctx, helicopter1);
+    }
+  }, 1000/60);
 
   let lifeCount = 3;
   let inputs = [];
   let arrowTimer = 0;
 
   resetPage = () => {
-    DrawCanvas.playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount, helicopter1);
+    DrawCanvas.playingPage(ctx, paused, parachuter1, bird1, blueBird1, lifeCount, helicopter1);
     helicopter1.alive = true;
     if (lifeCount === 0) {
       displayGameOver();
@@ -385,10 +384,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
       if (event.keyCode === 13){
           if (!gameStarted) {
+            DrawCanvas.borderTimer = 0;
             restartGame();
           }
           else {
             paused = paused ? false : true;
+            DrawCanvas.borderTimer = 0;
           }
       }
     }
@@ -716,7 +717,7 @@ class Bird {
   }
 
   updatePos(wind, helicopter) {
-    this.posX -= this.speed + (this.birdShotCount / 8);
+    this.posX -= this.speed + (this.birdShotCount / 7);
     if (this.feathers > 0) {
       this.posY += 3;
     } else {
@@ -850,7 +851,7 @@ class BlueBird {
   }
 
   updatePos(wind, helicopter) {
-    this.posX += this.speed + (this.birdShotCount / 8);
+    this.posX += this.speed + (this.birdShotCount / 7);
     if (this.feathers > 0) {
       this.posY += 3;
     } else {
@@ -1005,7 +1006,7 @@ const DrawCanvas = {
 
   },
 
-  playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount, helicopter1){
+  playingPage(ctx, paused, parachuter1, bird1, blueBird1, lifeCount, helicopter1){
     ctx.clearRect(0, 0, 1000, 600);
     ctx.fillStyle = "#053fff";
     ctx.fillRect(0, 0, 1000, 600);
@@ -1025,7 +1026,7 @@ const DrawCanvas = {
       ctx.strokeText(`Lives Left: ${lifeCount}`, 6, 90);
     }
 
-    if (helicopter1.alive && (helicopter1.posX < -5 || helicopter1.posX > 900 || helicopter1.posY < -20 || helicopter1.posY > 515)) {
+    if ((helicopter1.alive && !paused) && (helicopter1.posX < -5 || helicopter1.posX > 900 || helicopter1.posY < -20 || helicopter1.posY > 515)) {
       DrawCanvas.drawBorderDanger(ctx);
       DrawCanvas.borderTimer = 40;
     } else if (helicopter1.alive && DrawCanvas.borderTimer > 0) {
@@ -1185,7 +1186,7 @@ const Util = __webpack_require__(0);
 class Lightning {
   constructor(options) {
     this.posX = 1000 * Math.random();
-    this.posY = (-7000 * Math.random()) - 1000;
+    this.posY = (-5000 * Math.random()) - 1000;
     this.lightningIcon = new Image();
     this.lightningIcon.src = "./assets/lightningIcon.png";
     this.width = 100;
@@ -1205,7 +1206,7 @@ class Lightning {
 
   resetPos() {
     this.posX = 1000 * Math.random();
-    this.posY = -10000 * Math.random() - 1000;
+    this.posY = -5000 * Math.random() - 1000;
     }
 }
 
@@ -1221,7 +1222,7 @@ const Util = __webpack_require__(0);
 class Mosquito {
   constructor(options) {
     this.posX = 600 * Math.random();
-    this.posY = 700;
+    this.posY = 620;
     this.width = 25;
     this.height = 25;
     this.mosquitoIcon = new Image();
@@ -1269,7 +1270,7 @@ class Mosquito {
 
   resetPos() {
     this.posX = 600 * Math.random();
-    this.posY = 700;
+    this.posY = 620;
   }
 
 }
@@ -1287,7 +1288,7 @@ const Sound = __webpack_require__(1);
 class Parachuter {
   constructor(options) {
     this.posX = 960 * Math.random();
-    this.posY = -300 * Math.random() - 100;
+    this.posY = -100 * Math.random() - 100;
     this.width = 60;
     this.height = 60;
     this.parachuterIcon = new Image();
@@ -1305,13 +1306,13 @@ class Parachuter {
     this.difficulty = level;
     switch (level) {
       case "easy":
-        this.speed = 0.8 + (this.rescueCount / 8);
+        this.speed = 0.8 + (this.rescueCount / 7);
         break;
       case "medium":
-        this.speed = 1.3 + (this.rescueCount / 8);
+        this.speed = 1.3 + (this.rescueCount / 6);
         break;
       case "hard":
-        this.speed = 2.5 + (this.rescueCount / 8);
+        this.speed = 2.5 + (this.rescueCount / 5);
         break;
     }
   }
@@ -1350,7 +1351,7 @@ class Parachuter {
 
   resetPos(saved = false) {
     this.posX = 960 * Math.random();
-    this.posY = -300 * Math.random() - 100;
+    this.posY = -100 * Math.random() - 100;
     if (saved) {
       Sound.playSound("catchSound");
     }

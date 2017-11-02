@@ -44,19 +44,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
   parachuter1.lostCount = 0;
   bird1.birdShotCount = 0;
 
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 10);
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 30);
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 50);
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 100);
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 500);
-    setTimeout(() => DrawCanvas.startPage(ctx,helicopter1), 700);
+  setInterval(() => {
+    if (!initialsEntered) {
+      DrawCanvas.startPage(ctx, helicopter1);
+    }
+  }, 1000/60);
 
   let lifeCount = 3;
   let inputs = [];
   let arrowTimer = 0;
 
   resetPage = () => {
-    DrawCanvas.playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount, helicopter1);
+    DrawCanvas.playingPage(ctx, paused, parachuter1, bird1, blueBird1, lifeCount, helicopter1);
     helicopter1.alive = true;
     if (lifeCount === 0) {
       displayGameOver();
@@ -118,10 +117,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
       if (event.keyCode === 13){
           if (!gameStarted) {
+            DrawCanvas.borderTimer = 0;
             restartGame();
           }
           else {
             paused = paused ? false : true;
+            DrawCanvas.borderTimer = 0;
           }
       }
     }

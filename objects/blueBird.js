@@ -57,7 +57,7 @@ class BlueBird {
   }
 
   updatePos(wind, helicopter) {
-    this.posX += this.speed + (this.birdShotCount / 8);
+    this.posX += this.speed + (this.birdShotCount / 7);
     if (this.feathers > 0) {
       this.posY += 3;
     } else {

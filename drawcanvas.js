@@ -76,7 +76,7 @@ const DrawCanvas = {
 
   },
 
-  playingPage(ctx, parachuter1, bird1, blueBird1, lifeCount, helicopter1){
+  playingPage(ctx, paused, parachuter1, bird1, blueBird1, lifeCount, helicopter1){
     ctx.clearRect(0, 0, 1000, 600);
     ctx.fillStyle = "#053fff";
     ctx.fillRect(0, 0, 1000, 600);
@@ -96,7 +96,7 @@ const DrawCanvas = {
       ctx.strokeText(`Lives Left: ${lifeCount}`, 6, 90);
     }
 
-    if (helicopter1.alive && (helicopter1.posX < -5 || helicopter1.posX > 900 || helicopter1.posY < -20 || helicopter1.posY > 515)) {
+    if ((helicopter1.alive && !paused) && (helicopter1.posX < -5 || helicopter1.posX > 900 || helicopter1.posY < -20 || helicopter1.posY > 515)) {
       DrawCanvas.drawBorderDanger(ctx);
       DrawCanvas.borderTimer = 40;
     } else if (helicopter1.alive && DrawCanvas.borderTimer > 0) {

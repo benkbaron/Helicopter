@@ -4,7 +4,7 @@ const Sound = require("../sound");
 class Parachuter {
   constructor(options) {
     this.posX = 960 * Math.random();
-    this.posY = -300 * Math.random() - 100;
+    this.posY = -100 * Math.random() - 100;
     this.width = 60;
     this.height = 60;
     this.parachuterIcon = new Image();
@@ -22,13 +22,13 @@ class Parachuter {
     this.difficulty = level;
     switch (level) {
       case "easy":
-        this.speed = 0.8 + (this.rescueCount / 8);
+        this.speed = 0.8 + (this.rescueCount / 7);
         break;
       case "medium":
-        this.speed = 1.3 + (this.rescueCount / 8);
+        this.speed = 1.3 + (this.rescueCount / 6);
         break;
       case "hard":
-        this.speed = 2.5 + (this.rescueCount / 8);
+        this.speed = 2.5 + (this.rescueCount / 5);
         break;
     }
   }
@@ -67,7 +67,7 @@ class Parachuter {
 
   resetPos(saved = false) {
     this.posX = 960 * Math.random();
-    this.posY = -300 * Math.random() - 100;
+    this.posY = -100 * Math.random() - 100;
     if (saved) {
       Sound.playSound("catchSound");
     }
