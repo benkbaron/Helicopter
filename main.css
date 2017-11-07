@@ -22,7 +22,6 @@ body {
 .bottomNav {
   display: flex;
   flex-direction: row;
-  max-width: 84vw;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
