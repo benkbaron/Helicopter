@@ -2,8 +2,8 @@ const Util = require("../util");
 
 class Bird {
   constructor(options) {
-    this.posX = 1050;
-    this.posY = 600 * Math.random();
+    this.posX = Util.canvasWidth + 50;
+    this.posY = Util.canvasHeight * Math.random();
     this.width = 80;
     this.height = 80;
     this.featherWidth = 100;
@@ -77,8 +77,8 @@ class Bird {
   }
 
   resetPos() {
-    this.posX = 1050;
-    this.posY = 600 * Math.random();
+    this.posX = Util.canvasWidth + 50;
+    this.posY = Util.canvasHeight * Math.random();
     this.difficultyChange(this.difficulty);
     this.feathers = 0;
   }

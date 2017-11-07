@@ -2,8 +2,8 @@ const Util = require("../util");
 
 class Mosquito {
   constructor(options) {
-    this.posX = 600 * Math.random();
-    this.posY = 620;
+    this.posX = Util.canvasWidth * Math.random();
+    this.posY = Util.canvasHeight + 20;
     this.width = 25;
     this.height = 25;
     this.mosquitoIcon = new Image();
@@ -50,8 +50,8 @@ class Mosquito {
   }
 
   resetPos() {
-    this.posX = 600 * Math.random();
-    this.posY = 620;
+    this.posX = Util.canvasWidth * Math.random();
+    this.posY = Util.canvasHeight + 20;
   }
 
 }

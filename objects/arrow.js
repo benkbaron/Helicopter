@@ -33,7 +33,7 @@ class Arrow {
       this.posX -= 5;
     }
 
-    if (this.posX > 1050 || this.posX < -50) {
+    if (this.posX > Util.canvasWidth + 50 || this.posX < -50) {
       this.resetPos();
     }
 

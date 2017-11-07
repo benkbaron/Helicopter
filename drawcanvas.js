@@ -22,64 +22,64 @@ pauseIcon.src = "./assets/pauseIcon.png";
 const parachuterIcon = new Image();
 parachuterIcon.src = "./assets/parachuterIcon.png";
 
+const Util = require("./util");
 
 const DrawCanvas = {
   startPage(ctx, helicopter1){
-    ctx.clearRect(0, 0, 1000, 600);
+    ctx.clearRect(0, 0, Util.canvasWidth, Util.canvasHeight);
     ctx.fillStyle = "#053fff";
-    ctx.fillRect(0, 0, 1000, 600);
+    ctx.fillRect(0, 0, Util.canvasWidth, Util.canvasHeight);
     ctx.font = 'bold 80px tahoma';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;
-    ctx.strokeText("Helicopter", 295, 140);
+    ctx.strokeText("Helicopter", (Util.canvasWidth / 2) - 200, 140);
     ctx.fillStyle = "red";
-    ctx.fillText("Helicopter", 295, 140);
+    ctx.fillText("Helicopter", (Util.canvasWidth / 2) - 200, 140);
     ctx.font = 'bold 38px tahoma';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 3;
-    ctx.strokeText("Type your initials and press enter to begin!", 90, 250);
+    ctx.strokeText("Type your initials and press enter to begin!", (Util.canvasWidth / 2) - 400, 250);
     ctx.fillStyle = "red";
-    ctx.fillText("Type your initials and press enter to begin!", 90, 250);
+    ctx.fillText("Type your initials and press enter to begin!", (Util.canvasWidth / 2) - 400, 250);
     ctx.fillStyle = "red";
     ctx.font = '40px tahoma';
-    ctx.fillText(`${helicopter1.initials[0]}`, 449, 330);
-    ctx.fillText(`${helicopter1.initials[1]}`, 496, 330);
-    ctx.fillText(`${helicopter1.initials[2]}`, 542, 330);
+    ctx.fillText(`${helicopter1.initials[0]}`, (Util.canvasWidth / 2) - 46, 330);
+    ctx.fillText(`${helicopter1.initials[1]}`, (Util.canvasWidth / 2), 330);
+    ctx.fillText(`${helicopter1.initials[2]}`, (Util.canvasWidth / 2) + 46, 330);
 
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 1.2;
-    ctx.strokeText(`${helicopter1.initials[0]}`, 449, 330);
-    ctx.strokeText(`${helicopter1.initials[1]}`, 496, 330);
-    ctx.strokeText(`${helicopter1.initials[2]}`, 542, 330);
-    ctx.strokeText("_  _  _", 450, 335);
+    ctx.strokeText(`${helicopter1.initials[0]}`, (Util.canvasWidth / 2) - 46, 330);
+    ctx.strokeText(`${helicopter1.initials[1]}`, (Util.canvasWidth / 2), 330);
+    ctx.strokeText(`${helicopter1.initials[2]}`, (Util.canvasWidth / 2) + 46, 330);
+    ctx.strokeText("_  _  _", (Util.canvasWidth / 2) - 45, 335);
 
 
     ctx.fillStyle = "red";
-    ctx.fillText("_  _  _", 450, 335);
+    ctx.fillText("_  _  _", (Util.canvasWidth / 2) - 45, 335);
     ctx.fillStyle = "black";
     ctx.font = '26px tahoma';
 
-    ctx.drawImage(helicopter1.helicopterIcon, 150, 370, 100, 100);
-    ctx.drawImage(arrowKeyIcon, 295, 360, 130, 130);
+    ctx.drawImage(helicopter1.helicopterIcon, (Util.canvasWidth / 2) - 440, 370, 100, 100);
+    ctx.drawImage(arrowKeyIcon, (Util.canvasWidth / 2) - 280, 360, 130, 130);
 
-    ctx.drawImage(helicopter1.helicopterIcon, 50, 470, 100, 100);
-    ctx.drawImage(birdIcon, 230, 500, 70, 70);
-    ctx.drawImage(arrowIcon, 160, 490, 70, 70);
-    ctx.drawImage(spacebar, 290, 460, 140, 130);
+    ctx.drawImage(helicopter1.helicopterIcon, (Util.canvasWidth / 2) - 440, 470, 100, 100);
+    ctx.drawImage(arrowIcon, (Util.canvasWidth / 2) - 335, 490, 70, 70);
+    ctx.drawImage(spacebar, (Util.canvasWidth / 2) - 280, 460, 140, 130);
 
-    ctx.drawImage(helicopter1.helicopterIcon, 600, 370, 100, 100);
-    ctx.drawImage(parachuterIcon, 680, 390, 70, 70);
-    ctx.drawImage(thumbsUpIcon, 780, 380, 70, 70);
+    ctx.drawImage(helicopter1.helicopterIcon, (Util.canvasWidth / 2) + 130, 370, 100, 100);
+    ctx.drawImage(parachuterIcon, (Util.canvasWidth / 2) + 200, 390, 70, 70);
+    ctx.drawImage(thumbsUpIcon, (Util.canvasWidth / 2) + 300, 380, 70, 70);
 
-    ctx.drawImage(pauseIcon, 630, 490, 70, 70);
-    ctx.drawImage(enterIcon, 780, 500, 80, 50);
+    ctx.drawImage(pauseIcon, (Util.canvasWidth / 2) + 150, 490, 70, 70);
+    ctx.drawImage(enterIcon, (Util.canvasWidth / 2) + 300, 500, 80, 50);
 
   },
 
   playingPage(ctx, paused, parachuter1, bird1, blueBird1, lifeCount, helicopter1){
-    ctx.clearRect(0, 0, 1000, 600);
+    ctx.clearRect(0, 0, Util.canvasWidth, Util.canvasHeight);
     ctx.fillStyle = "#053fff";
-    ctx.fillRect(0, 0, 1000, 600);
+    ctx.fillRect(0, 0, Util.canvasWidth, Util.canvasHeight);
 
     if (helicopter1.alive) {
       ctx.font = 'bold 24px tahoma';
@@ -96,7 +96,7 @@ const DrawCanvas = {
       ctx.strokeText(`Lives Left: ${lifeCount}`, 6, 90);
     }
 
-    if ((helicopter1.alive && !paused) && (helicopter1.posX < -5 || helicopter1.posX > 900 || helicopter1.posY < -20 || helicopter1.posY > 515)) {
+    if ((helicopter1.alive && !paused) && (helicopter1.posX < -5 || helicopter1.posX > Util.canvasWidth - 100 || helicopter1.posY < -20 || helicopter1.posY > Util.canvasHeight - 85)) {
       DrawCanvas.drawBorderDanger(ctx);
       DrawCanvas.borderTimer = 40;
     } else if (helicopter1.alive && DrawCanvas.borderTimer > 0) {
@@ -111,11 +111,12 @@ const DrawCanvas = {
     ctx.font = 'bold 50px tahoma';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;
-    ctx.strokeText("Danger!", 420, 250);
-    ctx.strokeText("Stay in the borders!", 265, 350);
+    ctx.strokeText("Danger!", (Util.canvasWidth / 2) - 70, Util.canvasHeight / 2 - 90);
+    ctx.strokeText("Stay in the borders!", (Util.canvasWidth / 2) - 220, Util.canvasHeight / 2 + 10);
     ctx.fillStyle = "red";
-    ctx.fillText("Danger!", 420, 250);
-    ctx.fillText("Stay in the borders!", 265, 350);
+    ctx.fillText("Danger!", (Util.canvasWidth / 2
+    ) - 70, Util.canvasHeight / 2 - 90);
+    ctx.fillText("Stay in the borders!", (Util.canvasWidth / 2) - 220, Util.canvasHeight / 2 + 10);
   },
 
   pausedPage(ctx){
@@ -123,11 +124,11 @@ const DrawCanvas = {
     ctx.strokeStyle = 'black';
     ctx.fillStyle = "red";
     ctx.lineWidth = 4;
-    ctx.strokeText("Paused", 400, 250);
-    ctx.fillText("Paused", 400, 250);
+    ctx.strokeText("Paused", (Util.canvasWidth / 2) - 110, (Util.canvasHeight / 2) - 80);
+    ctx.fillText("Paused", (Util.canvasWidth / 2) - 110, (Util.canvasHeight / 2) - 80);
     ctx.font = 'bold 40px tahoma';
-    ctx.strokeText("Press enter to resume", 290, 350);
-    ctx.fillText("Press enter to resume", 290, 350);
+    ctx.strokeText("Press enter to resume", (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 2));
+    ctx.fillText("Press enter to resume", (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 2));
   },
 
   gameOver(ctx, parachuterHighScores, birdsHighScores, parachuter1, bird1, blueBird1, helicopter1){
@@ -144,39 +145,40 @@ const DrawCanvas = {
     ctx.font = 'bold 80px tahoma';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;
-    ctx.strokeText("You lost!", 330, 100);
+    ctx.strokeText("You lost!", (Util.canvasWidth / 2) - 150, (Util.canvasHeight / 6));
     ctx.fillStyle = "red";
-    ctx.fillText("You lost!", 330, 100);
+    ctx.fillText("You lost!", (Util.canvasWidth / 2) - 150, (Util.canvasHeight / 6));
     ctx.font = '50px tahoma';
     ctx.fillStyle = "black";
-    ctx.fillText("Hit enter to try again", 280, 180);
+    ctx.fillText("Hit enter to try again", (Util.canvasWidth / 2) - 210, (Util.canvasHeight / 6) + 100);
     ctx.font = '28px tahoma';
-    ctx.fillText("Parachuters Saved Highscores", 120, 250);
-    ctx.fillText("Birds Shot Highscores", 560, 250);
+    ctx.fillText("Parachuters Saved Highscores", (Util.canvasWidth / 2) - 400, (Util.canvasHeight / 6) + 200);
+    ctx.fillText("Birds Shot Highscores", (Util.canvasWidth / 2) + 80, (Util.canvasHeight / 6) + 200);
     ctx.font = '20px tahoma';
-    ctx.fillText(`1. ${parachuterHighScores[0].initials}:`, 240, 300);
-    ctx.fillText(`${parachuterHighScores[0].parachuters}`, 320, 300);
-    ctx.fillText(`2. ${parachuterHighScores[1].initials}:`, 240, 325);
-    ctx.fillText(`${parachuterHighScores[1].parachuters}`, 320, 325);
-    ctx.fillText(`3. ${parachuterHighScores[2].initials}:`, 240, 350);
-    ctx.fillText(`${parachuterHighScores[2].parachuters}`, 320, 350);
-    ctx.fillText(`4. ${parachuterHighScores[3].initials}:`, 240, 375);
-    ctx.fillText(`${parachuterHighScores[3].parachuters}`, 320, 375);
-    ctx.fillText(`5. ${parachuterHighScores[4].initials}:`, 240, 400);
-    ctx.fillText(`${parachuterHighScores[4].parachuters}`, 320, 400);
-    ctx.fillText(`1. ${birdsHighScores[0].initials}:`, 640, 300);
-    ctx.fillText(`${birdsHighScores[0].birds}`, 720, 300);
-    ctx.fillText(`2. ${birdsHighScores[1].initials}:`, 640, 325);
-    ctx.fillText(`${birdsHighScores[1].birds}`, 720, 325);
-    ctx.fillText(`3. ${birdsHighScores[2].initials}:`, 640, 350);
-    ctx.fillText(`${birdsHighScores[2].birds}`, 720, 350);
-    ctx.fillText(`4. ${birdsHighScores[3].initials}:`, 640, 375);
-    ctx.fillText(`${birdsHighScores[3].birds}`, 720, 375);
-    ctx.fillText(`5. ${birdsHighScores[4].initials}:`, 640, 400);
-    ctx.fillText(`${birdsHighScores[4].birds}`, 720, 400);
+    ctx.fillText(`1. ${parachuterHighScores[0].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`${parachuterHighScores[0].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`2. ${parachuterHighScores[1].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`${parachuterHighScores[1].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`3. ${parachuterHighScores[2].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`${parachuterHighScores[2].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`4. ${parachuterHighScores[3].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`${parachuterHighScores[3].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`5. ${parachuterHighScores[4].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 350);
+    ctx.fillText(`${parachuterHighScores[4].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 350);
+
+    ctx.fillText(`1. ${birdsHighScores[0].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`${birdsHighScores[0].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`2. ${birdsHighScores[1].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`${birdsHighScores[1].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`3. ${birdsHighScores[2].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`${birdsHighScores[2].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`4. ${birdsHighScores[3].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`${birdsHighScores[3].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`5. ${birdsHighScores[4].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 350);
+    ctx.fillText(`${birdsHighScores[4].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 350);
     ctx.font = '24px tahoma';
-    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, 340, 460);
-    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, 380, 490);
+    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, (Util.canvasWidth / 2) - 170, (Util.canvasHeight / 2) + 200);
+    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, (Util.canvasWidth / 2) - 130, (Util.canvasHeight / 2) + 250);
   }
 };
 

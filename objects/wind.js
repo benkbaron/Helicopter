@@ -2,8 +2,8 @@ const Util = require("../util");
 
 class Wind {
   constructor(options) {
-    this.posX = -1200 - (1000 * Math.random());
-    this.posY = (500 * Math.random());
+    this.posX = -1200 - (Util.canvasWidth * Math.random());
+    this.posY = (Util.canvasHeight * Math.random()) - 150;
     this.width = 250;
     this.height = 250;
     this.windIcon = new Image();
@@ -16,14 +16,14 @@ class Wind {
 
   updatePos() {
     this.posX += 3;
-    if (this.posX > 1200) {
+    if (this.posX > Util.canvasWidth + 200) {
       this.resetPos();
     }
   }
 
   resetPos() {
-    this.posX = -1200 - (1000 * Math.random());
-    this.posY = 500 * Math.random();
+    this.posX = -1200 - (Util.canvasWidth * Math.random());
+    this.posY = (Util.canvasHeight * Math.random()) - 150;
   }
 }
 

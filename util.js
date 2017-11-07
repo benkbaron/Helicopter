@@ -1,8 +1,10 @@
 const Util = {
+  canvasWidth: 1000,
+  canvasHeight: 600,
 
   checkCrash({helicopter, bird, blueBird, blimp, mosquito, lightning}) {
-    if (helicopter.posY > 550 || helicopter.posY < -100 ||
-        helicopter.posX > 1100 || helicopter.posX < -100) {
+    if (helicopter.posY > Util.canvasHeight - 50 || helicopter.posY < -60 ||
+        helicopter.posX > Util.canvasWidth - 50 || helicopter.posX < -60) {
       return true;
     }
 

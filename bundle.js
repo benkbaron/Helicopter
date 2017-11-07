@@ -68,10 +68,12 @@
 /***/ (function(module, exports) {
 
 const Util = {
+  canvasWidth: 1000,
+  canvasHeight: 600,
 
   checkCrash({helicopter, bird, blueBird, blimp, mosquito, lightning}) {
-    if (helicopter.posY > 550 || helicopter.posY < -100 ||
-        helicopter.posX > 1100 || helicopter.posX < -100) {
+    if (helicopter.posY > Util.canvasHeight - 50 || helicopter.posY < -60 ||
+        helicopter.posX > Util.canvasWidth - 50 || helicopter.posX < -60) {
       return true;
     }
 
@@ -293,9 +295,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let reset;
   let paused = false;
   let canvas = document.querySelector("canvas");
+
+  let heightOffset = 60;
+  Util.canvasWidth  = window.innerWidth;
+  Util.canvasHeight = window.innerHeight - heightOffset;
+
+  canvas.width = Util.canvasWidth;
+  canvas.height = Util.canvasHeight;
+
   let ctx = canvas.getContext("2d");
   let arrowArr = [];
-  let bird1 = new Bird();
+  let bird1 = new Bird(canvas.width, canvas.height);
   let blimp1 = new Blimp();
   let cloud1 = new Cloud();
   let helicopter1 = new Helicopter();
@@ -322,8 +332,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let arrowTimer = 0;
 
   resetPage = () => {
+    if (heightOffset > 0) {
+      heightOffset -= 0.4;
+    }
+    Util.canvasWidth = window.innerWidth;
+    Util.canvasHeight = window.innerHeight - heightOffset;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - heightOffset;
     DrawCanvas.playingPage(ctx, paused, parachuter1, bird1, blueBird1, lifeCount, helicopter1);
     helicopter1.alive = true;
+
+
     if (lifeCount === 0) {
       displayGameOver();
       return;
@@ -354,6 +373,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       }
 
     arrowTimer -= 1;
+
     setTimeout(resetPage, intervalSpeed);
   };
 
@@ -465,7 +485,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     resetArrows();
     gameStarted = true;
     inputs = [];
-    resetPage();
+    resetPage(canvas);
   };
 
   drawArrows = () => {
@@ -636,7 +656,7 @@ class Arrow {
       this.posX -= 5;
     }
 
-    if (this.posX > 1050 || this.posX < -50) {
+    if (this.posX > Util.canvasWidth + 50 || this.posX < -50) {
       this.resetPos();
     }
 
@@ -662,8 +682,8 @@ const Util = __webpack_require__(0);
 
 class Bird {
   constructor(options) {
-    this.posX = 1050;
-    this.posY = 600 * Math.random();
+    this.posX = Util.canvasWidth + 50;
+    this.posY = Util.canvasHeight * Math.random();
     this.width = 80;
     this.height = 80;
     this.featherWidth = 100;
@@ -737,8 +757,8 @@ class Bird {
   }
 
   resetPos() {
-    this.posX = 1050;
-    this.posY = 600 * Math.random();
+    this.posX = Util.canvasWidth + 50;
+    this.posY = Util.canvasHeight * Math.random();
     this.difficultyChange(this.difficulty);
     this.feathers = 0;
   }
@@ -756,7 +776,7 @@ const Util = __webpack_require__(0);
 class Blimp {
   constructor(options) {
     this.posX = - 500 - (1000 * Math.random());
-    this.posY = (600 * Math.random()) - 100;
+    this.posY = (Util.canvasHeight * Math.random()) - 100;
     this.width = 200;
     this.height = 200;
     this.blimpIcon = new Image();
@@ -768,7 +788,7 @@ class Blimp {
   }
 
   updatePos(wind) {
-    if (this.posX > 1200) {
+    if (this.posX > Util.canvasWidth + 200) {
       this.resetPos();
     } else {
       this.posX += 1/2;
@@ -780,7 +800,7 @@ class Blimp {
 
   resetPos() {
     this.posX = - 600 - (1000 * Math.random());
-    this.posY = (600 * Math.random()) - 100;
+    this.posY = (Util.canvasHeight * Math.random()) - 100;
   }
 
 }
@@ -797,7 +817,7 @@ const Util = __webpack_require__(0);
 class BlueBird {
   constructor(options) {
     this.posX = (-500 * Math.random()) - 50;
-    this.posY = 600 * Math.random();
+    this.posY = Util.canvasHeight * Math.random();
     this.feathersWidth = 100;
     this.feathersHeight = 100;
     this.width = 60;
@@ -862,7 +882,7 @@ class BlueBird {
       }
     }
 
-    if (this.posX > 1050) {
+    if (this.posX > Util.canvasWidth + 50) {
       this.resetPos();
     }
 
@@ -873,7 +893,7 @@ class BlueBird {
 
   resetPos() {
     this.posX = (-500 * Math.random()) - 50;
-    this.posY = 600 * Math.random();
+    this.posY = Util.canvasHeight * Math.random();
     this.difficultyChange(this.difficulty);
     this.feathers = 0;
   }
@@ -890,8 +910,8 @@ const Util = __webpack_require__(0);
 
 class Cloud {
   constructor(options) {
-    this.posX = 1200 + (1000 * Math.random());
-    this.posY = (500 * Math.random()) - 100;
+    this.posX = Util.canvasWidth + 200 + (800 * Math.random());
+    this.posY = (Util.canvasHeight * Math.random()) - 100;
     this.width = 350;
     this.height = 350;
     this.cloudIcon = new Image();
@@ -903,9 +923,9 @@ class Cloud {
   }
 
   updatePos(wind) {
-    if (this.posX < -500) {
+    if (this.posX < -400) {
       this.resetPos();
-    } else if (this.posX > 400 && this.posX < 500) {
+    } else if (this.posX > Util.canvasWidth / 4 && this.posX < Util.canvasWidth / 1.3) {
       this.posX -= 1/4;
     } else {
       this.posX -= 1;
@@ -916,8 +936,8 @@ class Cloud {
   }
 
   resetPos() {
-    this.posX = 1200 + 1000 * Math.random();
-    this.posY = 500 * Math.random();
+    this.posX = Util.canvasWidth + 200 + (800 * Math.random());
+    this.posY = (Util.canvasHeight * Math.random()) - 100;
   }
 }
 
@@ -926,7 +946,7 @@ module.exports = Cloud;
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 const arrowIcon = new Image();
 arrowIcon.src = "./assets/arrowIcon.png";
@@ -952,64 +972,64 @@ pauseIcon.src = "./assets/pauseIcon.png";
 const parachuterIcon = new Image();
 parachuterIcon.src = "./assets/parachuterIcon.png";
 
+const Util = __webpack_require__(0);
 
 const DrawCanvas = {
   startPage(ctx, helicopter1){
-    ctx.clearRect(0, 0, 1000, 600);
+    ctx.clearRect(0, 0, Util.canvasWidth, Util.canvasHeight);
     ctx.fillStyle = "#053fff";
-    ctx.fillRect(0, 0, 1000, 600);
+    ctx.fillRect(0, 0, Util.canvasWidth, Util.canvasHeight);
     ctx.font = 'bold 80px tahoma';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;
-    ctx.strokeText("Helicopter", 295, 140);
+    ctx.strokeText("Helicopter", (Util.canvasWidth / 2) - 200, 140);
     ctx.fillStyle = "red";
-    ctx.fillText("Helicopter", 295, 140);
+    ctx.fillText("Helicopter", (Util.canvasWidth / 2) - 200, 140);
     ctx.font = 'bold 38px tahoma';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 3;
-    ctx.strokeText("Type your initials and press enter to begin!", 90, 250);
+    ctx.strokeText("Type your initials and press enter to begin!", (Util.canvasWidth / 2) - 400, 250);
     ctx.fillStyle = "red";
-    ctx.fillText("Type your initials and press enter to begin!", 90, 250);
+    ctx.fillText("Type your initials and press enter to begin!", (Util.canvasWidth / 2) - 400, 250);
     ctx.fillStyle = "red";
     ctx.font = '40px tahoma';
-    ctx.fillText(`${helicopter1.initials[0]}`, 449, 330);
-    ctx.fillText(`${helicopter1.initials[1]}`, 496, 330);
-    ctx.fillText(`${helicopter1.initials[2]}`, 542, 330);
+    ctx.fillText(`${helicopter1.initials[0]}`, (Util.canvasWidth / 2) - 46, 330);
+    ctx.fillText(`${helicopter1.initials[1]}`, (Util.canvasWidth / 2), 330);
+    ctx.fillText(`${helicopter1.initials[2]}`, (Util.canvasWidth / 2) + 46, 330);
 
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 1.2;
-    ctx.strokeText(`${helicopter1.initials[0]}`, 449, 330);
-    ctx.strokeText(`${helicopter1.initials[1]}`, 496, 330);
-    ctx.strokeText(`${helicopter1.initials[2]}`, 542, 330);
-    ctx.strokeText("_  _  _", 450, 335);
+    ctx.strokeText(`${helicopter1.initials[0]}`, (Util.canvasWidth / 2) - 46, 330);
+    ctx.strokeText(`${helicopter1.initials[1]}`, (Util.canvasWidth / 2), 330);
+    ctx.strokeText(`${helicopter1.initials[2]}`, (Util.canvasWidth / 2) + 46, 330);
+    ctx.strokeText("_  _  _", (Util.canvasWidth / 2) - 45, 335);
 
 
     ctx.fillStyle = "red";
-    ctx.fillText("_  _  _", 450, 335);
+    ctx.fillText("_  _  _", (Util.canvasWidth / 2) - 45, 335);
     ctx.fillStyle = "black";
     ctx.font = '26px tahoma';
 
-    ctx.drawImage(helicopter1.helicopterIcon, 150, 370, 100, 100);
-    ctx.drawImage(arrowKeyIcon, 295, 360, 130, 130);
+    ctx.drawImage(helicopter1.helicopterIcon, (Util.canvasWidth / 2) - 440, 370, 100, 100);
+    ctx.drawImage(arrowKeyIcon, (Util.canvasWidth / 2) - 280, 360, 130, 130);
 
-    ctx.drawImage(helicopter1.helicopterIcon, 50, 470, 100, 100);
-    ctx.drawImage(birdIcon, 230, 500, 70, 70);
-    ctx.drawImage(arrowIcon, 160, 490, 70, 70);
-    ctx.drawImage(spacebar, 290, 460, 140, 130);
+    ctx.drawImage(helicopter1.helicopterIcon, (Util.canvasWidth / 2) - 440, 470, 100, 100);
+    ctx.drawImage(arrowIcon, (Util.canvasWidth / 2) - 335, 490, 70, 70);
+    ctx.drawImage(spacebar, (Util.canvasWidth / 2) - 280, 460, 140, 130);
 
-    ctx.drawImage(helicopter1.helicopterIcon, 600, 370, 100, 100);
-    ctx.drawImage(parachuterIcon, 680, 390, 70, 70);
-    ctx.drawImage(thumbsUpIcon, 780, 380, 70, 70);
+    ctx.drawImage(helicopter1.helicopterIcon, (Util.canvasWidth / 2) + 130, 370, 100, 100);
+    ctx.drawImage(parachuterIcon, (Util.canvasWidth / 2) + 200, 390, 70, 70);
+    ctx.drawImage(thumbsUpIcon, (Util.canvasWidth / 2) + 300, 380, 70, 70);
 
-    ctx.drawImage(pauseIcon, 630, 490, 70, 70);
-    ctx.drawImage(enterIcon, 780, 500, 80, 50);
+    ctx.drawImage(pauseIcon, (Util.canvasWidth / 2) + 150, 490, 70, 70);
+    ctx.drawImage(enterIcon, (Util.canvasWidth / 2) + 300, 500, 80, 50);
 
   },
 
   playingPage(ctx, paused, parachuter1, bird1, blueBird1, lifeCount, helicopter1){
-    ctx.clearRect(0, 0, 1000, 600);
+    ctx.clearRect(0, 0, Util.canvasWidth, Util.canvasHeight);
     ctx.fillStyle = "#053fff";
-    ctx.fillRect(0, 0, 1000, 600);
+    ctx.fillRect(0, 0, Util.canvasWidth, Util.canvasHeight);
 
     if (helicopter1.alive) {
       ctx.font = 'bold 24px tahoma';
@@ -1026,7 +1046,7 @@ const DrawCanvas = {
       ctx.strokeText(`Lives Left: ${lifeCount}`, 6, 90);
     }
 
-    if ((helicopter1.alive && !paused) && (helicopter1.posX < -5 || helicopter1.posX > 900 || helicopter1.posY < -20 || helicopter1.posY > 515)) {
+    if ((helicopter1.alive && !paused) && (helicopter1.posX < -5 || helicopter1.posX > Util.canvasWidth - 100 || helicopter1.posY < -20 || helicopter1.posY > Util.canvasHeight - 85)) {
       DrawCanvas.drawBorderDanger(ctx);
       DrawCanvas.borderTimer = 40;
     } else if (helicopter1.alive && DrawCanvas.borderTimer > 0) {
@@ -1041,11 +1061,12 @@ const DrawCanvas = {
     ctx.font = 'bold 50px tahoma';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;
-    ctx.strokeText("Danger!", 420, 250);
-    ctx.strokeText("Stay in the borders!", 265, 350);
+    ctx.strokeText("Danger!", (Util.canvasWidth / 2) - 70, Util.canvasHeight / 2 - 90);
+    ctx.strokeText("Stay in the borders!", (Util.canvasWidth / 2) - 220, Util.canvasHeight / 2 + 10);
     ctx.fillStyle = "red";
-    ctx.fillText("Danger!", 420, 250);
-    ctx.fillText("Stay in the borders!", 265, 350);
+    ctx.fillText("Danger!", (Util.canvasWidth / 2
+    ) - 70, Util.canvasHeight / 2 - 90);
+    ctx.fillText("Stay in the borders!", (Util.canvasWidth / 2) - 220, Util.canvasHeight / 2 + 10);
   },
 
   pausedPage(ctx){
@@ -1053,11 +1074,11 @@ const DrawCanvas = {
     ctx.strokeStyle = 'black';
     ctx.fillStyle = "red";
     ctx.lineWidth = 4;
-    ctx.strokeText("Paused", 400, 250);
-    ctx.fillText("Paused", 400, 250);
+    ctx.strokeText("Paused", (Util.canvasWidth / 2) - 110, (Util.canvasHeight / 2) - 80);
+    ctx.fillText("Paused", (Util.canvasWidth / 2) - 110, (Util.canvasHeight / 2) - 80);
     ctx.font = 'bold 40px tahoma';
-    ctx.strokeText("Press enter to resume", 290, 350);
-    ctx.fillText("Press enter to resume", 290, 350);
+    ctx.strokeText("Press enter to resume", (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 2));
+    ctx.fillText("Press enter to resume", (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 2));
   },
 
   gameOver(ctx, parachuterHighScores, birdsHighScores, parachuter1, bird1, blueBird1, helicopter1){
@@ -1074,39 +1095,40 @@ const DrawCanvas = {
     ctx.font = 'bold 80px tahoma';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;
-    ctx.strokeText("You lost!", 330, 100);
+    ctx.strokeText("You lost!", (Util.canvasWidth / 2) - 150, (Util.canvasHeight / 6));
     ctx.fillStyle = "red";
-    ctx.fillText("You lost!", 330, 100);
+    ctx.fillText("You lost!", (Util.canvasWidth / 2) - 150, (Util.canvasHeight / 6));
     ctx.font = '50px tahoma';
     ctx.fillStyle = "black";
-    ctx.fillText("Hit enter to try again", 280, 180);
+    ctx.fillText("Hit enter to try again", (Util.canvasWidth / 2) - 210, (Util.canvasHeight / 6) + 100);
     ctx.font = '28px tahoma';
-    ctx.fillText("Parachuters Saved Highscores", 120, 250);
-    ctx.fillText("Birds Shot Highscores", 560, 250);
+    ctx.fillText("Parachuters Saved Highscores", (Util.canvasWidth / 2) - 400, (Util.canvasHeight / 6) + 200);
+    ctx.fillText("Birds Shot Highscores", (Util.canvasWidth / 2) + 80, (Util.canvasHeight / 6) + 200);
     ctx.font = '20px tahoma';
-    ctx.fillText(`1. ${parachuterHighScores[0].initials}:`, 240, 300);
-    ctx.fillText(`${parachuterHighScores[0].parachuters}`, 320, 300);
-    ctx.fillText(`2. ${parachuterHighScores[1].initials}:`, 240, 325);
-    ctx.fillText(`${parachuterHighScores[1].parachuters}`, 320, 325);
-    ctx.fillText(`3. ${parachuterHighScores[2].initials}:`, 240, 350);
-    ctx.fillText(`${parachuterHighScores[2].parachuters}`, 320, 350);
-    ctx.fillText(`4. ${parachuterHighScores[3].initials}:`, 240, 375);
-    ctx.fillText(`${parachuterHighScores[3].parachuters}`, 320, 375);
-    ctx.fillText(`5. ${parachuterHighScores[4].initials}:`, 240, 400);
-    ctx.fillText(`${parachuterHighScores[4].parachuters}`, 320, 400);
-    ctx.fillText(`1. ${birdsHighScores[0].initials}:`, 640, 300);
-    ctx.fillText(`${birdsHighScores[0].birds}`, 720, 300);
-    ctx.fillText(`2. ${birdsHighScores[1].initials}:`, 640, 325);
-    ctx.fillText(`${birdsHighScores[1].birds}`, 720, 325);
-    ctx.fillText(`3. ${birdsHighScores[2].initials}:`, 640, 350);
-    ctx.fillText(`${birdsHighScores[2].birds}`, 720, 350);
-    ctx.fillText(`4. ${birdsHighScores[3].initials}:`, 640, 375);
-    ctx.fillText(`${birdsHighScores[3].birds}`, 720, 375);
-    ctx.fillText(`5. ${birdsHighScores[4].initials}:`, 640, 400);
-    ctx.fillText(`${birdsHighScores[4].birds}`, 720, 400);
+    ctx.fillText(`1. ${parachuterHighScores[0].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`${parachuterHighScores[0].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`2. ${parachuterHighScores[1].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`${parachuterHighScores[1].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`3. ${parachuterHighScores[2].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`${parachuterHighScores[2].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`4. ${parachuterHighScores[3].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`${parachuterHighScores[3].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`5. ${parachuterHighScores[4].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 350);
+    ctx.fillText(`${parachuterHighScores[4].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 350);
+
+    ctx.fillText(`1. ${birdsHighScores[0].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`${birdsHighScores[0].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`2. ${birdsHighScores[1].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`${birdsHighScores[1].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`3. ${birdsHighScores[2].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`${birdsHighScores[2].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`4. ${birdsHighScores[3].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`${birdsHighScores[3].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`5. ${birdsHighScores[4].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 350);
+    ctx.fillText(`${birdsHighScores[4].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 350);
     ctx.font = '24px tahoma';
-    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, 340, 460);
-    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, 380, 490);
+    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, (Util.canvasWidth / 2) - 170, (Util.canvasHeight / 2) + 200);
+    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, (Util.canvasWidth / 2) - 130, (Util.canvasHeight / 2) + 250);
   }
 };
 
@@ -1185,7 +1207,7 @@ const Util = __webpack_require__(0);
 
 class Lightning {
   constructor(options) {
-    this.posX = 1000 * Math.random();
+    this.posX = (Util.canvasWidth * Math.random()) - 20;
     this.posY = (-5000 * Math.random()) - 1000;
     this.lightningIcon = new Image();
     this.lightningIcon.src = "./assets/lightningIcon.png";
@@ -1199,13 +1221,13 @@ class Lightning {
 
   updatePos() {
     this.posY += 4.5;
-    if (this.posY > 1100) {
+    if (this.posY > Util.canvasHeight + 100) {
       this.resetPos();
     }
   }
 
   resetPos() {
-    this.posX = 1000 * Math.random();
+    this.posX = (Util.canvasWidth * Math.random()) - 20;
     this.posY = -5000 * Math.random() - 1000;
     }
 }
@@ -1221,8 +1243,8 @@ const Util = __webpack_require__(0);
 
 class Mosquito {
   constructor(options) {
-    this.posX = 600 * Math.random();
-    this.posY = 620;
+    this.posX = Util.canvasWidth * Math.random();
+    this.posY = Util.canvasHeight + 20;
     this.width = 25;
     this.height = 25;
     this.mosquitoIcon = new Image();
@@ -1269,8 +1291,8 @@ class Mosquito {
   }
 
   resetPos() {
-    this.posX = 600 * Math.random();
-    this.posY = 620;
+    this.posX = Util.canvasWidth * Math.random();
+    this.posY = Util.canvasHeight + 20;
   }
 
 }
@@ -1287,7 +1309,7 @@ const Sound = __webpack_require__(1);
 
 class Parachuter {
   constructor(options) {
-    this.posX = 960 * Math.random();
+    this.posX = Util.canvasWidth * Math.random() - 30;
     this.posY = -100 * Math.random() - 100;
     this.width = 60;
     this.height = 60;
@@ -1339,7 +1361,7 @@ class Parachuter {
     if (this.dead > 0) {
       this.posY -= 4;
     }
-    if (this.posY > 610 || this.posX > 1100) {
+    if (this.posY > Util.canvasHeight + 10 || this.posX > Util.canvasWidth + 80) {
       this.lostCount += 1;
       Sound.playSound("parachuterDied");
       this.resetPos();
@@ -1350,7 +1372,7 @@ class Parachuter {
   }
 
   resetPos(saved = false) {
-    this.posX = 960 * Math.random();
+    this.posX = Util.canvasWidth * Math.random() - 30;
     this.posY = -100 * Math.random() - 100;
     if (saved) {
       Sound.playSound("catchSound");
@@ -1370,7 +1392,7 @@ const Util = __webpack_require__(0);
 
 class Sun {
   constructor(options) {
-    this.posX = 920;
+    this.posX = Util.canvasWidth - 80;
     this.posY = 20;
     this.width = 70;
     this.height = 70;
@@ -1391,11 +1413,12 @@ class Sun {
   }
 
   updatePos(){
-    return true;
+    this.resetPos();
   }
 
   resetPos(){
-    return true;
+    this.posX = Util.canvasWidth - 80;
+    this.posY = 20;
   }
 
 }
@@ -1411,8 +1434,8 @@ const Util = __webpack_require__(0);
 
 class Wind {
   constructor(options) {
-    this.posX = -1200 - (1000 * Math.random());
-    this.posY = (500 * Math.random());
+    this.posX = -1200 - (Util.canvasWidth * Math.random());
+    this.posY = (Util.canvasHeight * Math.random()) - 150;
     this.width = 250;
     this.height = 250;
     this.windIcon = new Image();
@@ -1425,14 +1448,14 @@ class Wind {
 
   updatePos() {
     this.posX += 3;
-    if (this.posX > 1200) {
+    if (this.posX > Util.canvasWidth + 200) {
       this.resetPos();
     }
   }
 
   resetPos() {
-    this.posX = -1200 - (1000 * Math.random());
-    this.posY = 500 * Math.random();
+    this.posX = -1200 - (Util.canvasWidth * Math.random());
+    this.posY = (Util.canvasHeight * Math.random()) - 150;
   }
 }
 

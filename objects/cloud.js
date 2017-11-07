@@ -2,8 +2,8 @@ const Util = require("../util");
 
 class Cloud {
   constructor(options) {
-    this.posX = 1200 + (1000 * Math.random());
-    this.posY = (500 * Math.random()) - 100;
+    this.posX = Util.canvasWidth + 200 + (800 * Math.random());
+    this.posY = (Util.canvasHeight * Math.random()) - 100;
     this.width = 350;
     this.height = 350;
     this.cloudIcon = new Image();
@@ -15,9 +15,9 @@ class Cloud {
   }
 
   updatePos(wind) {
-    if (this.posX < -500) {
+    if (this.posX < -400) {
       this.resetPos();
-    } else if (this.posX > 400 && this.posX < 500) {
+    } else if (this.posX > Util.canvasWidth / 4 && this.posX < Util.canvasWidth / 1.3) {
       this.posX -= 1/4;
     } else {
       this.posX -= 1;
@@ -28,8 +28,8 @@ class Cloud {
   }
 
   resetPos() {
-    this.posX = 1200 + 1000 * Math.random();
-    this.posY = 500 * Math.random();
+    this.posX = Util.canvasWidth + 200 + (800 * Math.random());
+    this.posY = (Util.canvasHeight * Math.random()) - 100;
   }
 }
 

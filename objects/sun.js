@@ -2,7 +2,7 @@ const Util = require("../util");
 
 class Sun {
   constructor(options) {
-    this.posX = 920;
+    this.posX = Util.canvasWidth - 80;
     this.posY = 20;
     this.width = 70;
     this.height = 70;
@@ -23,11 +23,12 @@ class Sun {
   }
 
   updatePos(){
-    return true;
+    this.resetPos();
   }
 
   resetPos(){
-    return true;
+    this.posX = Util.canvasWidth - 80;
+    this.posY = 20;
   }
 
 }

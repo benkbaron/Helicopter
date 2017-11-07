@@ -3,7 +3,7 @@ const Util = require("../util");
 class Blimp {
   constructor(options) {
     this.posX = - 500 - (1000 * Math.random());
-    this.posY = (600 * Math.random()) - 100;
+    this.posY = (Util.canvasHeight * Math.random()) - 100;
     this.width = 200;
     this.height = 200;
     this.blimpIcon = new Image();
@@ -15,7 +15,7 @@ class Blimp {
   }
 
   updatePos(wind) {
-    if (this.posX > 1200) {
+    if (this.posX > Util.canvasWidth + 200) {
       this.resetPos();
     } else {
       this.posX += 1/2;
@@ -27,7 +27,7 @@ class Blimp {
 
   resetPos() {
     this.posX = - 600 - (1000 * Math.random());
-    this.posY = (600 * Math.random()) - 100;
+    this.posY = (Util.canvasHeight * Math.random()) - 100;
   }
 
 }

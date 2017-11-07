@@ -2,7 +2,7 @@ const Util = require("../util");
 
 class Lightning {
   constructor(options) {
-    this.posX = 1000 * Math.random();
+    this.posX = (Util.canvasWidth * Math.random()) - 20;
     this.posY = (-5000 * Math.random()) - 1000;
     this.lightningIcon = new Image();
     this.lightningIcon.src = "./assets/lightningIcon.png";
@@ -16,13 +16,13 @@ class Lightning {
 
   updatePos() {
     this.posY += 4.5;
-    if (this.posY > 1100) {
+    if (this.posY > Util.canvasHeight + 100) {
       this.resetPos();
     }
   }
 
   resetPos() {
-    this.posX = 1000 * Math.random();
+    this.posX = (Util.canvasWidth * Math.random()) - 20;
     this.posY = -5000 * Math.random() - 1000;
     }
 }

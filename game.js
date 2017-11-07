@@ -26,9 +26,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let reset;
   let paused = false;
   let canvas = document.querySelector("canvas");
+
+  let heightOffset = 60;
+  Util.canvasWidth  = window.innerWidth;
+  Util.canvasHeight = window.innerHeight - heightOffset;
+
+  canvas.width = Util.canvasWidth;
+  canvas.height = Util.canvasHeight;
+
   let ctx = canvas.getContext("2d");
   let arrowArr = [];
-  let bird1 = new Bird();
+  let bird1 = new Bird(canvas.width, canvas.height);
   let blimp1 = new Blimp();
   let cloud1 = new Cloud();
   let helicopter1 = new Helicopter();
@@ -55,8 +63,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let arrowTimer = 0;
 
   resetPage = () => {
+    if (heightOffset > 0) {
+      heightOffset -= 0.4;
+    }
+    Util.canvasWidth = window.innerWidth;
+    Util.canvasHeight = window.innerHeight - heightOffset;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - heightOffset;
     DrawCanvas.playingPage(ctx, paused, parachuter1, bird1, blueBird1, lifeCount, helicopter1);
     helicopter1.alive = true;
+
+
     if (lifeCount === 0) {
       displayGameOver();
       return;
@@ -87,6 +104,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       }
 
     arrowTimer -= 1;
+
     setTimeout(resetPage, intervalSpeed);
   };
 
@@ -198,7 +216,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     resetArrows();
     gameStarted = true;
     inputs = [];
-    resetPage();
+    resetPage(canvas);
   };
 
   drawArrows = () => {

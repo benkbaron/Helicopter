@@ -3,7 +3,7 @@ const Sound = require("../sound");
 
 class Parachuter {
   constructor(options) {
-    this.posX = 960 * Math.random();
+    this.posX = Util.canvasWidth * Math.random() - 30;
     this.posY = -100 * Math.random() - 100;
     this.width = 60;
     this.height = 60;
@@ -55,7 +55,7 @@ class Parachuter {
     if (this.dead > 0) {
       this.posY -= 4;
     }
-    if (this.posY > 610 || this.posX > 1100) {
+    if (this.posY > Util.canvasHeight + 10 || this.posX > Util.canvasWidth + 80) {
       this.lostCount += 1;
       Sound.playSound("parachuterDied");
       this.resetPos();
@@ -66,7 +66,7 @@ class Parachuter {
   }
 
   resetPos(saved = false) {
-    this.posX = 960 * Math.random();
+    this.posX = Util.canvasWidth * Math.random() - 30;
     this.posY = -100 * Math.random() - 100;
     if (saved) {
       Sound.playSound("catchSound");
