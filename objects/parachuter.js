@@ -41,8 +41,9 @@ class Parachuter {
       }
       this.dead -= 1;
       image = this.parachuterAngelIcon;
-      if (this.dead === 1) {
+      if (this.dead === 79) {
         this.rescueCount -= 1;
+      } else if (this.dead === 1) {
         this.resetPos();
       }
     }
