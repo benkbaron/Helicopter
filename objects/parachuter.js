@@ -42,7 +42,7 @@ class Parachuter {
       this.dead -= 1;
       image = this.parachuterAngelIcon;
       if (this.dead === 1) {
-        this.lostCount += 1;
+        this.rescueCount -= 1;
         this.resetPos();
       }
     }
@@ -56,7 +56,7 @@ class Parachuter {
       this.posY -= 4;
     }
     if (this.posY > Util.canvasHeight + 10 || this.posX > Util.canvasWidth + 80) {
-      this.lostCount += 1;
+      this.rescueCount -= 1;
       Sound.playSound("parachuterDied");
       this.resetPos();
     }

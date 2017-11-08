@@ -1036,14 +1036,12 @@ const DrawCanvas = {
       ctx.strokeStyle = 'black';
       ctx.fillStyle = "yellow";
       ctx.lineWidth = 0.5;
-      ctx.fillText(`Parachuters Saved: ${parachuter1.rescueCount}`, 6, 24);
-      ctx.fillText(`Parachuters Lost: ${parachuter1.lostCount}`, 6, 46);
-      ctx.fillText(`Birds Shot: ${bird1.birdShotCount + blueBird1.birdShotCount}`, 6, 68);
-      ctx.fillText(`Lives Left: ${lifeCount}`, 6, 90);
-      ctx.strokeText(`Parachuters Saved: ${parachuter1.rescueCount}`, 6, 24);
-      ctx.strokeText(`Parachuters Lost: ${parachuter1.lostCount}`, 6, 46);
-      ctx.strokeText(`Birds Shot: ${bird1.birdShotCount + blueBird1.birdShotCount}`, 6, 68);
-      ctx.strokeText(`Lives Left: ${lifeCount}`, 6, 90);
+      ctx.fillText(`Parachuters Saved: ${parachuter1.rescueCount}`, 8, 26);
+      ctx.fillText(`Birds Shot: ${bird1.birdShotCount + blueBird1.birdShotCount}`, 8, 48);
+      ctx.fillText(`Lives Left: ${lifeCount}`, 8, 70);
+      ctx.strokeText(`Parachuters Saved: ${parachuter1.rescueCount}`, 8, 26);
+      ctx.strokeText(`Birds Shot: ${bird1.birdShotCount + blueBird1.birdShotCount}`, 8, 48);
+      ctx.strokeText(`Lives Left: ${lifeCount}`, 8, 70);
     }
 
     if ((helicopter1.alive && !paused) && (helicopter1.posX < -5 || helicopter1.posX > Util.canvasWidth - 100 || helicopter1.posY < -20 || helicopter1.posY > Util.canvasHeight - 85)) {
@@ -1348,7 +1346,7 @@ class Parachuter {
       this.dead -= 1;
       image = this.parachuterAngelIcon;
       if (this.dead === 1) {
-        this.lostCount += 1;
+        this.rescueCount -= 1;
         this.resetPos();
       }
     }
@@ -1362,7 +1360,7 @@ class Parachuter {
       this.posY -= 4;
     }
     if (this.posY > Util.canvasHeight + 10 || this.posX > Util.canvasWidth + 80) {
-      this.lostCount += 1;
+      this.rescueCount -= 1;
       Sound.playSound("parachuterDied");
       this.resetPos();
     }
