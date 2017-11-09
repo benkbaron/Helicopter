@@ -125,7 +125,7 @@ const Util = {
   },
 
   inWindRange(obj, wind) {
-    let space = this.distance([wind.posX, wind.posY], [obj.posX + (obj.width / 2), obj.posY + (obj.height / 2)]);
+    let space = this.distance([wind.posX + (wind.width / 2), wind.posY + (wind.height / 2)], [obj.posX + (obj.width / 2), obj.posY + (obj.height / 2)]);
     if (space < 300 && wind.posX < obj.posX) return true;
     return false;
   },
