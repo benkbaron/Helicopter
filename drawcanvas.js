@@ -128,17 +128,19 @@ const DrawCanvas = {
     ctx.fillText("Press enter to resume", (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 2));
   },
 
-  gameOver(ctx, parachuterHighScores, birdsHighScores, parachuter1, bird1, blueBird1, helicopter1){
-    parachuterHighScores.push({initials: helicopter1.initials.join(""), parachuters: parachuter1.rescueCount});
-    birdsHighScores.push({initials: helicopter1.initials.join(""), birds: blueBird1.birdShotCount + bird1.birdShotCount});
+  gameOver(ctx, parachuterHighScores, birdsHighScores, parachuter1, bird1, blueBird1, helicopter1, sortedScores){
+    if (!sortedScores) {
+      parachuterHighScores.push({initials: helicopter1.initials.join(""), parachuters: parachuter1.rescueCount});
+      birdsHighScores.push({initials: helicopter1.initials.join(""), birds: blueBird1.birdShotCount + bird1.birdShotCount});
 
-    parachuterHighScores.sort(function (a, b) {
-      return b.parachuters - a.parachuters;
-    });
+      parachuterHighScores.sort(function (a, b) {
+        return b.parachuters - a.parachuters;
+      });
 
-    birdsHighScores.sort(function (a, b) {
-      return b.birds - a.birds;
-    });
+      birdsHighScores.sort(function (a, b) {
+        return b.birds - a.birds;
+      });
+    }
     ctx.font = 'bold 80px tahoma';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;

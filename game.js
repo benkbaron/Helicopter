@@ -64,7 +64,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else if (lifeCount === 0 && heightOffset === 60) {
         updateScreenDimensions();
         DrawCanvas.gameOver(ctx, parachuterHighScores, birdsHighScores,
-                            parachuter1, bird1, blueBird1, helicopter1);
+                            parachuter1, bird1, blueBird1, helicopter1, sortedScores);
+        sortedScores = true;
     }
   }, 1000/60);
 
@@ -73,6 +74,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let arrowTimer = 0;
 
   resetPage = () => {
+    sortedScores = false;
     if (heightOffset > 0) {
       heightOffset -= 0.4;
     }
@@ -84,7 +86,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (lifeCount === 0) {
       heightOffset = 60;
       updateScreenDimensions();
-      displayGameOver();
+      sendScores();
+      gameStarted = false;
       return;
     } else if (paused) {
       DrawCanvas.pausedPage(ctx);
@@ -202,15 +205,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     drawAll();
   };
 
-  displayGameOver = () => {
+  sendScores = () => {
     scoreData = new FormData();
     scoreData.append("score[parachuters]", parachuter1.rescueCount);
     scoreData.append("score[birds]", bird1.birdShotCount + blueBird1.birdShotCount);
     scoreData.append("score[initials]", helicopter1.initials.join(""));
     sendScores(scoreData);
-    DrawCanvas.gameOver(ctx, parachuterHighScores, birdsHighScores,
-                        parachuter1, bird1, blueBird1, helicopter1);
-    gameStarted = false;
   };
 
   restartGame = () => {

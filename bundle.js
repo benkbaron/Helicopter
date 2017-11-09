@@ -333,7 +333,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else if (lifeCount === 0 && heightOffset === 60) {
         updateScreenDimensions();
         DrawCanvas.gameOver(ctx, parachuterHighScores, birdsHighScores,
-                            parachuter1, bird1, blueBird1, helicopter1);
+                            parachuter1, bird1, blueBird1, helicopter1, sortedScores);
+        sortedScores = true;
     }
   }, 1000/60);
 
@@ -342,6 +343,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let arrowTimer = 0;
 
   resetPage = () => {
+    sortedScores = false;
     if (heightOffset > 0) {
       heightOffset -= 0.4;
     }
@@ -353,7 +355,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (lifeCount === 0) {
       heightOffset = 60;
       updateScreenDimensions();
-      displayGameOver();
+      sendScores();
+      gameStarted = false;
       return;
     } else if (paused) {
       DrawCanvas.pausedPage(ctx);
@@ -471,15 +474,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     drawAll();
   };
 
-  displayGameOver = () => {
+  sendScores = () => {
     scoreData = new FormData();
     scoreData.append("score[parachuters]", parachuter1.rescueCount);
     scoreData.append("score[birds]", bird1.birdShotCount + blueBird1.birdShotCount);
     scoreData.append("score[initials]", helicopter1.initials.join(""));
     sendScores(scoreData);
-    DrawCanvas.gameOver(ctx, parachuterHighScores, birdsHighScores,
-                        parachuter1, bird1, blueBird1, helicopter1);
-    gameStarted = false;
   };
 
   restartGame = () => {
@@ -1085,17 +1085,19 @@ const DrawCanvas = {
     ctx.fillText("Press enter to resume", (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 2));
   },
 
-  gameOver(ctx, parachuterHighScores, birdsHighScores, parachuter1, bird1, blueBird1, helicopter1){
-    parachuterHighScores.push({initials: helicopter1.initials.join(""), parachuters: parachuter1.rescueCount});
-    birdsHighScores.push({initials: helicopter1.initials.join(""), birds: blueBird1.birdShotCount + bird1.birdShotCount});
+  gameOver(ctx, parachuterHighScores, birdsHighScores, parachuter1, bird1, blueBird1, helicopter1, sortedScores){
+    if (!sortedScores) {
+      parachuterHighScores.push({initials: helicopter1.initials.join(""), parachuters: parachuter1.rescueCount});
+      birdsHighScores.push({initials: helicopter1.initials.join(""), birds: blueBird1.birdShotCount + bird1.birdShotCount});
 
-    parachuterHighScores.sort(function (a, b) {
-      return b.parachuters - a.parachuters;
-    });
+      parachuterHighScores.sort(function (a, b) {
+        return b.parachuters - a.parachuters;
+      });
 
-    birdsHighScores.sort(function (a, b) {
-      return b.birds - a.birds;
-    });
+      birdsHighScores.sort(function (a, b) {
+        return b.birds - a.birds;
+      });
+    }
     ctx.font = 'bold 80px tahoma';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 4;
