@@ -55,6 +55,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   setInterval(() => {
     if (!initialsEntered) {
       DrawCanvas.startPage(ctx, helicopter1);
+      helicopter1.posX = -200;
+      helicopter1.posY = 300;
+      displayStandard();
     }
   }, 1000/60);
 
