@@ -56,10 +56,9 @@ class Parachuter {
     if (this.dead > 0) {
       this.posY -= 4;
     }
-    if (this.posY > Util.canvasHeight + 10 || this.posX > Util.canvasWidth + 80) {
-      this.rescueCount -= 1;
+    else if (this.posY > Util.canvasHeight + 10 || this.posX > Util.canvasWidth + 10) {
+      this.dead = 80;
       Sound.playSound("parachuterDied");
-      this.resetPos();
     }
     if (Util.inWindRange(this, wind)){
       this.posX += 3;
