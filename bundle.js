@@ -326,11 +326,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
   setInterval(() => {
     if (!initialsEntered) {
       updateScreenDimensions();
-
       DrawCanvas.startPage(ctx, helicopter1);
       helicopter1.posX = -200;
       helicopter1.posY = 300;
       displayStandard();
+    } else if (lifeCount === 0 && heightOffset === 60) {
+        updateScreenDimensions();
+        DrawCanvas.gameOver(ctx, parachuterHighScores, birdsHighScores,
+                            parachuter1, bird1, blueBird1, helicopter1);
     }
   }, 1000/60);
 
@@ -348,6 +351,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
     if (lifeCount === 0) {
+      heightOffset = 60;
+      updateScreenDimensions();
       displayGameOver();
       return;
     } else if (paused) {
@@ -545,7 +550,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     playing = playing ? false : true;
   });
 
-  // let soundEffects = true;
   let soundButton = document.getElementById("soundButton");
   soundButton.addEventListener("click", () => {
     if (Sound.soundEffects) {
@@ -1102,33 +1106,35 @@ const DrawCanvas = {
     ctx.fillStyle = "black";
     ctx.fillText("Hit enter to try again", (Util.canvasWidth / 2) - 210, (Util.canvasHeight / 6) + 100);
     ctx.font = '28px tahoma';
-    ctx.fillText("Parachuters Saved Highscores", (Util.canvasWidth / 2) - 400, (Util.canvasHeight / 6) + 200);
-    ctx.fillText("Birds Shot Highscores", (Util.canvasWidth / 2) + 80, (Util.canvasHeight / 6) + 200);
+    ctx.fillText("Parachuters Saved", (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 170);
+    ctx.fillText("Highscores", (Util.canvasWidth / 2) - 170, (Util.canvasHeight / 6) + 210);
+    ctx.fillText("Birds Shot", (Util.canvasWidth / 2) + 115, (Util.canvasHeight / 6) + 170);
+    ctx.fillText("Highscores", (Util.canvasWidth / 2) + 110, (Util.canvasHeight / 6) + 210);
     ctx.font = '20px tahoma';
-    ctx.fillText(`1. ${parachuterHighScores[0].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 250);
-    ctx.fillText(`${parachuterHighScores[0].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 250);
-    ctx.fillText(`2. ${parachuterHighScores[1].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 275);
-    ctx.fillText(`${parachuterHighScores[1].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 275);
-    ctx.fillText(`3. ${parachuterHighScores[2].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 300);
-    ctx.fillText(`${parachuterHighScores[2].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 300);
-    ctx.fillText(`4. ${parachuterHighScores[3].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 325);
-    ctx.fillText(`${parachuterHighScores[3].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 325);
-    ctx.fillText(`5. ${parachuterHighScores[4].initials}:`, (Util.canvasWidth / 2) - 300, (Util.canvasHeight / 6) + 350);
-    ctx.fillText(`${parachuterHighScores[4].parachuters}`, (Util.canvasWidth / 2) - 220, (Util.canvasHeight / 6) + 350);
+    ctx.fillText(`1. ${parachuterHighScores[0].initials}:`, (Util.canvasWidth / 2) - 160, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`${parachuterHighScores[0].parachuters}`, (Util.canvasWidth / 2) - 80, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`2. ${parachuterHighScores[1].initials}:`, (Util.canvasWidth / 2) - 160, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`${parachuterHighScores[1].parachuters}`, (Util.canvasWidth / 2) - 80, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`3. ${parachuterHighScores[2].initials}:`, (Util.canvasWidth / 2) - 160, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`${parachuterHighScores[2].parachuters}`, (Util.canvasWidth / 2) - 80, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`4. ${parachuterHighScores[3].initials}:`, (Util.canvasWidth / 2) - 160, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`${parachuterHighScores[3].parachuters}`, (Util.canvasWidth / 2) - 80, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`5. ${parachuterHighScores[4].initials}:`, (Util.canvasWidth / 2) - 160, (Util.canvasHeight / 6) + 350);
+    ctx.fillText(`${parachuterHighScores[4].parachuters}`, (Util.canvasWidth / 2) - 80, (Util.canvasHeight / 6) + 350);
 
-    ctx.fillText(`1. ${birdsHighScores[0].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 250);
-    ctx.fillText(`${birdsHighScores[0].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 250);
-    ctx.fillText(`2. ${birdsHighScores[1].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 275);
-    ctx.fillText(`${birdsHighScores[1].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 275);
-    ctx.fillText(`3. ${birdsHighScores[2].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 300);
-    ctx.fillText(`${birdsHighScores[2].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 300);
-    ctx.fillText(`4. ${birdsHighScores[3].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 325);
-    ctx.fillText(`${birdsHighScores[3].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 325);
-    ctx.fillText(`5. ${birdsHighScores[4].initials}:`, (Util.canvasWidth / 2) + 150, (Util.canvasHeight / 6) + 350);
-    ctx.fillText(`${birdsHighScores[4].birds}`, (Util.canvasWidth / 2) + 255, (Util.canvasHeight / 6) + 350);
+    ctx.fillText(`1. ${birdsHighScores[0].initials}:`, (Util.canvasWidth / 2) + 130, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`${birdsHighScores[0].birds}`, (Util.canvasWidth / 2) + 212, (Util.canvasHeight / 6) + 250);
+    ctx.fillText(`2. ${birdsHighScores[1].initials}:`, (Util.canvasWidth / 2) + 130, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`${birdsHighScores[1].birds}`, (Util.canvasWidth / 2) + 212, (Util.canvasHeight / 6) + 275);
+    ctx.fillText(`3. ${birdsHighScores[2].initials}:`, (Util.canvasWidth / 2) + 130, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`${birdsHighScores[2].birds}`, (Util.canvasWidth / 2) + 212, (Util.canvasHeight / 6) + 300);
+    ctx.fillText(`4. ${birdsHighScores[3].initials}:`, (Util.canvasWidth / 2) + 130, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`${birdsHighScores[3].birds}`, (Util.canvasWidth / 2) + 212, (Util.canvasHeight / 6) + 325);
+    ctx.fillText(`5. ${birdsHighScores[4].initials}:`, (Util.canvasWidth / 2) + 130, (Util.canvasHeight / 6) + 350);
+    ctx.fillText(`${birdsHighScores[4].birds}`, (Util.canvasWidth / 2) + 212, (Util.canvasHeight / 6) + 350);
     ctx.font = '24px tahoma';
-    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, (Util.canvasWidth / 2) - 170, (Util.canvasHeight / 2) + 200);
-    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, (Util.canvasWidth / 2) - 130, (Util.canvasHeight / 2) + 250);
+    ctx.fillText(`Your Parachuters Saved Score: ${parachuter1.rescueCount}`, (Util.canvasWidth / 2) - 140, (Util.canvasHeight / 2) + 200);
+    ctx.fillText(`Your Birds Shot Score: ${blueBird1.birdShotCount + bird1.birdShotCount}`, (Util.canvasWidth / 2) - 100, (Util.canvasHeight / 2) + 250);
   }
 };
 

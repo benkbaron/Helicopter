@@ -57,11 +57,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
   setInterval(() => {
     if (!initialsEntered) {
       updateScreenDimensions();
-
       DrawCanvas.startPage(ctx, helicopter1);
       helicopter1.posX = -200;
       helicopter1.posY = 300;
       displayStandard();
+    } else if (lifeCount === 0 && heightOffset === 60) {
+        updateScreenDimensions();
+        DrawCanvas.gameOver(ctx, parachuterHighScores, birdsHighScores,
+                            parachuter1, bird1, blueBird1, helicopter1);
     }
   }, 1000/60);
 
@@ -79,6 +82,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
     if (lifeCount === 0) {
+      heightOffset = 60;
+      updateScreenDimensions();
       displayGameOver();
       return;
     } else if (paused) {
@@ -276,7 +281,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     playing = playing ? false : true;
   });
 
-  // let soundEffects = true;
   let soundButton = document.getElementById("soundButton");
   soundButton.addEventListener("click", () => {
     if (Sound.soundEffects) {
