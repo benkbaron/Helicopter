@@ -297,11 +297,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let canvas = document.querySelector("canvas");
 
   let heightOffset = 60;
-  Util.canvasWidth  = window.innerWidth;
-  Util.canvasHeight = window.innerHeight - heightOffset;
-
-  canvas.width = Util.canvasWidth;
-  canvas.height = Util.canvasHeight;
+  updateScreenDimensions = () => {
+    Util.canvasWidth = window.innerWidth;
+    Util.canvasHeight = window.innerHeight - heightOffset;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - heightOffset;
+  };
+  updateScreenDimensions();
 
   let ctx = canvas.getContext("2d");
   let arrowArr = [];
@@ -323,6 +325,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   setInterval(() => {
     if (!initialsEntered) {
+      updateScreenDimensions();
+
       DrawCanvas.startPage(ctx, helicopter1);
       helicopter1.posX = -200;
       helicopter1.posY = 300;
@@ -338,10 +342,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (heightOffset > 0) {
       heightOffset -= 0.4;
     }
-    Util.canvasWidth = window.innerWidth;
-    Util.canvasHeight = window.innerHeight - heightOffset;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight - heightOffset;
+    updateScreenDimensions();
     DrawCanvas.playingPage(ctx, paused, parachuter1, bird1, blueBird1, lifeCount, helicopter1);
     helicopter1.alive = true;
 
@@ -616,7 +617,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     parachuterHighScores = data.parachuter_highscores;
     birdsHighScores = data.bird_highscores;
   };
-
 });
 
 
