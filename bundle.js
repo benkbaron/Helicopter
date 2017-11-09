@@ -1010,12 +1010,11 @@ const DrawCanvas = {
     ctx.fillStyle = "black";
     ctx.font = '26px tahoma';
 
-    ctx.drawImage(helicopter1.helicopterIcon, (Util.canvasWidth / 2) - 440, 370, 100, 100);
-    ctx.drawImage(arrowKeyIcon, (Util.canvasWidth / 2) - 280, 360, 130, 130);
+    ctx.drawImage(helicopter1.helicopterIcon, (Util.canvasWidth / 2) - 355, 370, 100, 100);
+    ctx.drawImage(arrowKeyIcon, (Util.canvasWidth / 2) - 235, 360, 130, 130);
 
-    ctx.drawImage(helicopter1.helicopterIcon, (Util.canvasWidth / 2) - 440, 470, 100, 100);
-    ctx.drawImage(arrowIcon, (Util.canvasWidth / 2) - 335, 490, 70, 70);
-    ctx.drawImage(spacebar, (Util.canvasWidth / 2) - 280, 460, 140, 130);
+    ctx.drawImage(arrowIcon, (Util.canvasWidth / 2) - 330, 490, 70, 70);
+    ctx.drawImage(spacebar, (Util.canvasWidth / 2) - 240, 460, 140, 130);
 
     ctx.drawImage(helicopter1.helicopterIcon, (Util.canvasWidth / 2) + 130, 370, 100, 100);
     ctx.drawImage(parachuterIcon, (Util.canvasWidth / 2) + 200, 390, 70, 70);
