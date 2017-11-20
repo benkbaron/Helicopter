@@ -479,7 +479,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     scoreData.append("score[parachuters]", parachuter1.rescueCount);
     scoreData.append("score[birds]", bird1.birdShotCount + blueBird1.birdShotCount);
     scoreData.append("score[initials]", helicopter1.initials.join(""));
-    sendScores(scoreData);
+    postScores(scoreData);
   };
 
   restartGame = () => {
@@ -607,7 +607,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
   };
 
-  sendScores = (scoreData) => {
+  postScores = (scoreData) => {
     $DJ.ajax({
       method: "POST",
       url: "https://helicopterbackend.herokuapp.com/api/scores",
