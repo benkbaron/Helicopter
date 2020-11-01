@@ -1,6 +1,7 @@
 ## Helicopter
 
 [Live](http://www.benbaron.info/Helicopter/)
+
 ### Functionality
 
 Player guides the helicopter using the arrow keys to rescue falling parachuters and fires arrows using spacebar to defend against attackers.
